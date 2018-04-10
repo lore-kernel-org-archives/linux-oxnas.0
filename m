@@ -1,45 +1,43 @@
-Received: by mail-wm0-f68.google.com with SMTP id t67so24514905wmt.0
-        for <linux-oxnas@groups.io>; Tue, 10 Apr 2018 01:43:58 -0700 (PDT)
+Received: by mail-wm0-f46.google.com with SMTP id r191so24296077wmg.4
+        for <linux-oxnas@groups.io>; Tue, 10 Apr 2018 01:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=6loQoEPYcePuLTim1op/q4XwM0gOyPWHcXSRl9pFJBU=;
-        b=afrFrmsXIR8CYeuptWKOFSZjHk9SPZQb1GF5pJKaiOvfiSGI/ylEeXluB8xrUtugrc
-         JLAZwAcOIgeUEODzs23SQpGGwsXsJyWNqmd30u/2AUXKVS8TIunbrfgE/hwdwD45UFk5
-         9kFhxCws0o/vwl46UYCpOs85DxrYuM0P3cirsdZ2PX7jDX09LX1OtZqGE/PmFbUtm07X
-         GSXnePNPcwafq9P2yq1lsYddhBB5APt74e1DM9jZmpGiboyxbhAX4XKF+HauIK+VuSeh
-         0IoI/yj76x1Da2p4qkRZzNxFrIoArncCW7QqEvuvNKqXH+Qqxfl4E1GQ76KpIlW8BaNW
-         07IQ==
+        h=to:cc:from:subject:organization:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=5UUcTRg2PvLtXafEkh74TCihELtTRh9M2ulOFUvZXy8=;
+        b=NHhusT9irmXjDlPfWBczbtIxZxLchRzpX8UO8S+ga5RvAvyLTxfh7oRQoqg7KlfH3F
+         TPmlvpW5iZp7vZWDe/lWUldiBOgfDw24VtkX0BRdliLUDtqNhC+JmicrEzVgtsduhzIy
+         kekXUB5Imk5kDH0NECemvbx7IrhYbyvhHMEMvkYNq6+KbBtnKFI1CTPcvrJKotttjfgt
+         XyDSdCl3WC1co99CZpxQLkUWfo6RUkisiwwPHdDfN/ZXNo7GN3+a3tRRrnUWI1BVlYz3
+         gXlYGKtS7/IRyy8b4xKh9KWC6cZSCRWOEpgHq1wdhhNjCHwYTqpepm/M1BEIaj1WBOUF
+         R4yg==
 Return-Path: <narmstrong@baylibre.com>
 From: "Neil Armstrong" <narmstrong@baylibre.com>
-Subject: [PATCH] MAINTAINERS: Migrate oxnas list to groups.io
-Date: Tue, 10 Apr 2018 10:43:45 +0200
-Message-ID: <1524069BAA73DD87.11485@groups.io>
-To: arm@kernel.org
-Cc: Neil Armstrong <narmstrong@baylibre.com>, linux-oxnas@lists.tuxfamily.org, linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: List migration to groups.io
+Message-ID: <152406D76E5B904F.12461@groups.io>
+Date: Tue, 10 Apr 2018 10:48:12 +0200
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+To: linux-oxnas@lists.tuxfamily.org
+Cc: linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-The linux-oxnas migrates from tuxfamily to groups.io for a simpler
-administration and maintainance.
+Hi all,
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This mailing-list is currently hosted at tuxfamily but the administration interface is too primitive.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6d296bd..f846da2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1743,7 +1743,7 @@ F:	arch/arm/mach-orion5x/ts78xx-*
- ARM/OXNAS platform support
- M:	Neil Armstrong <narmstrong@baylibre.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--L:	linux-oxnas@lists.tuxfamily.org (moderated for non-subscribers)
-+L:	linux-oxnas@groups.io (moderated for non-subscribers)
- S:	Maintained
- F:	arch/arm/mach-oxnas/
- F:	arch/arm/boot/dts/ox8*.dts*
+The list is being migrated to groups.io : https://groups.io/g/linux-oxnas
+
+If you wish to continue receiving updates about the Linux Oxnas mainline support, please register to the new list.
+
+You can also send an email to : linux-oxnas+subscribe@groups.io to subscribe.
+
+Thanks,
+Neil
 -- 
-2.7.4
-
+Neil Armstrong
+Embedded Linux Software Engineer
+BayLibre - At the Heart of Embedded Linux
+www.baylibre.com
