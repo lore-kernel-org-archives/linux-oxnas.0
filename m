@@ -1,39 +1,42 @@
-Received: by mail-qt0-f194.google.com with SMTP id s2so13489888qti.2
-        for <linux-oxnas@groups.io>; Tue, 10 Apr 2018 07:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:in-reply-to:references:from:date:message-id
-         :subject:to:cc;
-        bh=0sIk8BseQCCfUhAQRIFn8uRbQcBOgWJ20L0qcIa7nuU=;
-        b=I0rQsGS7URIAi0CWO6ErO+ksga159oIh/Gzzou0XCmWk7llAqteS5Ps15PdbYw1mtt
-         nVFwK3fX9KBvocN+IyT1G9dFwfHKHdYU0M7Pb00/SYNMwQqTP9jDmZu8xVXI8fV05u9W
-         kuTvwDTyhit/xH3y2vGBP1nonW+PFTZXfFH3Ym6MAlowzpaAqI3L9HDRgCkLv/pQH9Ix
-         NxA1bfjAhJKnKIihMmJDzgSIs5hITAbeOQT/uJtNyOUl1ZkT/1FCctnB2aGOVh+P80kZ
-         rZlve3KPrEYrbgNhAQoXyFiq+8YNB6aY9cW6tZG06QLDr6Cy6Pnfi3j3UAQO7n0XkB9I
-         VQeA==
+ d=Synaptics.onmicrosoft.com; s=selector1-synaptics-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=0T7qpDlC972uTBw1TWUL26ZvfVJSqh2b3uUOQRgdbIw=;
+ b=X7BrXQCdAXqmxWWxsnpn/JR0Hq6NkukX8llPY3gzN3Kkp4efHqN5P4bUzeZdL2BWTevxarBoDew51GZmlpzZg2JZNgemrqSBSuSlcJl4EHSR2qswOg3g56A4ArM0yOh+WpglomXUwyFeys9SurUuXSC+/qURTRqUKYAP5aStenw=
+Date: Mon, 7 May 2018 15:42:15 +0800
+From: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Subject: [PATCH] arm: oxnas: remove non-necessary flush_cache_all()
+Message-ID: <20180507154215.45a9348f@xhacker.debian>
 MIME-Version: 1.0
-Sender: arndbergmann@gmail.com
-In-Reply-To: <1523349825-1969-1-git-send-email-narmstrong@baylibre.com>
-References: <1523349825-1969-1-git-send-email-narmstrong@baylibre.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 10 Apr 2018 16:41:46 +0200
-Message-ID: <CAK8P3a2PACp3fzg+jfvdAwaxZNQkP391nNy7nnW8wBqGVpkzKg@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Migrate oxnas list to groups.io
-Content-Type: text/plain; charset="UTF-8"
+Return-Path: Jisheng.Zhang@synaptics.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 To: Neil Armstrong <narmstrong@baylibre.com>
-Cc: arm-soc <arm@kernel.org>, "moderated list:ARM/OXNAS platform support" <linux-oxnas@lists.tuxfamily.org>, linux-oxnas@groups.io, Linux ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, linux-kernel@vger.kernel.org
 List-ID: <linux-oxnas@groups.io>
 
-On Tue, Apr 10, 2018 at 10:43 AM, Neil Armstrong
-<narmstrong@baylibre.com> wrote:
-> The linux-oxnas migrates from tuxfamily to groups.io for a simpler
-> administration and maintainance.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I believe the flush_cache_all() after scu_enable() is to "Ensure that
+the data accessed by CPU0 before the SCU was initialised is visible
+to the other CPUs." as commented in scu_enable(). So flush_cache_all()
+here is a duplication of the one in scu_enable(), remove it.
 
-Applied to fixes branch.
+Signed-off-by: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+---
+ arch/arm/mach-oxnas/platsmp.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-    Arnd
+diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
+index 442cc8a2f7dc..1a8e1e9fc222 100644
+--- a/arch/arm/mach-oxnas/platsmp.c
++++ b/arch/arm/mach-oxnas/platsmp.c
+@@ -85,7 +85,6 @@ static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
+ 		goto unmap_scu;
+ 
+ 	scu_enable(scu_base);
+-	flush_cache_all();
+ 
+ unmap_scu:
+ 	iounmap(scu_base);
+-- 
+2.17.0
+
