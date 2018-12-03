@@ -1,94 +1,47 @@
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2014; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=u8iyJzlceG3MnleS1QUeQGTVSonKlGF6GrwmyXojBUo=; b=bJ6N74e/cJ3EWmvLOhyPtYFRs+
-	P0XdHLqwXt2a48WwCfIf06KkhtQvRTDrhoedNA/0nr7qWWn8VjuR9WgEqQ4nZu0q6WJQzQBFVyNYt
-	Ld/g0LRomkFS+JxqpA9SSoE9TBJa/wtmLqljOrEAaTd8p6zTiOZYLtCF72Gw+QtfhhRw=;
-In-Reply-To: <20181213175952.GC26090@n2100.armlinux.org.uk>
-References: <20181213175952.GC26090@n2100.armlinux.org.uk>
-From: Russell King <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 7/9] ARM: versatile: convert boot_lock to raw
+Date: Mon, 3 Dec 2018 10:23:17 +0100
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Subject: Re: [PATCH] ARM: dts: Kill off skeleton{64}.dtsi
+Message-ID: <20181203092317.GA3173@kwain>
+References: <20181130170634.9467-1-robh@kernel.org>
 MIME-Version: 1.0
-Message-Id: <E1gXVIO-0008Cn-DO@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Thu, 13 Dec 2018 18:01:12 +0000
+In-Reply-To: <20181130170634.9467-1-robh@kernel.org>
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-To: linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-omap@vger.kernel.org, linux-oxnas@groups.io, linux-samsung-soc@vger.kernel.org, linux-soc@vger.kernel.org
-Cc: Linus Walleij <linus.walleij@linaro.org>, Linus Walleij <linus.walleij@linaro.org>
+Content-Transfer-Encoding: quoted-printable
+To: Rob Herring <robh@kernel.org>
+Cc: arm@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, Tsahee Zidenberg <tsahee@annapurnalabs.com>, Antoine Tenart <antoine.tenart@bootlin.com>, Linus Walleij <linus.walleij@linaro.org>, Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Jesper Nilsson <jesper.nilsson@axis.com>, Lars Persson <lars.persson@axis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Ludovic Desroches <ludovic.desroches@microchip.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Jon Mason <jonmason@broadcom.com>, bcm-kernel-feedback-list@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>, Hauke Mehrtens <hauke@hauke-m.de>, =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, Brian Norris <computersforpeace@gmail.com>, Gregory Fong <gregory.0xf0@gmail.com>, Baruch Siach <baruch@tkos.co.il>, Vladimir Zapolskiy <vz@mleia.com>, Sylvain Lemieux <slemieux.tyco@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>, Carlo Caione <carlo@caione.org>, Kevin Hilman <khilman@baylibre.com>, Eric Miao <eric.y.miao@gmail.com>, Haojian Zhuang <haojian.zhuang@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, Neil Armstrong <narmstrong@baylibre.com>, Jamie Iles <jamie@jamieiles.com>, Barry Song <baohua@kernel.org>, Daniel Mack <daniel@zonque.org>, Robert Jarzmik <robert.jarzmik@free.fr>, Andy Gross <andy.gross@linaro.org>, David Brown <david.brown@linaro.org>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@st.com>, Maxime Ripard <maxime.ripard@bootlin.com>, Chen-Yu Tsai <wens@csie.org>, Jun Nie <jun.nie@linaro.org>, linux-arm-kernel@axis.com, linux-amlogic@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 List-ID: <linux-oxnas@groups.io>
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Hi Rob,
 
-The arm boot_lock is used by the secondary processor startup code.  The locking
-task is the idle thread, which has idle->sched_class == &idle_sched_class.
-idle_sched_class->enqueue_task == NULL, so if the idle task blocks on the
-lock, the attempt to wake it when the lock becomes available will fail:
+On Fri, Nov 30, 2018 at 11:06:34AM -0600, Rob Herring wrote:
+> Remove the usage of skeleton.dtsi in the remaining dts files. It was
+> deprecated since commit 9c0da3cc61f1 ("ARM: dts: explicitly mark
+> skeleton.dtsi as deprecated"). This will make adding a unit-address to
+> memory nodes easier.
+>=20
+> The main tricky part to removing skeleton.dtsi is we could end up with
+> no /memory node at all when a bootloader depends on one being present. =
+I
+> hacked up dtc to check for this condition.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Yes, I'm being lazy and not splitting this up into dozens of sub-arch=20
+> patches. I don't think this should conflict nor should we be getting ne=
+w=20
+> dependencies on skeleton.dtsi. So please apply directly to arm-soc.
 
-try_to_wake_up()
-   ...
-      activate_task()
-         enqueue_task()
-            p->sched_class->enqueue_task(rq, p, flags)
+>  arch/arm/boot/dts/alpine.dtsi                  |  8 +++++++-
 
-Fix by converting boot_lock to a raw spin lock.
+For the above file,
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Frank Rowand <frank.rowand@am.sony.com>
-Link: http://lkml.kernel.org/r/4E77B952.3010606@am.sony.com
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
----
- arch/arm/plat-versatile/platsmp.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Acked-by: Antoine Tenart <antoine.tenart@bootlin.com>
 
-diff --git a/arch/arm/plat-versatile/platsmp.c b/arch/arm/plat-versatile/platsmp.c
-index c2366510187a..6b60f582b738 100644
---- a/arch/arm/plat-versatile/platsmp.c
-+++ b/arch/arm/plat-versatile/platsmp.c
-@@ -32,7 +32,7 @@ static void write_pen_release(int val)
- 	sync_cache_w(&pen_release);
- }
- 
--static DEFINE_SPINLOCK(boot_lock);
-+static DEFINE_RAW_SPINLOCK(boot_lock);
- 
- void versatile_secondary_init(unsigned int cpu)
- {
-@@ -45,8 +45,8 @@ void versatile_secondary_init(unsigned int cpu)
- 	/*
- 	 * Synchronise with the boot thread.
- 	 */
--	spin_lock(&boot_lock);
--	spin_unlock(&boot_lock);
-+	raw_spin_lock(&boot_lock);
-+	raw_spin_unlock(&boot_lock);
- }
- 
- int versatile_boot_secondary(unsigned int cpu, struct task_struct *idle)
-@@ -57,7 +57,7 @@ int versatile_boot_secondary(unsigned int cpu, struct task_struct *idle)
- 	 * Set synchronisation state between this boot processor
- 	 * and the secondary one
- 	 */
--	spin_lock(&boot_lock);
-+	raw_spin_lock(&boot_lock);
- 
- 	/*
- 	 * This is really belt and braces; we hold unintended secondary
-@@ -87,7 +87,7 @@ int versatile_boot_secondary(unsigned int cpu, struct task_struct *idle)
- 	 * now the secondary core is starting up let it run its
- 	 * calibrations, then wait for it to finish
- 	 */
--	spin_unlock(&boot_lock);
-+	raw_spin_unlock(&boot_lock);
- 
- 	return pen_release != -1 ? -ENOSYS : 0;
- }
--- 
-2.7.4
+Thanks!
+Antoine
 
+--=20
+Antoine T=E9nart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
