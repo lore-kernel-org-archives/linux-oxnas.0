@@ -1,55 +1,103 @@
-Subject: Re: [PATCH] ARM: dts: Kill off skeleton{64}.dtsi
-References: <20181130170634.9467-1-robh@kernel.org>
-From: Alexandre Torgue <alexandre.torgue@st.com>
-Message-ID: <b34072f1-d0f3-8115-741b-fa70d5723f0f@st.com>
-Date: Mon, 3 Dec 2018 11:29:09 +0100
+Received: by mail-wr1-f66.google.com with SMTP id b14so1365248wru.12
+        for <linux-oxnas@groups.io>; Tue, 04 Dec 2018 00:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=mvkdi3q+pCk19j+OSCfIIO4IR4c7G8O0A9eW6/HhP7s=;
+        b=H3IU8tzbX+K1KZGAxgcl8y+TQFRwPk/o9HFRGDIA8A/MN17BRpJls1VASuivI/q4H8
+         Sz7R0XqDNbYmkk/jGBKD/E/zaDuN1+5PSfFv1XKBFWoFCi1Q5ab0ootFd3mpq8VGw7pj
+         kBo7P/zm0yvM8cyaBp/rh+lVcoLu4CeDxSfrUwSX/Dt/u5USczVIRBcLYjA61vs6Nq2F
+         CEigs7nGwonnLgqZzaVGR6OURed7BAm6y5oYkOhxzZhCbwt7ebpgRusmRCsJWBnUksMb
+         69mVuvJsxaEKoOcDzj4XTx1PudP6US5GJ+LyvPD/QlDimfDgxlTyzmwpo7okhoLa+qZk
+         Hk/w==
+Return-Path: <narmstrong@baylibre.com>
+Subject: Re: [PATCH v2 21/34] dt-bindings: arm: Convert Oxford Semi board/soc bindings to json-schema
+References: <20181203213223.16986-1-robh@kernel.org>
+ <20181203213223.16986-22-robh@kernel.org>
+From: "Neil Armstrong" <narmstrong@baylibre.com>
+Message-ID: <be37bd18-a573-307e-3a9e-e879010cfc89@baylibre.com>
+Date: Tue, 4 Dec 2018 09:43:08 +0100
 MIME-Version: 1.0
-In-Reply-To: <20181130170634.9467-1-robh@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20181203213223.16986-22-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-To: Rob Herring <robh@kernel.org>, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, Tsahee Zidenberg <tsahee@annapurnalabs.com>, Antoine Tenart <antoine.tenart@bootlin.com>, Linus Walleij <linus.walleij@linaro.org>, Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Jesper Nilsson <jesper.nilsson@axis.com>, Lars Persson <lars.persson@axis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Ludovic Desroches <ludovic.desroches@microchip.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Jon Mason <jonmason@broadcom.com>, bcm-kernel-feedback-list@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>, Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, Brian Norris <computersforpeace@gmail.com>, Gregory Fong <gregory.0xf0@gmail.com>, Baruch Siach <baruch@tkos.co.il>, Vladimir Zapolskiy <vz@mleia.com>, Sylvain Lemieux <slemieux.tyco@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>, Carlo Caione <carlo@caione.org>, Kevin Hilman <khilman@baylibre.com>, Eric Miao <eric.y.miao@gmail.com>, Haojian Zhuang <haojian.zhuang@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, Neil Armstrong <narmstrong@baylibre.com>, Jamie Iles <jamie@jamieiles.com>, Barry Song <baohua@kernel.org>, Daniel Mack <daniel@zonque.org>, Robert Jarzmik <robert.jarzmik@free.fr>, Andy Gross <andy.gross@linaro.org>, David Brown <david.brown@linaro.org>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <maxime.ripard@bootlin.com>, Chen-Yu Tsai <wens@csie.org>, Jun Nie <jun.nie@linaro.org>, linux-arm-kernel@axis.com, linux-amlogic@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+To: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Sean Hudson <darknighte@darknighte.com>, Frank Rowand <frowand.list@gmail.com>, linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, Grant Likely <grant.likely@arm.com>, Kumar Gala <kumar.gala@linaro.org>, arm@kernel.org, Mark Rutland <mark.rutland@arm.com>, linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-Hi Rob
-
-On 11/30/18 6:06 PM, Rob Herring wrote:
-> Remove the usage of skeleton.dtsi in the remaining dts files. It was
-> deprecated since commit 9c0da3cc61f1 ("ARM: dts: explicitly mark
-> skeleton.dtsi as deprecated"). This will make adding a unit-address to
-> memory nodes easier.
+On 03/12/2018 22:32, Rob Herring wrote:
+> Convert Oxford Semi SoC bindings to DT schema format using json-schema.
 > 
-> The main tricky part to removing skeleton.dtsi is we could end up with
-> no /memory node at all when a bootloader depends on one being present. I
-> hacked up dtc to check for this condition.
-> 
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-oxnas@groups.io
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> Yes, I'm being lazy and not splitting this up into dozens of sub-arch
-> patches. I don't think this should conflict nor should we be getting new
-> dependencies on skeleton.dtsi. So please apply directly to arm-soc.
+>  .../devicetree/bindings/arm/oxnas.txt         | 14 -----------
+>  .../devicetree/bindings/arm/oxnas.yaml        | 25 +++++++++++++++++++
+>  2 files changed, 25 insertions(+), 14 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/oxnas.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/oxnas.yaml
 > 
-> Rob
+> diff --git a/Documentation/devicetree/bindings/arm/oxnas.txt b/Documentation/devicetree/bindings/arm/oxnas.txt
+> deleted file mode 100644
+> index ac64e60f99f1..000000000000
+> --- a/Documentation/devicetree/bindings/arm/oxnas.txt
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -Oxford Semiconductor OXNAS SoCs Family device tree bindings
+> --------------------------------------------
+> -
+> -Boards with the OX810SE SoC shall have the following properties:
+> -  Required root node property:
+> -    compatible: "oxsemi,ox810se"
+> -
+> -Boards with the OX820 SoC shall have the following properties:
+> -  Required root node property:
+> -    compatible: "oxsemi,ox820"
+> -
+> -Board compatible values:
+> -  - "wd,mbwe" (OX810SE)
+> -  - "cloudengines,pogoplugv3" (OX820)
+> diff --git a/Documentation/devicetree/bindings/arm/oxnas.yaml b/Documentation/devicetree/bindings/arm/oxnas.yaml
+> new file mode 100644
+> index 000000000000..6ae51ef513be
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/oxnas.yaml
+> @@ -0,0 +1,25 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/oxnas.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Oxford Semiconductor OXNAS SoCs Family device tree bindings
+> +
+> +maintainers:
+> +  - Neil Armstrong <narmstrong@baylibre.com>
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +        - enum:
+> +            - wd,mbwe
+> +        - const: oxsemi,ox810se
+> +
+> +      - items:
+> +        - enum:
+> +            - cloudengines,pogoplugv3
+> +        - const: oxsemi,ox820
+> 
 
-...
+We also loose all the "human friendly" description of board/SoC relationship here,
+and I think it's a shame.
 
->   arch/arm/boot/dts/stm32429i-eval.dts           |  1 +
->   arch/arm/boot/dts/stm32746g-eval.dts           |  1 +
->   arch/arm/boot/dts/stm32f429-disco.dts          |  1 +
->   arch/arm/boot/dts/stm32f429.dtsi               |  4 +++-
->   arch/arm/boot/dts/stm32f469-disco.dts          |  1 +
->   arch/arm/boot/dts/stm32f746-disco.dts          |  1 +
->   arch/arm/boot/dts/stm32f746.dtsi               |  4 +++-
->   arch/arm/boot/dts/stm32f769-disco.dts          |  1 +
->   arch/arm/boot/dts/stm32h743.dtsi               |  4 +++-
->   arch/arm/boot/dts/stm32h743i-disco.dts         |  1 +
->   arch/arm/boot/dts/stm32h743i-eval.dts          |  1 +
->   arch/arm/boot/dts/stm32mp157c-ed1.dts          |  1 +
-
-For STM32 files:
-
-Acked-by: Alexandre TORGUE <alexandre.torgue@st.com>
-
-Regards
-Alex
+Neil
