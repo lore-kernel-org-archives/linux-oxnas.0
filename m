@@ -1,176 +1,188 @@
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2014; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	 bh=I+z6LiHczflJfpmQx838ZM5Qt9r6byCH4yniN8uAUIo=; b=Jm5aUOpvXi9S/jy80LxYA0U8W
-	/TslPv/juiDEkOUfUq7zwydWz+n1upezTPE7hdKnFPD7uric+isg7L649+uJN5LAtfAmfpfUAmc9c
-	hM+BQiY71FB1B9hPxXITT6vevnAfTaFWeVkXzjkMD3v2TWwmYP/bp7yWzqXx0oYED8gxs=;
-Date: Fri, 14 Dec 2018 13:12:00 +0000
-From: Russell King - ARM Linux <linux@armlinux.org.uk>
-Subject: Re: [PATCH 9/9] ARM: smp: remove arch-provided "pen_release"
-Message-ID: <20181214131200.GL9507@n2100.armlinux.org.uk>
+	d=armlinux.org.uk; s=pandora-2014; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=V8bov3LQxKS+0wgZ/p0gc863/fFXgsfqhoabofSGwog=; b=aA8LM/dTq3dtk+PwBBk94AzpNq
+	tt5Y5420nZ/aICO6UyuaRKsck1QHJpTItEAYKgVE36DoWHJRmZmaa4O16SwdfmVWb3lefsfb6SxaK
+	cbuxnC/QO7RyXbGJDjm+ZUOdxk4cAt4yu5xOWwwLjLOBThOAi2ETixlL7mNleAzj4fUU=;
+In-Reply-To: <20181213175952.GC26090@n2100.armlinux.org.uk>
 References: <20181213175952.GC26090@n2100.armlinux.org.uk>
- <E1gXVIY-0008DI-MU@rmk-PC.armlinux.org.uk>
- <20181214043923.2gusomvei424vw7m@vireshk-i7>
+From: Russell King <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 3/9] ARM: oxnas: remove CPU hotplug implementation
 MIME-Version: 1.0
-In-Reply-To: <20181214043923.2gusomvei424vw7m@vireshk-i7>
-Sender: Russell King - ARM Linux <linux@armlinux.org.uk>
-Content-Type: text/plain; charset=us-ascii
+Message-Id: <E1gXVI3-00088u-N6@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Thu, 13 Dec 2018 18:00:51 +0000
 Content-Disposition: inline
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Barry Song <baohua@kernel.org>, linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>, Viresh Kumar <vireshk@kernel.org>, linux-oxnas@groups.io, linux-soc@vger.kernel.org, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, linux-arm-kernel@lists.infradead.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+To: linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-omap@vger.kernel.org, linux-oxnas@groups.io, linux-samsung-soc@vger.kernel.org, linux-soc@vger.kernel.org
+Cc: Neil Armstrong <narmstrong@baylibre.com>
 List-ID: <linux-oxnas@groups.io>
 
-On Fri, Dec 14, 2018 at 10:09:23AM +0530, Viresh Kumar wrote:
-> On 13-12-18, 18:01, Russell King wrote:
-> > diff --git a/arch/arm/mach-spear/generic.h b/arch/arm/mach-spear/generic.h
-> > index 909b97c0b237..815333fc320c 100644
-> > --- a/arch/arm/mach-spear/generic.h
-> > +++ b/arch/arm/mach-spear/generic.h
-> > @@ -20,6 +20,8 @@
-> >  
-> >  #include <asm/mach/time.h>
-> >  
-> > +extern volatile int prima2_pen_release;
-> 
->                        prima2 ?
-> 
-> I haven't tried but this may cause build regressions as well, I am
-> surprised on how this passed for you.
+The CPU hotplug implementation on this platform is cargo-culted from
+the plat-versatile implementation, and is buggy.  Once a CPU hits the
+"low power" loop, it will wait for pen_release to be set to the CPU
+number to wake up again - but nothing in this implementation does that.
 
-Thanks.
+So, once a CPU has entered cpu_die() it will never, ever leave.
 
-These patches aren't all build tested - I don't see the point of wasting
-hours build testing when these platforms /really/ need something better.
+Remove this useless cargo-culted implementation.
 
-This is not supposed to be a finished patch, but a patch to get folk
-to do something about this issue.
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+---
+ arch/arm/mach-oxnas/Makefile  |   1 -
+ arch/arm/mach-oxnas/hotplug.c | 109 ------------------------------------------
+ arch/arm/mach-oxnas/platsmp.c |   4 --
+ 3 files changed, 114 deletions(-)
+ delete mode 100644 arch/arm/mach-oxnas/hotplug.c
 
-Please fix this issue properly.  I can't give you a patch to do that,
-you need to sort it yourself, but failure to do anything _will_ result
-in an updated version of this patch being merged.
-
-> >  extern void spear13xx_timer_init(void);
-> >  extern void spear3xx_timer_init(void);
-> >  extern struct pl022_ssp_controller pl022_plat_data;
-> > diff --git a/arch/arm/mach-spear/headsmp.S b/arch/arm/mach-spear/headsmp.S
-> > index c52192dc3d9f..6e250b6c0aa2 100644
-> > --- a/arch/arm/mach-spear/headsmp.S
-> > +++ b/arch/arm/mach-spear/headsmp.S
-> > @@ -43,5 +43,5 @@ pen:	ldr	r7, [r6]
-> >  
-> >  	.align
-> >  1:	.long	.
-> > -	.long	pen_release
-> > +	.long	spear_pen_release
-> >  ENDPROC(spear13xx_secondary_startup)
-> > diff --git a/arch/arm/mach-spear/hotplug.c b/arch/arm/mach-spear/hotplug.c
-> > index 12edd1cf8a12..0dd84f609627 100644
-> > --- a/arch/arm/mach-spear/hotplug.c
-> > +++ b/arch/arm/mach-spear/hotplug.c
-> > @@ -16,6 +16,8 @@
-> >  #include <asm/cp15.h>
-> >  #include <asm/smp_plat.h>
-> >  
-> > +#include "generic.h"
-> > +
-> >  static inline void cpu_enter_lowpower(void)
-> >  {
-> >  	unsigned int v;
-> > @@ -57,7 +59,7 @@ static inline void spear13xx_do_lowpower(unsigned int cpu, int *spurious)
-> >  	for (;;) {
-> >  		wfi();
-> >  
-> > -		if (pen_release == cpu) {
-> > +		if (spear_pen_release == cpu) {
-> >  			/*
-> >  			 * OK, proper wakeup, we're done
-> >  			 */
-> > diff --git a/arch/arm/mach-spear/platsmp.c b/arch/arm/mach-spear/platsmp.c
-> > index 39038a03836a..b1ff4bb86f6d 100644
-> > --- a/arch/arm/mach-spear/platsmp.c
-> > +++ b/arch/arm/mach-spear/platsmp.c
-> > @@ -20,16 +20,21 @@
-> >  #include <mach/spear.h>
-> >  #include "generic.h"
-> >  
-> > +/* XXX spear_pen_release is cargo culted code - DO NOT COPY XXX */
-> > +volatile int spear_pen_release = -1;
-> > +
-> >  /*
-> > - * Write pen_release in a way that is guaranteed to be visible to all
-> > - * observers, irrespective of whether they're taking part in coherency
-> > + * XXX CARGO CULTED CODE - DO NOT COPY XXX
-> > + *
-> > + * Write spear_pen_release in a way that is guaranteed to be visible to
-> > + * all observers, irrespective of whether they're taking part in coherency
-> >   * or not.  This is necessary for the hotplug code to work reliably.
-> >   */
-> > -static void write_pen_release(int val)
-> > +static void spear_write_pen_release(int val)
-> >  {
-> > -	pen_release = val;
-> > +	spear_pen_release = val;
-> >  	smp_wmb();
-> > -	sync_cache_w(&pen_release);
-> > +	sync_cache_w(&spear_pen_release);
-> >  }
-> >  
-> >  static DEFINE_SPINLOCK(boot_lock);
-> > @@ -42,7 +47,7 @@ static void spear13xx_secondary_init(unsigned int cpu)
-> >  	 * let the primary processor know we're out of the
-> >  	 * pen, then head off into the C entry point
-> >  	 */
-> > -	write_pen_release(-1);
-> > +	spear_write_pen_release(-1);
-> >  
-> >  	/*
-> >  	 * Synchronise with the boot thread.
-> > @@ -64,17 +69,17 @@ static int spear13xx_boot_secondary(unsigned int cpu, struct task_struct *idle)
-> >  	/*
-> >  	 * The secondary processor is waiting to be released from
-> >  	 * the holding pen - release it, then wait for it to flag
-> > -	 * that it has been released by resetting pen_release.
-> > +	 * that it has been released by resetting spear_pen_release.
-> >  	 *
-> > -	 * Note that "pen_release" is the hardware CPU ID, whereas
-> > +	 * Note that "spear_pen_release" is the hardware CPU ID, whereas
-> >  	 * "cpu" is Linux's internal ID.
-> >  	 */
-> > -	write_pen_release(cpu);
-> > +	spear_write_pen_release(cpu);
-> >  
-> >  	timeout = jiffies + (1 * HZ);
-> >  	while (time_before(jiffies, timeout)) {
-> >  		smp_rmb();
-> > -		if (pen_release == -1)
-> > +		if (spear_pen_release == -1)
-> >  			break;
-> >  
-> >  		udelay(10);
-> > @@ -86,7 +91,7 @@ static int spear13xx_boot_secondary(unsigned int cpu, struct task_struct *idle)
-> >  	 */
-> >  	spin_unlock(&boot_lock);
-> >  
-> > -	return pen_release != -1 ? -ENOSYS : 0;
-> > +	return spear_pen_release != -1 ? -ENOSYS : 0;
-> >  }
-> >  
-> >  /*
-> > -- 
-> > 2.7.4
-> 
-> -- 
-> viresh
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
+diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
+index b625906a9970..61a34e1c0f22 100644
+--- a/arch/arm/mach-oxnas/Makefile
++++ b/arch/arm/mach-oxnas/Makefile
+@@ -1,2 +1 @@
+ obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
+-obj-$(CONFIG_HOTPLUG_CPU) 	+= hotplug.o
+diff --git a/arch/arm/mach-oxnas/hotplug.c b/arch/arm/mach-oxnas/hotplug.c
+deleted file mode 100644
+index 854f29b8cba6..000000000000
+--- a/arch/arm/mach-oxnas/hotplug.c
++++ /dev/null
+@@ -1,109 +0,0 @@
+-/*
+- *  Copyright (C) 2002 ARM Ltd.
+- *  All Rights Reserved
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+- */
+-#include <linux/kernel.h>
+-#include <linux/errno.h>
+-#include <linux/smp.h>
+-
+-#include <asm/cp15.h>
+-#include <asm/smp_plat.h>
+-
+-static inline void cpu_enter_lowpower(void)
+-{
+-	unsigned int v;
+-
+-	asm volatile(
+-	"	mcr	p15, 0, %1, c7, c5, 0\n"
+-	"	mcr	p15, 0, %1, c7, c10, 4\n"
+-	/*
+-	 * Turn off coherency
+-	 */
+-	"	mrc	p15, 0, %0, c1, c0, 1\n"
+-	"	bic	%0, %0, #0x20\n"
+-	"	mcr	p15, 0, %0, c1, c0, 1\n"
+-	"	mrc	p15, 0, %0, c1, c0, 0\n"
+-	"	bic	%0, %0, %2\n"
+-	"	mcr	p15, 0, %0, c1, c0, 0\n"
+-	  : "=&r" (v)
+-	  : "r" (0), "Ir" (CR_C)
+-	  : "cc");
+-}
+-
+-static inline void cpu_leave_lowpower(void)
+-{
+-	unsigned int v;
+-
+-	asm volatile(	"mrc	p15, 0, %0, c1, c0, 0\n"
+-	"	orr	%0, %0, %1\n"
+-	"	mcr	p15, 0, %0, c1, c0, 0\n"
+-	"	mrc	p15, 0, %0, c1, c0, 1\n"
+-	"	orr	%0, %0, #0x20\n"
+-	"	mcr	p15, 0, %0, c1, c0, 1\n"
+-	  : "=&r" (v)
+-	  : "Ir" (CR_C)
+-	  : "cc");
+-}
+-
+-static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
+-{
+-	/*
+-	 * there is no power-control hardware on this platform, so all
+-	 * we can do is put the core into WFI; this is safe as the calling
+-	 * code will have already disabled interrupts
+-	 */
+-	for (;;) {
+-		/*
+-		 * here's the WFI
+-		 */
+-		asm(".word	0xe320f003\n"
+-		    :
+-		    :
+-		    : "memory", "cc");
+-
+-		if (pen_release == cpu_logical_map(cpu)) {
+-			/*
+-			 * OK, proper wakeup, we're done
+-			 */
+-			break;
+-		}
+-
+-		/*
+-		 * Getting here, means that we have come out of WFI without
+-		 * having been woken up - this shouldn't happen
+-		 *
+-		 * Just note it happening - when we're woken, we can report
+-		 * its occurrence.
+-		 */
+-		(*spurious)++;
+-	}
+-}
+-
+-/*
+- * platform-specific code to shutdown a CPU
+- *
+- * Called with IRQs disabled
+- */
+-void ox820_cpu_die(unsigned int cpu)
+-{
+-	int spurious = 0;
+-
+-	/*
+-	 * we're ready for shutdown now, so do it
+-	 */
+-	cpu_enter_lowpower();
+-	platform_do_lowpower(cpu, &spurious);
+-
+-	/*
+-	 * bring this CPU back into the world of cache
+-	 * coherency, and then restore interrupts
+-	 */
+-	cpu_leave_lowpower();
+-
+-	if (spurious)
+-		pr_warn("CPU%u: %u spurious wakeup calls\n", cpu, spurious);
+-}
+diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
+index 442cc8a2f7dc..735141c0e3a3 100644
+--- a/arch/arm/mach-oxnas/platsmp.c
++++ b/arch/arm/mach-oxnas/platsmp.c
+@@ -19,7 +19,6 @@
+ #include <asm/smp_scu.h>
+ 
+ extern void ox820_secondary_startup(void);
+-extern void ox820_cpu_die(unsigned int cpu);
+ 
+ static void __iomem *cpu_ctrl;
+ static void __iomem *gic_cpu_ctrl;
+@@ -94,9 +93,6 @@ static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
+ static const struct smp_operations ox820_smp_ops __initconst = {
+ 	.smp_prepare_cpus	= ox820_smp_prepare_cpus,
+ 	.smp_boot_secondary	= ox820_boot_secondary,
+-#ifdef CONFIG_HOTPLUG_CPU
+-	.cpu_die		= ox820_cpu_die,
+-#endif
+ };
+ 
+ CPU_METHOD_OF_DECLARE(ox820_smp, "oxsemi,ox820-smp", &ox820_smp_ops);
 -- 
-RMK's Patch system: http://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+2.7.4
+
