@@ -1,105 +1,186 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPSA id 6950020879
-	for <linux-oxnas@groups.io>; Tue,  4 Dec 2018 14:05:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1543932306;
-	bh=yTr+UbBFW+eS6HM3fzcLbxczAbrxW4SyfnuUXDeA/9o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GV0vsPguRlbVwUdqPqdotp9D2RX4uJcvLoeZB4aoigLRi8c7ofsrLfJ3hTvEy12nT
-	 3oDb2slvH5a27cyVmVC2m6BQspIoq8Cfy2ZmpH2LSslhjD9ORiJJdd8STMH9ZsBG+O
-	 U9Uh+jBysPhtu0bVYSATY+Qpb2tiZwvhrxeihfeg=
-Received: by mail-qt1-f181.google.com with SMTP id z16so18104777qtq.4
-        for <linux-oxnas@groups.io>; Tue, 04 Dec 2018 06:05:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2014; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+	Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=V8bov3LQxKS+0wgZ/p0gc863/fFXgsfqhoabofSGwog=; b=irfQJ4kHYaqio4mRZxdWTlMZLb
+	xXePbWZkjc14opZ2eULELb7ta4ylWuqnPkucX1Yqiq1YXzWqou0aJXgqVcNL3vlwQgEDR4m7c+fCT
+	PMmTFoSvbgJGjVqc1TojmaU1OxHmMrtgxlI3KG7+qAsa1xGpdgTc6wHxflJtRngu+6xM=;
+From: Russell King <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 3/5] ARM: oxnas: remove CPU hotplug implementation
 MIME-Version: 1.0
-References: <20181203213223.16986-1-robh@kernel.org> <20181203213223.16986-22-robh@kernel.org>
- <be37bd18-a573-307e-3a9e-e879010cfc89@baylibre.com>
-In-Reply-To: <be37bd18-a573-307e-3a9e-e879010cfc89@baylibre.com>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 4 Dec 2018 08:04:54 -0600
-Message-ID: <CAL_JsqJ3oL4FWSQKVLRtmg5Bma5q6-QgicfATcOEo3nQY-TdPw@mail.gmail.com>
-Subject: Re: [PATCH v2 21/34] dt-bindings: arm: Convert Oxford Semi board/soc bindings to json-schema
-Content-Type: text/plain; charset="UTF-8"
-To: Neil Armstrong <narmstrong@baylibre.com>
-Cc: devicetree@vger.kernel.org, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Sean Hudson <darknighte@darknighte.com>, Frank Rowand <frowand.list@gmail.com>, "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, Grant Likely <grant.likely@arm.com>, Kumar Gala <kumar.gala@linaro.org>, ARM-SoC Maintainers <arm@kernel.org>, Mark Rutland <mark.rutland@arm.com>, linux-oxnas@groups.io
+Message-Id: <E1gXPak-00064Q-TD@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Thu, 13 Dec 2018 11:55:46 +0000
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+To: linux-arm-msm@vger.kernel.org
+Cc: Neil Armstrong <narmstrong@baylibre.com>, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-On Tue, Dec 4, 2018 at 2:43 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> On 03/12/2018 22:32, Rob Herring wrote:
-> > Convert Oxford Semi SoC bindings to DT schema format using json-schema.
-> >
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Neil Armstrong <narmstrong@baylibre.com>
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-oxnas@groups.io
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../devicetree/bindings/arm/oxnas.txt         | 14 -----------
-> >  .../devicetree/bindings/arm/oxnas.yaml        | 25 +++++++++++++++++++
-> >  2 files changed, 25 insertions(+), 14 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/arm/oxnas.txt
-> >  create mode 100644 Documentation/devicetree/bindings/arm/oxnas.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/oxnas.txt b/Documentation/devicetree/bindings/arm/oxnas.txt
-> > deleted file mode 100644
-> > index ac64e60f99f1..000000000000
-> > --- a/Documentation/devicetree/bindings/arm/oxnas.txt
-> > +++ /dev/null
-> > @@ -1,14 +0,0 @@
-> > -Oxford Semiconductor OXNAS SoCs Family device tree bindings
-> > --------------------------------------------
-> > -
-> > -Boards with the OX810SE SoC shall have the following properties:
-> > -  Required root node property:
-> > -    compatible: "oxsemi,ox810se"
-> > -
-> > -Boards with the OX820 SoC shall have the following properties:
-> > -  Required root node property:
-> > -    compatible: "oxsemi,ox820"
-> > -
-> > -Board compatible values:
-> > -  - "wd,mbwe" (OX810SE)
-> > -  - "cloudengines,pogoplugv3" (OX820)
-> > diff --git a/Documentation/devicetree/bindings/arm/oxnas.yaml b/Documentation/devicetree/bindings/arm/oxnas.yaml
-> > new file mode 100644
-> > index 000000000000..6ae51ef513be
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/arm/oxnas.yaml
-> > @@ -0,0 +1,25 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/arm/oxnas.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Oxford Semiconductor OXNAS SoCs Family device tree bindings
-> > +
-> > +maintainers:
-> > +  - Neil Armstrong <narmstrong@baylibre.com>
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    const: '/'
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +        - enum:
-> > +            - wd,mbwe
-> > +        - const: oxsemi,ox810se
-> > +
-> > +      - items:
-> > +        - enum:
-> > +            - cloudengines,pogoplugv3
-> > +        - const: oxsemi,ox820
-> >
->
-> We also loose all the "human friendly" description of board/SoC relationship here,
-> and I think it's a shame.
+The CPU hotplug implementation on this platform is cargo-culted from
+the plat-versatile implementation, and is buggy.  Once a CPU hits the
+"low power" loop, it will wait for pen_release to be set to the CPU
+number to wake up again - but nothing in this implementation does that.
 
-You can have whatever comments or description properties you like, so
-how would you like it to look?
+So, once a CPU has entered cpu_die() it will never, ever leave.
 
-Rob
+Remove this useless cargo-culted implementation.
+
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+---
+ arch/arm/mach-oxnas/Makefile  |   1 -
+ arch/arm/mach-oxnas/hotplug.c | 109 ------------------------------------------
+ arch/arm/mach-oxnas/platsmp.c |   4 --
+ 3 files changed, 114 deletions(-)
+ delete mode 100644 arch/arm/mach-oxnas/hotplug.c
+
+diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
+index b625906a9970..61a34e1c0f22 100644
+--- a/arch/arm/mach-oxnas/Makefile
++++ b/arch/arm/mach-oxnas/Makefile
+@@ -1,2 +1 @@
+ obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
+-obj-$(CONFIG_HOTPLUG_CPU) 	+= hotplug.o
+diff --git a/arch/arm/mach-oxnas/hotplug.c b/arch/arm/mach-oxnas/hotplug.c
+deleted file mode 100644
+index 854f29b8cba6..000000000000
+--- a/arch/arm/mach-oxnas/hotplug.c
++++ /dev/null
+@@ -1,109 +0,0 @@
+-/*
+- *  Copyright (C) 2002 ARM Ltd.
+- *  All Rights Reserved
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+- */
+-#include <linux/kernel.h>
+-#include <linux/errno.h>
+-#include <linux/smp.h>
+-
+-#include <asm/cp15.h>
+-#include <asm/smp_plat.h>
+-
+-static inline void cpu_enter_lowpower(void)
+-{
+-	unsigned int v;
+-
+-	asm volatile(
+-	"	mcr	p15, 0, %1, c7, c5, 0\n"
+-	"	mcr	p15, 0, %1, c7, c10, 4\n"
+-	/*
+-	 * Turn off coherency
+-	 */
+-	"	mrc	p15, 0, %0, c1, c0, 1\n"
+-	"	bic	%0, %0, #0x20\n"
+-	"	mcr	p15, 0, %0, c1, c0, 1\n"
+-	"	mrc	p15, 0, %0, c1, c0, 0\n"
+-	"	bic	%0, %0, %2\n"
+-	"	mcr	p15, 0, %0, c1, c0, 0\n"
+-	  : "=&r" (v)
+-	  : "r" (0), "Ir" (CR_C)
+-	  : "cc");
+-}
+-
+-static inline void cpu_leave_lowpower(void)
+-{
+-	unsigned int v;
+-
+-	asm volatile(	"mrc	p15, 0, %0, c1, c0, 0\n"
+-	"	orr	%0, %0, %1\n"
+-	"	mcr	p15, 0, %0, c1, c0, 0\n"
+-	"	mrc	p15, 0, %0, c1, c0, 1\n"
+-	"	orr	%0, %0, #0x20\n"
+-	"	mcr	p15, 0, %0, c1, c0, 1\n"
+-	  : "=&r" (v)
+-	  : "Ir" (CR_C)
+-	  : "cc");
+-}
+-
+-static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
+-{
+-	/*
+-	 * there is no power-control hardware on this platform, so all
+-	 * we can do is put the core into WFI; this is safe as the calling
+-	 * code will have already disabled interrupts
+-	 */
+-	for (;;) {
+-		/*
+-		 * here's the WFI
+-		 */
+-		asm(".word	0xe320f003\n"
+-		    :
+-		    :
+-		    : "memory", "cc");
+-
+-		if (pen_release == cpu_logical_map(cpu)) {
+-			/*
+-			 * OK, proper wakeup, we're done
+-			 */
+-			break;
+-		}
+-
+-		/*
+-		 * Getting here, means that we have come out of WFI without
+-		 * having been woken up - this shouldn't happen
+-		 *
+-		 * Just note it happening - when we're woken, we can report
+-		 * its occurrence.
+-		 */
+-		(*spurious)++;
+-	}
+-}
+-
+-/*
+- * platform-specific code to shutdown a CPU
+- *
+- * Called with IRQs disabled
+- */
+-void ox820_cpu_die(unsigned int cpu)
+-{
+-	int spurious = 0;
+-
+-	/*
+-	 * we're ready for shutdown now, so do it
+-	 */
+-	cpu_enter_lowpower();
+-	platform_do_lowpower(cpu, &spurious);
+-
+-	/*
+-	 * bring this CPU back into the world of cache
+-	 * coherency, and then restore interrupts
+-	 */
+-	cpu_leave_lowpower();
+-
+-	if (spurious)
+-		pr_warn("CPU%u: %u spurious wakeup calls\n", cpu, spurious);
+-}
+diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
+index 442cc8a2f7dc..735141c0e3a3 100644
+--- a/arch/arm/mach-oxnas/platsmp.c
++++ b/arch/arm/mach-oxnas/platsmp.c
+@@ -19,7 +19,6 @@
+ #include <asm/smp_scu.h>
+ 
+ extern void ox820_secondary_startup(void);
+-extern void ox820_cpu_die(unsigned int cpu);
+ 
+ static void __iomem *cpu_ctrl;
+ static void __iomem *gic_cpu_ctrl;
+@@ -94,9 +93,6 @@ static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
+ static const struct smp_operations ox820_smp_ops __initconst = {
+ 	.smp_prepare_cpus	= ox820_smp_prepare_cpus,
+ 	.smp_boot_secondary	= ox820_boot_secondary,
+-#ifdef CONFIG_HOTPLUG_CPU
+-	.cpu_die		= ox820_cpu_die,
+-#endif
+ };
+ 
+ CPU_METHOD_OF_DECLARE(ox820_smp, "oxsemi,ox820-smp", &ox820_smp_ops);
+-- 
+2.7.4
+
