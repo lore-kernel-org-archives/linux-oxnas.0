@@ -1,55 +1,199 @@
-Subject: Re: [PATCH] ARM: dts: Kill off skeleton{64}.dtsi
-References: <20181130170634.9467-1-robh@kernel.org>
-From: Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <a10f92c0-50f9-1e10-4b17-c694353e4580@mleia.com>
-Date: Tue, 4 Dec 2018 00:27:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2014; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=/ytTiQYVG3g6vcew3RCoHF4lBQZyfASgL8KIPRbyLzw=; b=WzGp03rpHEuKUXgGlpiYn6ug36
+	JcHm9gdkc8FZAdjy70rK09pg11Pni8REUC6qhRDjSab5oZ0NKpNImJ1cNK0g0pE1Z0bjPcTitJUZw
+	I3kl5BCXwyAohhqeGopMm5x8Z1ymAT9t/hOCs/8bRstZH3zuSOQCvOsMj56T4d020JQM=;
+In-Reply-To: <20181213175952.GC26090@n2100.armlinux.org.uk>
+References: <20181213175952.GC26090@n2100.armlinux.org.uk>
+From: Russell King <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 4/9] ARM: sti: remove pen_release and boot_lock
 MIME-Version: 1.0
-In-Reply-To: <20181130170634.9467-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-To: Rob Herring <robh@kernel.org>, arm@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, Tsahee Zidenberg <tsahee@annapurnalabs.com>, Antoine Tenart <antoine.tenart@bootlin.com>, Linus Walleij <linus.walleij@linaro.org>, Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Jesper Nilsson <jesper.nilsson@axis.com>, Lars Persson <lars.persson@axis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Ludovic Desroches <ludovic.desroches@microchip.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Jon Mason <jonmason@broadcom.com>, bcm-kernel-feedback-list@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>, Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, Brian Norris <computersforpeace@gmail.com>, Gregory Fong <gregory.0xf0@gmail.com>, Baruch Siach <baruch@tkos.co.il>, Sylvain Lemieux <slemieux.tyco@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>, Carlo Caione <carlo@caione.org>, Kevin Hilman <khilman@baylibre.com>, Eric Miao <eric.y.miao@gmail.com>, Haojian Zhuang <haojian.zhuang@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, Neil Armstrong <narmstrong@baylibre.com>, Jamie Iles <jamie@jamieiles.com>, Barry Song <baohua@kernel.org>, Daniel Mack <daniel@zonque.org>, Robert Jarzmik <robert.jarzmik@free.fr>, Andy Gross <andy.gross@linaro.org>, David Brown <david.brown@linaro.org>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@st.com>, Maxime Ripard <maxime.ripard@bootlin.com>, Chen-Yu Tsai <wens@csie.org>, Jun Nie <jun.nie@linaro.org>, linux-arm-kernel@axis.com, linux-amlogic@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Message-Id: <E1gXVI9-000897-25@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Thu, 13 Dec 2018 18:00:57 +0000
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+To: linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-omap@vger.kernel.org, linux-oxnas@groups.io, linux-samsung-soc@vger.kernel.org, linux-soc@vger.kernel.org
+Cc: Patrice Chotard <patrice.chotard@st.com>
 List-ID: <linux-oxnas@groups.io>
 
-On 11/30/2018 07:06 PM, Rob Herring wrote:
-> Remove the usage of skeleton.dtsi in the remaining dts files. It was
-> deprecated since commit 9c0da3cc61f1 ("ARM: dts: explicitly mark
-> skeleton.dtsi as deprecated"). This will make adding a unit-address to
-> memory nodes easier.
-> 
-> The main tricky part to removing skeleton.dtsi is we could end up with
-> no /memory node at all when a bootloader depends on one being present. I
-> hacked up dtc to check for this condition.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+The pen_release implementation was created for Versatile platforms to
+work around boot loaders that did not differentiate between the
+various different secondary CPUs on this ARM development platform.
+This should not be true of modern platforms where we send IPIs to
+specific CPUs to wake them up.  Remove the pen_release stuff from
+SoCs that make use of the per-CPU IPI mechanism.
 
-[snip]
+The boot_lock is something that was required for ARM development
+platforms to ensure that the delay calibration worked properly.  This
+is not necessary for modern platforms that have better bus bandwidth
+and do not need to calibrate the delay loop for secondary cores.
+Remove the boot_lock entirely.
 
-> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
-> index b7303a4e4236..44b468e4c37a 100644
-> --- a/arch/arm/boot/dts/lpc32xx.dtsi
-> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
-> @@ -11,12 +11,12 @@
->   * http://www.gnu.org/copyleft/gpl.html
->   */
->  
-> -#include "skeleton.dtsi"
-> -
->  #include <dt-bindings/clock/lpc32xx-clock.h>
->  #include <dt-bindings/interrupt-controller/irq.h>
->  
->  / {
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
->  	compatible = "nxp,lpc3220";
->  	interrupt-parent = <&mic>;
->  
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+---
+ arch/arm/mach-sti/Makefile  |  2 +-
+ arch/arm/mach-sti/headsmp.S | 43 -------------------------------
+ arch/arm/mach-sti/platsmp.c | 62 ++-------------------------------------------
+ 3 files changed, 3 insertions(+), 104 deletions(-)
+ delete mode 100644 arch/arm/mach-sti/headsmp.S
 
-For lpc32xx:
+diff --git a/arch/arm/mach-sti/Makefile b/arch/arm/mach-sti/Makefile
+index acb330916333..f85ff059cfba 100644
+--- a/arch/arm/mach-sti/Makefile
++++ b/arch/arm/mach-sti/Makefile
+@@ -1,2 +1,2 @@
+-obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
++obj-$(CONFIG_SMP)		+= platsmp.o
+ obj-$(CONFIG_ARCH_STI) 		+= board-dt.o
+diff --git a/arch/arm/mach-sti/headsmp.S b/arch/arm/mach-sti/headsmp.S
+deleted file mode 100644
+index e0ad451700d5..000000000000
+--- a/arch/arm/mach-sti/headsmp.S
++++ /dev/null
+@@ -1,43 +0,0 @@
+-/*
+- *  arch/arm/mach-sti/headsmp.S
+- *
+- * Copyright (C) 2013 STMicroelectronics (R&D) Limited.
+- *		http://www.st.com
+- *
+- * Cloned from linux/arch/arm/mach-vexpress/headsmp.S
+- *
+- *  Copyright (c) 2003 ARM Limited
+- *  All Rights Reserved
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+- */
+-#include <linux/linkage.h>
+-#include <linux/init.h>
+-
+-/*
+- * ST specific entry point for secondary CPUs.  This provides
+- * a "holding pen" into which all secondary cores are held until we're
+- * ready for them to initialise.
+- */
+-ENTRY(sti_secondary_startup)
+-	mrc	p15, 0, r0, c0, c0, 5
+-	and	r0, r0, #15
+-	adr	r4, 1f
+-	ldmia	r4, {r5, r6}
+-	sub	r4, r4, r5
+-	add	r6, r6, r4
+-pen:	ldr	r7, [r6]
+-	cmp	r7, r0
+-	bne	pen
+-
+-	/*
+-	 * we've been released from the holding pen: secondary_stack
+-	 * should now contain the SVC stack for this core
+-	 */
+-	b	secondary_startup
+-ENDPROC(sti_secondary_startup)
+-
+-1:	.long	.
+-	.long	pen_release
+diff --git a/arch/arm/mach-sti/platsmp.c b/arch/arm/mach-sti/platsmp.c
+index 231f19e17436..21668501c9bb 100644
+--- a/arch/arm/mach-sti/platsmp.c
++++ b/arch/arm/mach-sti/platsmp.c
+@@ -28,72 +28,15 @@
+ 
+ #include "smp.h"
+ 
+-static void write_pen_release(int val)
+-{
+-	pen_release = val;
+-	smp_wmb();
+-	sync_cache_w(&pen_release);
+-}
+-
+-static DEFINE_SPINLOCK(boot_lock);
+-
+-static void sti_secondary_init(unsigned int cpu)
+-{
+-	/*
+-	 * let the primary processor know we're out of the
+-	 * pen, then head off into the C entry point
+-	 */
+-	write_pen_release(-1);
+-
+-	/*
+-	 * Synchronise with the boot thread.
+-	 */
+-	spin_lock(&boot_lock);
+-	spin_unlock(&boot_lock);
+-}
+-
+ static int sti_boot_secondary(unsigned int cpu, struct task_struct *idle)
+ {
+-	unsigned long timeout;
+-
+-	/*
+-	 * set synchronisation state between this boot processor
+-	 * and the secondary one
+-	 */
+-	spin_lock(&boot_lock);
+-
+-	/*
+-	 * The secondary processor is waiting to be released from
+-	 * the holding pen - release it, then wait for it to flag
+-	 * that it has been released by resetting pen_release.
+-	 *
+-	 * Note that "pen_release" is the hardware CPU ID, whereas
+-	 * "cpu" is Linux's internal ID.
+-	 */
+-	write_pen_release(cpu_logical_map(cpu));
+-
+ 	/*
+ 	 * Send the secondary CPU a soft interrupt, thereby causing
+ 	 * it to jump to the secondary entrypoint.
+ 	 */
+ 	arch_send_wakeup_ipi_mask(cpumask_of(cpu));
+ 
+-	timeout = jiffies + (1 * HZ);
+-	while (time_before(jiffies, timeout)) {
+-		smp_rmb();
+-		if (pen_release == -1)
+-			break;
+-
+-		udelay(10);
+-	}
+-
+-	/*
+-	 * now the secondary core is starting up let it run its
+-	 * calibrations, then wait for it to finish
+-	 */
+-	spin_unlock(&boot_lock);
+-
+-	return pen_release != -1 ? -ENOSYS : 0;
++	return 0;
+ }
+ 
+ static void __init sti_smp_prepare_cpus(unsigned int max_cpus)
+@@ -103,7 +46,7 @@ static void __init sti_smp_prepare_cpus(unsigned int max_cpus)
+ 	u32 __iomem *cpu_strt_ptr;
+ 	u32 release_phys;
+ 	int cpu;
+-	unsigned long entry_pa = __pa_symbol(sti_secondary_startup);
++	unsigned long entry_pa = __pa_symbol(secondary_startup);
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-scu");
+ 
+@@ -158,6 +101,5 @@ static void __init sti_smp_prepare_cpus(unsigned int max_cpus)
+ 
+ const struct smp_operations sti_smp_ops __initconst = {
+ 	.smp_prepare_cpus	= sti_smp_prepare_cpus,
+-	.smp_secondary_init	= sti_secondary_init,
+ 	.smp_boot_secondary	= sti_boot_secondary,
+ };
+-- 
+2.7.4
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
-
---
-Best wishes,
-Vladimir
