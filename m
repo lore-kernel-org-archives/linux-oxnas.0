@@ -1,199 +1,75 @@
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2014; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/ytTiQYVG3g6vcew3RCoHF4lBQZyfASgL8KIPRbyLzw=; b=WzGp03rpHEuKUXgGlpiYn6ug36
-	JcHm9gdkc8FZAdjy70rK09pg11Pni8REUC6qhRDjSab5oZ0NKpNImJ1cNK0g0pE1Z0bjPcTitJUZw
-	I3kl5BCXwyAohhqeGopMm5x8Z1ymAT9t/hOCs/8bRstZH3zuSOQCvOsMj56T4d020JQM=;
-In-Reply-To: <20181213175952.GC26090@n2100.armlinux.org.uk>
+Received: by mail-pl1-f193.google.com with SMTP id a14so5603914plm.12
+        for <linux-oxnas@groups.io>; Sun, 16 Dec 2018 22:16:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=AFpXFwHMVO/VpPcfAVPRAu1XtJGJYWGygCyS0HseBIs=;
+        b=aUBd9zzVxe70o2CMwY1samH0vs0vIfuBZj0lpIQn1OdZjB+m76kdR0QEIaK3TPKxlS
+         2poA4ElRgLx7BulLv1aI/FGclF0J80fo+/ZwGcUDsgy9JZWVIk2AY4xiRifjgVRQRRVs
+         Q9u5CENsDLs9M5BJDchPE3sQPMyAiRnDBK3iQ=
+Return-Path: <viresh.kumar@linaro.org>
+Date: Mon, 17 Dec 2018 11:46:08 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH 9/9] ARM: smp: remove arch-provided "pen_release"
+Message-ID: <20181217061608.tlxl24xwfksadj4d@vireshk-i7>
 References: <20181213175952.GC26090@n2100.armlinux.org.uk>
-From: Russell King <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4/9] ARM: sti: remove pen_release and boot_lock
+ <E1gXVIY-0008DI-MU@rmk-PC.armlinux.org.uk>
+ <20181214043923.2gusomvei424vw7m@vireshk-i7>
+ <20181214131200.GL9507@n2100.armlinux.org.uk>
 MIME-Version: 1.0
-Message-Id: <E1gXVI9-000897-25@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Thu, 13 Dec 2018 18:00:57 +0000
+In-Reply-To: <20181214131200.GL9507@n2100.armlinux.org.uk>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-To: linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-omap@vger.kernel.org, linux-oxnas@groups.io, linux-samsung-soc@vger.kernel.org, linux-soc@vger.kernel.org
-Cc: Patrice Chotard <patrice.chotard@st.com>
+To: Russell King - ARM Linux <linux@armlinux.org.uk>
+Cc: Barry Song <baohua@kernel.org>, linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>, Viresh Kumar <vireshk@kernel.org>, linux-oxnas@groups.io, linux-soc@vger.kernel.org, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, linux-arm-kernel@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-The pen_release implementation was created for Versatile platforms to
-work around boot loaders that did not differentiate between the
-various different secondary CPUs on this ARM development platform.
-This should not be true of modern platforms where we send IPIs to
-specific CPUs to wake them up.  Remove the pen_release stuff from
-SoCs that make use of the per-CPU IPI mechanism.
+On 14-12-18, 13:12, Russell King - ARM Linux wrote:
+> On Fri, Dec 14, 2018 at 10:09:23AM +0530, Viresh Kumar wrote:
+> > On 13-12-18, 18:01, Russell King wrote:
+> > > diff --git a/arch/arm/mach-spear/generic.h b/arch/arm/mach-spear/generic.h
+> > > index 909b97c0b237..815333fc320c 100644
+> > > --- a/arch/arm/mach-spear/generic.h
+> > > +++ b/arch/arm/mach-spear/generic.h
+> > > @@ -20,6 +20,8 @@
+> > >  
+> > >  #include <asm/mach/time.h>
+> > >  
+> > > +extern volatile int prima2_pen_release;
+> > 
+> >                        prima2 ?
+> > 
+> > I haven't tried but this may cause build regressions as well, I am
+> > surprised on how this passed for you.
+> 
+> Thanks.
+> 
+> These patches aren't all build tested -
 
-The boot_lock is something that was required for ARM development
-platforms to ensure that the delay calibration worked properly.  This
-is not necessary for modern platforms that have better bus bandwidth
-and do not need to calibrate the delay loop for secondary cores.
-Remove the boot_lock entirely.
+Ah okay.
 
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
----
- arch/arm/mach-sti/Makefile  |  2 +-
- arch/arm/mach-sti/headsmp.S | 43 -------------------------------
- arch/arm/mach-sti/platsmp.c | 62 ++-------------------------------------------
- 3 files changed, 3 insertions(+), 104 deletions(-)
- delete mode 100644 arch/arm/mach-sti/headsmp.S
+> I don't see the point of wasting
+> hours build testing when these platforms /really/ need something better.
 
-diff --git a/arch/arm/mach-sti/Makefile b/arch/arm/mach-sti/Makefile
-index acb330916333..f85ff059cfba 100644
---- a/arch/arm/mach-sti/Makefile
-+++ b/arch/arm/mach-sti/Makefile
-@@ -1,2 +1,2 @@
--obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
-+obj-$(CONFIG_SMP)		+= platsmp.o
- obj-$(CONFIG_ARCH_STI) 		+= board-dt.o
-diff --git a/arch/arm/mach-sti/headsmp.S b/arch/arm/mach-sti/headsmp.S
-deleted file mode 100644
-index e0ad451700d5..000000000000
---- a/arch/arm/mach-sti/headsmp.S
-+++ /dev/null
-@@ -1,43 +0,0 @@
--/*
-- *  arch/arm/mach-sti/headsmp.S
-- *
-- * Copyright (C) 2013 STMicroelectronics (R&D) Limited.
-- *		http://www.st.com
-- *
-- * Cloned from linux/arch/arm/mach-vexpress/headsmp.S
-- *
-- *  Copyright (c) 2003 ARM Limited
-- *  All Rights Reserved
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- */
--#include <linux/linkage.h>
--#include <linux/init.h>
--
--/*
-- * ST specific entry point for secondary CPUs.  This provides
-- * a "holding pen" into which all secondary cores are held until we're
-- * ready for them to initialise.
-- */
--ENTRY(sti_secondary_startup)
--	mrc	p15, 0, r0, c0, c0, 5
--	and	r0, r0, #15
--	adr	r4, 1f
--	ldmia	r4, {r5, r6}
--	sub	r4, r4, r5
--	add	r6, r6, r4
--pen:	ldr	r7, [r6]
--	cmp	r7, r0
--	bne	pen
--
--	/*
--	 * we've been released from the holding pen: secondary_stack
--	 * should now contain the SVC stack for this core
--	 */
--	b	secondary_startup
--ENDPROC(sti_secondary_startup)
--
--1:	.long	.
--	.long	pen_release
-diff --git a/arch/arm/mach-sti/platsmp.c b/arch/arm/mach-sti/platsmp.c
-index 231f19e17436..21668501c9bb 100644
---- a/arch/arm/mach-sti/platsmp.c
-+++ b/arch/arm/mach-sti/platsmp.c
-@@ -28,72 +28,15 @@
- 
- #include "smp.h"
- 
--static void write_pen_release(int val)
--{
--	pen_release = val;
--	smp_wmb();
--	sync_cache_w(&pen_release);
--}
--
--static DEFINE_SPINLOCK(boot_lock);
--
--static void sti_secondary_init(unsigned int cpu)
--{
--	/*
--	 * let the primary processor know we're out of the
--	 * pen, then head off into the C entry point
--	 */
--	write_pen_release(-1);
--
--	/*
--	 * Synchronise with the boot thread.
--	 */
--	spin_lock(&boot_lock);
--	spin_unlock(&boot_lock);
--}
--
- static int sti_boot_secondary(unsigned int cpu, struct task_struct *idle)
- {
--	unsigned long timeout;
--
--	/*
--	 * set synchronisation state between this boot processor
--	 * and the secondary one
--	 */
--	spin_lock(&boot_lock);
--
--	/*
--	 * The secondary processor is waiting to be released from
--	 * the holding pen - release it, then wait for it to flag
--	 * that it has been released by resetting pen_release.
--	 *
--	 * Note that "pen_release" is the hardware CPU ID, whereas
--	 * "cpu" is Linux's internal ID.
--	 */
--	write_pen_release(cpu_logical_map(cpu));
--
- 	/*
- 	 * Send the secondary CPU a soft interrupt, thereby causing
- 	 * it to jump to the secondary entrypoint.
- 	 */
- 	arch_send_wakeup_ipi_mask(cpumask_of(cpu));
- 
--	timeout = jiffies + (1 * HZ);
--	while (time_before(jiffies, timeout)) {
--		smp_rmb();
--		if (pen_release == -1)
--			break;
--
--		udelay(10);
--	}
--
--	/*
--	 * now the secondary core is starting up let it run its
--	 * calibrations, then wait for it to finish
--	 */
--	spin_unlock(&boot_lock);
--
--	return pen_release != -1 ? -ENOSYS : 0;
-+	return 0;
- }
- 
- static void __init sti_smp_prepare_cpus(unsigned int max_cpus)
-@@ -103,7 +46,7 @@ static void __init sti_smp_prepare_cpus(unsigned int max_cpus)
- 	u32 __iomem *cpu_strt_ptr;
- 	u32 release_phys;
- 	int cpu;
--	unsigned long entry_pa = __pa_symbol(sti_secondary_startup);
-+	unsigned long entry_pa = __pa_symbol(secondary_startup);
- 
- 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-scu");
- 
-@@ -158,6 +101,5 @@ static void __init sti_smp_prepare_cpus(unsigned int max_cpus)
- 
- const struct smp_operations sti_smp_ops __initconst = {
- 	.smp_prepare_cpus	= sti_smp_prepare_cpus,
--	.smp_secondary_init	= sti_secondary_init,
- 	.smp_boot_secondary	= sti_boot_secondary,
- };
+I was expecting it to be build tested at least, to be honest. But anyway, we
+will see build failures from bots if any such cases exist.
+
+> This is not supposed to be a finished patch, but a patch to get folk
+> to do something about this issue.
+> 
+> Please fix this issue properly.  I can't give you a patch to do that,
+> you need to sort it yourself, but failure to do anything _will_ result
+> in an updated version of this patch being merged.
+
+Yeah, I know. I have seen the thread and it was lack of knowledge in the
+beginning which made us copy code from rest of ARM platforms. That was stupid
+and there can't be any excuse for that.
+
+Unfortunately, I don't have access to hardware to test this stuff and so
+wouldn't be possible to send a patch as well.
+
+Lets get your patch merged at least.
+
 -- 
-2.7.4
-
+viresh
