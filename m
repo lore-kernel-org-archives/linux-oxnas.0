@@ -1,75 +1,118 @@
-Received: by mail-pl1-f193.google.com with SMTP id a14so5603914plm.12
-        for <linux-oxnas@groups.io>; Sun, 16 Dec 2018 22:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=AFpXFwHMVO/VpPcfAVPRAu1XtJGJYWGygCyS0HseBIs=;
-        b=aUBd9zzVxe70o2CMwY1samH0vs0vIfuBZj0lpIQn1OdZjB+m76kdR0QEIaK3TPKxlS
-         2poA4ElRgLx7BulLv1aI/FGclF0J80fo+/ZwGcUDsgy9JZWVIk2AY4xiRifjgVRQRRVs
-         Q9u5CENsDLs9M5BJDchPE3sQPMyAiRnDBK3iQ=
-Return-Path: <viresh.kumar@linaro.org>
-Date: Mon, 17 Dec 2018 11:46:08 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH 9/9] ARM: smp: remove arch-provided "pen_release"
-Message-ID: <20181217061608.tlxl24xwfksadj4d@vireshk-i7>
+From: Patrice CHOTARD <patrice.chotard@st.com>
+Subject: Re: [PATCH 4/9] ARM: sti: remove pen_release and boot_lock
+Date: Mon, 17 Dec 2018 08:22:45 +0000
+Message-ID: <b24d6a8c-a1ef-9274-0ef8-7b080b365122@st.com>
 References: <20181213175952.GC26090@n2100.armlinux.org.uk>
- <E1gXVIY-0008DI-MU@rmk-PC.armlinux.org.uk>
- <20181214043923.2gusomvei424vw7m@vireshk-i7>
- <20181214131200.GL9507@n2100.armlinux.org.uk>
+ <E1gXVI9-000897-25@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1gXVI9-000897-25@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20181214131200.GL9507@n2100.armlinux.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-To: Russell King - ARM Linux <linux@armlinux.org.uk>
-Cc: Barry Song <baohua@kernel.org>, linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, linux-omap@vger.kernel.org, Kukjin Kim <kgene@kernel.org>, Viresh Kumar <vireshk@kernel.org>, linux-oxnas@groups.io, linux-soc@vger.kernel.org, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B2ADECE59424EE47A5FD54BDDDB536CC@st.com>
+Content-Transfer-Encoding: base64
+To: Russell King <rmk+kernel@armlinux.org.uk>, "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>, "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, "linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, "linux-soc@vger.kernel.org" <linux-soc@vger.kernel.org>
 List-ID: <linux-oxnas@groups.io>
 
-On 14-12-18, 13:12, Russell King - ARM Linux wrote:
-> On Fri, Dec 14, 2018 at 10:09:23AM +0530, Viresh Kumar wrote:
-> > On 13-12-18, 18:01, Russell King wrote:
-> > > diff --git a/arch/arm/mach-spear/generic.h b/arch/arm/mach-spear/generic.h
-> > > index 909b97c0b237..815333fc320c 100644
-> > > --- a/arch/arm/mach-spear/generic.h
-> > > +++ b/arch/arm/mach-spear/generic.h
-> > > @@ -20,6 +20,8 @@
-> > >  
-> > >  #include <asm/mach/time.h>
-> > >  
-> > > +extern volatile int prima2_pen_release;
-> > 
-> >                        prima2 ?
-> > 
-> > I haven't tried but this may cause build regressions as well, I am
-> > surprised on how this passed for you.
-> 
-> Thanks.
-> 
-> These patches aren't all build tested -
-
-Ah okay.
-
-> I don't see the point of wasting
-> hours build testing when these platforms /really/ need something better.
-
-I was expecting it to be build tested at least, to be honest. But anyway, we
-will see build failures from bots if any such cases exist.
-
-> This is not supposed to be a finished patch, but a patch to get folk
-> to do something about this issue.
-> 
-> Please fix this issue properly.  I can't give you a patch to do that,
-> you need to sort it yourself, but failure to do anything _will_ result
-> in an updated version of this patch being merged.
-
-Yeah, I know. I have seen the thread and it was lack of knowledge in the
-beginning which made us copy code from rest of ARM platforms. That was stupid
-and there can't be any excuse for that.
-
-Unfortunately, I don't have access to hardware to test this stuff and so
-wouldn't be possible to send a patch as well.
-
-Lets get your patch merged at least.
-
--- 
-viresh
+SGkgUnVzc2VsDQoNCk9uIDEyLzEzLzE4IDc6MDAgUE0sIFJ1c3NlbGwgS2luZyB3cm90ZToNCj4g
+VGhlIHBlbl9yZWxlYXNlIGltcGxlbWVudGF0aW9uIHdhcyBjcmVhdGVkIGZvciBWZXJzYXRpbGUg
+cGxhdGZvcm1zIHRvDQo+IHdvcmsgYXJvdW5kIGJvb3QgbG9hZGVycyB0aGF0IGRpZCBub3QgZGlm
+ZmVyZW50aWF0ZSBiZXR3ZWVuIHRoZQ0KPiB2YXJpb3VzIGRpZmZlcmVudCBzZWNvbmRhcnkgQ1BV
+cyBvbiB0aGlzIEFSTSBkZXZlbG9wbWVudCBwbGF0Zm9ybS4NCj4gVGhpcyBzaG91bGQgbm90IGJl
+IHRydWUgb2YgbW9kZXJuIHBsYXRmb3JtcyB3aGVyZSB3ZSBzZW5kIElQSXMgdG8NCj4gc3BlY2lm
+aWMgQ1BVcyB0byB3YWtlIHRoZW0gdXAuICBSZW1vdmUgdGhlIHBlbl9yZWxlYXNlIHN0dWZmIGZy
+b20NCj4gU29DcyB0aGF0IG1ha2UgdXNlIG9mIHRoZSBwZXItQ1BVIElQSSBtZWNoYW5pc20uDQo+
+IA0KPiBUaGUgYm9vdF9sb2NrIGlzIHNvbWV0aGluZyB0aGF0IHdhcyByZXF1aXJlZCBmb3IgQVJN
+IGRldmVsb3BtZW50DQo+IHBsYXRmb3JtcyB0byBlbnN1cmUgdGhhdCB0aGUgZGVsYXkgY2FsaWJy
+YXRpb24gd29ya2VkIHByb3Blcmx5LiAgVGhpcw0KPiBpcyBub3QgbmVjZXNzYXJ5IGZvciBtb2Rl
+cm4gcGxhdGZvcm1zIHRoYXQgaGF2ZSBiZXR0ZXIgYnVzIGJhbmR3aWR0aA0KPiBhbmQgZG8gbm90
+IG5lZWQgdG8gY2FsaWJyYXRlIHRoZSBkZWxheSBsb29wIGZvciBzZWNvbmRhcnkgY29yZXMuDQo+
+IFJlbW92ZSB0aGUgYm9vdF9sb2NrIGVudGlyZWx5Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUnVz
+c2VsbCBLaW5nIDxybWsra2VybmVsQGFybWxpbnV4Lm9yZy51az4NCj4gLS0tDQo+ICBhcmNoL2Fy
+bS9tYWNoLXN0aS9NYWtlZmlsZSAgfCAgMiArLQ0KPiAgYXJjaC9hcm0vbWFjaC1zdGkvaGVhZHNt
+cC5TIHwgNDMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgYXJjaC9hcm0vbWFj
+aC1zdGkvcGxhdHNtcC5jIHwgNjIgKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMTA0IGRlbGV0
+aW9ucygtKQ0KPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL21hY2gtc3RpL2hlYWRzbXAu
+Uw0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL21hY2gtc3RpL01ha2VmaWxlIGIvYXJjaC9h
+cm0vbWFjaC1zdGkvTWFrZWZpbGUNCj4gaW5kZXggYWNiMzMwOTE2MzMzLi5mODVmZjA1OWNmYmEg
+MTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtL21hY2gtc3RpL01ha2VmaWxlDQo+ICsrKyBiL2FyY2gv
+YXJtL21hY2gtc3RpL01ha2VmaWxlDQo+IEBAIC0xLDIgKzEsMiBAQA0KPiAtb2JqLSQoQ09ORklH
+X1NNUCkJCSs9IHBsYXRzbXAubyBoZWFkc21wLm8NCj4gK29iai0kKENPTkZJR19TTVApCQkrPSBw
+bGF0c21wLm8NCj4gIG9iai0kKENPTkZJR19BUkNIX1NUSSkgCQkrPSBib2FyZC1kdC5vDQo+IGRp
+ZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLXN0aS9oZWFkc21wLlMgYi9hcmNoL2FybS9tYWNoLXN0
+aS9oZWFkc21wLlMNCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IGUwYWQ0NTE3
+MDBkNS4uMDAwMDAwMDAwMDAwDQo+IC0tLSBhL2FyY2gvYXJtL21hY2gtc3RpL2hlYWRzbXAuUw0K
+PiArKysgL2Rldi9udWxsDQo+IEBAIC0xLDQzICswLDAgQEANCj4gLS8qDQo+IC0gKiAgYXJjaC9h
+cm0vbWFjaC1zdGkvaGVhZHNtcC5TDQo+IC0gKg0KPiAtICogQ29weXJpZ2h0IChDKSAyMDEzIFNU
+TWljcm9lbGVjdHJvbmljcyAoUiZEKSBMaW1pdGVkLg0KPiAtICoJCWh0dHA6Ly93d3cuc3QuY29t
+DQo+IC0gKg0KPiAtICogQ2xvbmVkIGZyb20gbGludXgvYXJjaC9hcm0vbWFjaC12ZXhwcmVzcy9o
+ZWFkc21wLlMNCj4gLSAqDQo+IC0gKiAgQ29weXJpZ2h0IChjKSAyMDAzIEFSTSBMaW1pdGVkDQo+
+IC0gKiAgQWxsIFJpZ2h0cyBSZXNlcnZlZA0KPiAtICoNCj4gLSAqIFRoaXMgcHJvZ3JhbSBpcyBm
+cmVlIHNvZnR3YXJlOyB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5DQo+IC0g
+KiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIHZl
+cnNpb24gMiBhcw0KPiAtICogcHVibGlzaGVkIGJ5IHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRp
+b24uDQo+IC0gKi8NCj4gLSNpbmNsdWRlIDxsaW51eC9saW5rYWdlLmg+DQo+IC0jaW5jbHVkZSA8
+bGludXgvaW5pdC5oPg0KPiAtDQo+IC0vKg0KPiAtICogU1Qgc3BlY2lmaWMgZW50cnkgcG9pbnQg
+Zm9yIHNlY29uZGFyeSBDUFVzLiAgVGhpcyBwcm92aWRlcw0KPiAtICogYSAiaG9sZGluZyBwZW4i
+IGludG8gd2hpY2ggYWxsIHNlY29uZGFyeSBjb3JlcyBhcmUgaGVsZCB1bnRpbCB3ZSdyZQ0KPiAt
+ICogcmVhZHkgZm9yIHRoZW0gdG8gaW5pdGlhbGlzZS4NCj4gLSAqLw0KPiAtRU5UUlkoc3RpX3Nl
+Y29uZGFyeV9zdGFydHVwKQ0KPiAtCW1yYwlwMTUsIDAsIHIwLCBjMCwgYzAsIDUNCj4gLQlhbmQJ
+cjAsIHIwLCAjMTUNCj4gLQlhZHIJcjQsIDFmDQo+IC0JbGRtaWEJcjQsIHtyNSwgcjZ9DQo+IC0J
+c3ViCXI0LCByNCwgcjUNCj4gLQlhZGQJcjYsIHI2LCByNA0KPiAtcGVuOglsZHIJcjcsIFtyNl0N
+Cj4gLQljbXAJcjcsIHIwDQo+IC0JYm5lCXBlbg0KPiAtDQo+IC0JLyoNCj4gLQkgKiB3ZSd2ZSBi
+ZWVuIHJlbGVhc2VkIGZyb20gdGhlIGhvbGRpbmcgcGVuOiBzZWNvbmRhcnlfc3RhY2sNCj4gLQkg
+KiBzaG91bGQgbm93IGNvbnRhaW4gdGhlIFNWQyBzdGFjayBmb3IgdGhpcyBjb3JlDQo+IC0JICov
+DQo+IC0JYglzZWNvbmRhcnlfc3RhcnR1cA0KPiAtRU5EUFJPQyhzdGlfc2Vjb25kYXJ5X3N0YXJ0
+dXApDQo+IC0NCj4gLTE6CS5sb25nCS4NCj4gLQkubG9uZwlwZW5fcmVsZWFzZQ0KPiBkaWZmIC0t
+Z2l0IGEvYXJjaC9hcm0vbWFjaC1zdGkvcGxhdHNtcC5jIGIvYXJjaC9hcm0vbWFjaC1zdGkvcGxh
+dHNtcC5jDQo+IGluZGV4IDIzMWYxOWUxNzQzNi4uMjE2Njg1MDFjOWJiIDEwMDY0NA0KPiAtLS0g
+YS9hcmNoL2FybS9tYWNoLXN0aS9wbGF0c21wLmMNCj4gKysrIGIvYXJjaC9hcm0vbWFjaC1zdGkv
+cGxhdHNtcC5jDQo+IEBAIC0yOCw3MiArMjgsMTUgQEANCj4gIA0KPiAgI2luY2x1ZGUgInNtcC5o
+Ig0KPiAgDQo+IC1zdGF0aWMgdm9pZCB3cml0ZV9wZW5fcmVsZWFzZShpbnQgdmFsKQ0KPiAtew0K
+PiAtCXBlbl9yZWxlYXNlID0gdmFsOw0KPiAtCXNtcF93bWIoKTsNCj4gLQlzeW5jX2NhY2hlX3co
+JnBlbl9yZWxlYXNlKTsNCj4gLX0NCj4gLQ0KPiAtc3RhdGljIERFRklORV9TUElOTE9DSyhib290
+X2xvY2spOw0KPiAtDQo+IC1zdGF0aWMgdm9pZCBzdGlfc2Vjb25kYXJ5X2luaXQodW5zaWduZWQg
+aW50IGNwdSkNCj4gLXsNCj4gLQkvKg0KPiAtCSAqIGxldCB0aGUgcHJpbWFyeSBwcm9jZXNzb3Ig
+a25vdyB3ZSdyZSBvdXQgb2YgdGhlDQo+IC0JICogcGVuLCB0aGVuIGhlYWQgb2ZmIGludG8gdGhl
+IEMgZW50cnkgcG9pbnQNCj4gLQkgKi8NCj4gLQl3cml0ZV9wZW5fcmVsZWFzZSgtMSk7DQo+IC0N
+Cj4gLQkvKg0KPiAtCSAqIFN5bmNocm9uaXNlIHdpdGggdGhlIGJvb3QgdGhyZWFkLg0KPiAtCSAq
+Lw0KPiAtCXNwaW5fbG9jaygmYm9vdF9sb2NrKTsNCj4gLQlzcGluX3VubG9jaygmYm9vdF9sb2Nr
+KTsNCj4gLX0NCj4gLQ0KPiAgc3RhdGljIGludCBzdGlfYm9vdF9zZWNvbmRhcnkodW5zaWduZWQg
+aW50IGNwdSwgc3RydWN0IHRhc2tfc3RydWN0ICppZGxlKQ0KPiAgew0KPiAtCXVuc2lnbmVkIGxv
+bmcgdGltZW91dDsNCj4gLQ0KPiAtCS8qDQo+IC0JICogc2V0IHN5bmNocm9uaXNhdGlvbiBzdGF0
+ZSBiZXR3ZWVuIHRoaXMgYm9vdCBwcm9jZXNzb3INCj4gLQkgKiBhbmQgdGhlIHNlY29uZGFyeSBv
+bmUNCj4gLQkgKi8NCj4gLQlzcGluX2xvY2soJmJvb3RfbG9jayk7DQo+IC0NCj4gLQkvKg0KPiAt
+CSAqIFRoZSBzZWNvbmRhcnkgcHJvY2Vzc29yIGlzIHdhaXRpbmcgdG8gYmUgcmVsZWFzZWQgZnJv
+bQ0KPiAtCSAqIHRoZSBob2xkaW5nIHBlbiAtIHJlbGVhc2UgaXQsIHRoZW4gd2FpdCBmb3IgaXQg
+dG8gZmxhZw0KPiAtCSAqIHRoYXQgaXQgaGFzIGJlZW4gcmVsZWFzZWQgYnkgcmVzZXR0aW5nIHBl
+bl9yZWxlYXNlLg0KPiAtCSAqDQo+IC0JICogTm90ZSB0aGF0ICJwZW5fcmVsZWFzZSIgaXMgdGhl
+IGhhcmR3YXJlIENQVSBJRCwgd2hlcmVhcw0KPiAtCSAqICJjcHUiIGlzIExpbnV4J3MgaW50ZXJu
+YWwgSUQuDQo+IC0JICovDQo+IC0Jd3JpdGVfcGVuX3JlbGVhc2UoY3B1X2xvZ2ljYWxfbWFwKGNw
+dSkpOw0KPiAtDQo+ICAJLyoNCj4gIAkgKiBTZW5kIHRoZSBzZWNvbmRhcnkgQ1BVIGEgc29mdCBp
+bnRlcnJ1cHQsIHRoZXJlYnkgY2F1c2luZw0KPiAgCSAqIGl0IHRvIGp1bXAgdG8gdGhlIHNlY29u
+ZGFyeSBlbnRyeXBvaW50Lg0KPiAgCSAqLw0KPiAgCWFyY2hfc2VuZF93YWtldXBfaXBpX21hc2so
+Y3B1bWFza19vZihjcHUpKTsNCj4gIA0KPiAtCXRpbWVvdXQgPSBqaWZmaWVzICsgKDEgKiBIWik7
+DQo+IC0Jd2hpbGUgKHRpbWVfYmVmb3JlKGppZmZpZXMsIHRpbWVvdXQpKSB7DQo+IC0JCXNtcF9y
+bWIoKTsNCj4gLQkJaWYgKHBlbl9yZWxlYXNlID09IC0xKQ0KPiAtCQkJYnJlYWs7DQo+IC0NCj4g
+LQkJdWRlbGF5KDEwKTsNCj4gLQl9DQo+IC0NCj4gLQkvKg0KPiAtCSAqIG5vdyB0aGUgc2Vjb25k
+YXJ5IGNvcmUgaXMgc3RhcnRpbmcgdXAgbGV0IGl0IHJ1biBpdHMNCj4gLQkgKiBjYWxpYnJhdGlv
+bnMsIHRoZW4gd2FpdCBmb3IgaXQgdG8gZmluaXNoDQo+IC0JICovDQo+IC0Jc3Bpbl91bmxvY2so
+JmJvb3RfbG9jayk7DQo+IC0NCj4gLQlyZXR1cm4gcGVuX3JlbGVhc2UgIT0gLTEgPyAtRU5PU1lT
+IDogMDsNCj4gKwlyZXR1cm4gMDsNCj4gIH0NCj4gIA0KPiAgc3RhdGljIHZvaWQgX19pbml0IHN0
+aV9zbXBfcHJlcGFyZV9jcHVzKHVuc2lnbmVkIGludCBtYXhfY3B1cykNCj4gQEAgLTEwMyw3ICs0
+Niw3IEBAIHN0YXRpYyB2b2lkIF9faW5pdCBzdGlfc21wX3ByZXBhcmVfY3B1cyh1bnNpZ25lZCBp
+bnQgbWF4X2NwdXMpDQo+ICAJdTMyIF9faW9tZW0gKmNwdV9zdHJ0X3B0cjsNCj4gIAl1MzIgcmVs
+ZWFzZV9waHlzOw0KPiAgCWludCBjcHU7DQo+IC0JdW5zaWduZWQgbG9uZyBlbnRyeV9wYSA9IF9f
+cGFfc3ltYm9sKHN0aV9zZWNvbmRhcnlfc3RhcnR1cCk7DQo+ICsJdW5zaWduZWQgbG9uZyBlbnRy
+eV9wYSA9IF9fcGFfc3ltYm9sKHNlY29uZGFyeV9zdGFydHVwKTsNCj4gIA0KPiAgCW5wID0gb2Zf
+ZmluZF9jb21wYXRpYmxlX25vZGUoTlVMTCwgTlVMTCwgImFybSxjb3J0ZXgtYTktc2N1Iik7DQo+
+ICANCj4gQEAgLTE1OCw2ICsxMDEsNSBAQCBzdGF0aWMgdm9pZCBfX2luaXQgc3RpX3NtcF9wcmVw
+YXJlX2NwdXModW5zaWduZWQgaW50IG1heF9jcHVzKQ0KPiAgDQo+ICBjb25zdCBzdHJ1Y3Qgc21w
+X29wZXJhdGlvbnMgc3RpX3NtcF9vcHMgX19pbml0Y29uc3QgPSB7DQo+ICAJLnNtcF9wcmVwYXJl
+X2NwdXMJPSBzdGlfc21wX3ByZXBhcmVfY3B1cywNCj4gLQkuc21wX3NlY29uZGFyeV9pbml0CT0g
+c3RpX3NlY29uZGFyeV9pbml0LA0KPiAgCS5zbXBfYm9vdF9zZWNvbmRhcnkJPSBzdGlfYm9vdF9z
+ZWNvbmRhcnksDQo+ICB9Ow0KPiANCg0KRXZlbiBpZiB0aGlzIHBhdGNoIGlzIGJyZWFraW5nIHRo
+ZSBzZWNvbmRhcnkgQ1BVJ3MgYnJpbmd1cCwgaXQgY2FuIGJlDQptZXJnZWQgYXMgZXhwbGFpbmVk
+IGluIHRoZSBjb21taXQgbWVzc2FnZS4NCg0KSSB3aWxsIHNlbmQgYW4gYWRkaXRpb25uYWwgcGF0
+Y2ggdG8gcmVzdG9yZSB0aGUgc2Vjb25kYXJ5IENQVSdzIGJyaW5ndXAuDQoNClRoYW5rcyBmb3Ig
+dGhpcyBjbGVhbi11cC4NCg0KUGF0cmljZQ==
