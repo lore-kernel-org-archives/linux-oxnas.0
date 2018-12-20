@@ -1,118 +1,194 @@
-From: Patrice CHOTARD <patrice.chotard@st.com>
-Subject: Re: [PATCH 4/9] ARM: sti: remove pen_release and boot_lock
-Date: Mon, 17 Dec 2018 08:22:45 +0000
-Message-ID: <b24d6a8c-a1ef-9274-0ef8-7b080b365122@st.com>
+Received: by mail-wm1-f66.google.com with SMTP id g67so2325239wmd.2
+        for <linux-oxnas@groups.io>; Thu, 20 Dec 2018 06:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=JIxIFoeGjsKtNVE23FzL8DydGYZeNS0ljgI025CltDY=;
+        b=bCX/UpUcLdy/iwQmPAHFdH/PHL/hGZnQe8b5S2+Amle+PmlSWOetnxtdkcW3oJMVCC
+         3EqGwhkZETq5oe5vzYoA/qti++NVPYNxXKnWXS8SnZENAg/bBy6P1gHFq5hZy/ynFeD0
+         cqnbXP+RXX+gv5Yf12RECx/cwlcDrUwtYOqwwZpO5XJqsfZEvUeIgnwyYqVSD0AgfUy6
+         03KeeWs9Q0VqMJbqh8Jy4q347t3bXXM4itxm8S2xVbsOXGIYlyAz/83gtXZu98g5smfK
+         noFdpzhE42eT4CxWFdxDY7m9mNHvT7RLWSs/d9JRdza+E37YzmcAe1XCEujD6oLBFN64
+         hBoA==
+Return-Path: <narmstrong@baylibre.com>
+Subject: Re: [PATCH 3/9] ARM: oxnas: remove CPU hotplug implementation
 References: <20181213175952.GC26090@n2100.armlinux.org.uk>
- <E1gXVI9-000897-25@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1gXVI9-000897-25@rmk-PC.armlinux.org.uk>
+ <E1gXVI3-00088u-N6@rmk-PC.armlinux.org.uk>
+From: "Neil Armstrong" <narmstrong@baylibre.com>
+Message-ID: <b1e2ac26-52a2-0614-4e14-0cb46e839d3f@baylibre.com>
+Date: Thu, 20 Dec 2018 15:03:44 +0100
 MIME-Version: 1.0
+In-Reply-To: <E1gXVI3-00088u-N6@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B2ADECE59424EE47A5FD54BDDDB536CC@st.com>
-Content-Transfer-Encoding: base64
-To: Russell King <rmk+kernel@armlinux.org.uk>, "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>, "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, "linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, "linux-soc@vger.kernel.org" <linux-soc@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: Russell King <rmk+kernel@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-omap@vger.kernel.org, linux-oxnas@groups.io, linux-samsung-soc@vger.kernel.org, linux-soc@vger.kernel.org
 List-ID: <linux-oxnas@groups.io>
 
-SGkgUnVzc2VsDQoNCk9uIDEyLzEzLzE4IDc6MDAgUE0sIFJ1c3NlbGwgS2luZyB3cm90ZToNCj4g
-VGhlIHBlbl9yZWxlYXNlIGltcGxlbWVudGF0aW9uIHdhcyBjcmVhdGVkIGZvciBWZXJzYXRpbGUg
-cGxhdGZvcm1zIHRvDQo+IHdvcmsgYXJvdW5kIGJvb3QgbG9hZGVycyB0aGF0IGRpZCBub3QgZGlm
-ZmVyZW50aWF0ZSBiZXR3ZWVuIHRoZQ0KPiB2YXJpb3VzIGRpZmZlcmVudCBzZWNvbmRhcnkgQ1BV
-cyBvbiB0aGlzIEFSTSBkZXZlbG9wbWVudCBwbGF0Zm9ybS4NCj4gVGhpcyBzaG91bGQgbm90IGJl
-IHRydWUgb2YgbW9kZXJuIHBsYXRmb3JtcyB3aGVyZSB3ZSBzZW5kIElQSXMgdG8NCj4gc3BlY2lm
-aWMgQ1BVcyB0byB3YWtlIHRoZW0gdXAuICBSZW1vdmUgdGhlIHBlbl9yZWxlYXNlIHN0dWZmIGZy
-b20NCj4gU29DcyB0aGF0IG1ha2UgdXNlIG9mIHRoZSBwZXItQ1BVIElQSSBtZWNoYW5pc20uDQo+
-IA0KPiBUaGUgYm9vdF9sb2NrIGlzIHNvbWV0aGluZyB0aGF0IHdhcyByZXF1aXJlZCBmb3IgQVJN
-IGRldmVsb3BtZW50DQo+IHBsYXRmb3JtcyB0byBlbnN1cmUgdGhhdCB0aGUgZGVsYXkgY2FsaWJy
-YXRpb24gd29ya2VkIHByb3Blcmx5LiAgVGhpcw0KPiBpcyBub3QgbmVjZXNzYXJ5IGZvciBtb2Rl
-cm4gcGxhdGZvcm1zIHRoYXQgaGF2ZSBiZXR0ZXIgYnVzIGJhbmR3aWR0aA0KPiBhbmQgZG8gbm90
-IG5lZWQgdG8gY2FsaWJyYXRlIHRoZSBkZWxheSBsb29wIGZvciBzZWNvbmRhcnkgY29yZXMuDQo+
-IFJlbW92ZSB0aGUgYm9vdF9sb2NrIGVudGlyZWx5Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUnVz
-c2VsbCBLaW5nIDxybWsra2VybmVsQGFybWxpbnV4Lm9yZy51az4NCj4gLS0tDQo+ICBhcmNoL2Fy
-bS9tYWNoLXN0aS9NYWtlZmlsZSAgfCAgMiArLQ0KPiAgYXJjaC9hcm0vbWFjaC1zdGkvaGVhZHNt
-cC5TIHwgNDMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgYXJjaC9hcm0vbWFj
-aC1zdGkvcGxhdHNtcC5jIHwgNjIgKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMTA0IGRlbGV0
-aW9ucygtKQ0KPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL21hY2gtc3RpL2hlYWRzbXAu
-Uw0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL21hY2gtc3RpL01ha2VmaWxlIGIvYXJjaC9h
-cm0vbWFjaC1zdGkvTWFrZWZpbGUNCj4gaW5kZXggYWNiMzMwOTE2MzMzLi5mODVmZjA1OWNmYmEg
-MTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtL21hY2gtc3RpL01ha2VmaWxlDQo+ICsrKyBiL2FyY2gv
-YXJtL21hY2gtc3RpL01ha2VmaWxlDQo+IEBAIC0xLDIgKzEsMiBAQA0KPiAtb2JqLSQoQ09ORklH
-X1NNUCkJCSs9IHBsYXRzbXAubyBoZWFkc21wLm8NCj4gK29iai0kKENPTkZJR19TTVApCQkrPSBw
-bGF0c21wLm8NCj4gIG9iai0kKENPTkZJR19BUkNIX1NUSSkgCQkrPSBib2FyZC1kdC5vDQo+IGRp
-ZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLXN0aS9oZWFkc21wLlMgYi9hcmNoL2FybS9tYWNoLXN0
-aS9oZWFkc21wLlMNCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IGUwYWQ0NTE3
-MDBkNS4uMDAwMDAwMDAwMDAwDQo+IC0tLSBhL2FyY2gvYXJtL21hY2gtc3RpL2hlYWRzbXAuUw0K
-PiArKysgL2Rldi9udWxsDQo+IEBAIC0xLDQzICswLDAgQEANCj4gLS8qDQo+IC0gKiAgYXJjaC9h
-cm0vbWFjaC1zdGkvaGVhZHNtcC5TDQo+IC0gKg0KPiAtICogQ29weXJpZ2h0IChDKSAyMDEzIFNU
-TWljcm9lbGVjdHJvbmljcyAoUiZEKSBMaW1pdGVkLg0KPiAtICoJCWh0dHA6Ly93d3cuc3QuY29t
-DQo+IC0gKg0KPiAtICogQ2xvbmVkIGZyb20gbGludXgvYXJjaC9hcm0vbWFjaC12ZXhwcmVzcy9o
-ZWFkc21wLlMNCj4gLSAqDQo+IC0gKiAgQ29weXJpZ2h0IChjKSAyMDAzIEFSTSBMaW1pdGVkDQo+
-IC0gKiAgQWxsIFJpZ2h0cyBSZXNlcnZlZA0KPiAtICoNCj4gLSAqIFRoaXMgcHJvZ3JhbSBpcyBm
-cmVlIHNvZnR3YXJlOyB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5DQo+IC0g
-KiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIHZl
-cnNpb24gMiBhcw0KPiAtICogcHVibGlzaGVkIGJ5IHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRp
-b24uDQo+IC0gKi8NCj4gLSNpbmNsdWRlIDxsaW51eC9saW5rYWdlLmg+DQo+IC0jaW5jbHVkZSA8
-bGludXgvaW5pdC5oPg0KPiAtDQo+IC0vKg0KPiAtICogU1Qgc3BlY2lmaWMgZW50cnkgcG9pbnQg
-Zm9yIHNlY29uZGFyeSBDUFVzLiAgVGhpcyBwcm92aWRlcw0KPiAtICogYSAiaG9sZGluZyBwZW4i
-IGludG8gd2hpY2ggYWxsIHNlY29uZGFyeSBjb3JlcyBhcmUgaGVsZCB1bnRpbCB3ZSdyZQ0KPiAt
-ICogcmVhZHkgZm9yIHRoZW0gdG8gaW5pdGlhbGlzZS4NCj4gLSAqLw0KPiAtRU5UUlkoc3RpX3Nl
-Y29uZGFyeV9zdGFydHVwKQ0KPiAtCW1yYwlwMTUsIDAsIHIwLCBjMCwgYzAsIDUNCj4gLQlhbmQJ
-cjAsIHIwLCAjMTUNCj4gLQlhZHIJcjQsIDFmDQo+IC0JbGRtaWEJcjQsIHtyNSwgcjZ9DQo+IC0J
-c3ViCXI0LCByNCwgcjUNCj4gLQlhZGQJcjYsIHI2LCByNA0KPiAtcGVuOglsZHIJcjcsIFtyNl0N
-Cj4gLQljbXAJcjcsIHIwDQo+IC0JYm5lCXBlbg0KPiAtDQo+IC0JLyoNCj4gLQkgKiB3ZSd2ZSBi
-ZWVuIHJlbGVhc2VkIGZyb20gdGhlIGhvbGRpbmcgcGVuOiBzZWNvbmRhcnlfc3RhY2sNCj4gLQkg
-KiBzaG91bGQgbm93IGNvbnRhaW4gdGhlIFNWQyBzdGFjayBmb3IgdGhpcyBjb3JlDQo+IC0JICov
-DQo+IC0JYglzZWNvbmRhcnlfc3RhcnR1cA0KPiAtRU5EUFJPQyhzdGlfc2Vjb25kYXJ5X3N0YXJ0
-dXApDQo+IC0NCj4gLTE6CS5sb25nCS4NCj4gLQkubG9uZwlwZW5fcmVsZWFzZQ0KPiBkaWZmIC0t
-Z2l0IGEvYXJjaC9hcm0vbWFjaC1zdGkvcGxhdHNtcC5jIGIvYXJjaC9hcm0vbWFjaC1zdGkvcGxh
-dHNtcC5jDQo+IGluZGV4IDIzMWYxOWUxNzQzNi4uMjE2Njg1MDFjOWJiIDEwMDY0NA0KPiAtLS0g
-YS9hcmNoL2FybS9tYWNoLXN0aS9wbGF0c21wLmMNCj4gKysrIGIvYXJjaC9hcm0vbWFjaC1zdGkv
-cGxhdHNtcC5jDQo+IEBAIC0yOCw3MiArMjgsMTUgQEANCj4gIA0KPiAgI2luY2x1ZGUgInNtcC5o
-Ig0KPiAgDQo+IC1zdGF0aWMgdm9pZCB3cml0ZV9wZW5fcmVsZWFzZShpbnQgdmFsKQ0KPiAtew0K
-PiAtCXBlbl9yZWxlYXNlID0gdmFsOw0KPiAtCXNtcF93bWIoKTsNCj4gLQlzeW5jX2NhY2hlX3co
-JnBlbl9yZWxlYXNlKTsNCj4gLX0NCj4gLQ0KPiAtc3RhdGljIERFRklORV9TUElOTE9DSyhib290
-X2xvY2spOw0KPiAtDQo+IC1zdGF0aWMgdm9pZCBzdGlfc2Vjb25kYXJ5X2luaXQodW5zaWduZWQg
-aW50IGNwdSkNCj4gLXsNCj4gLQkvKg0KPiAtCSAqIGxldCB0aGUgcHJpbWFyeSBwcm9jZXNzb3Ig
-a25vdyB3ZSdyZSBvdXQgb2YgdGhlDQo+IC0JICogcGVuLCB0aGVuIGhlYWQgb2ZmIGludG8gdGhl
-IEMgZW50cnkgcG9pbnQNCj4gLQkgKi8NCj4gLQl3cml0ZV9wZW5fcmVsZWFzZSgtMSk7DQo+IC0N
-Cj4gLQkvKg0KPiAtCSAqIFN5bmNocm9uaXNlIHdpdGggdGhlIGJvb3QgdGhyZWFkLg0KPiAtCSAq
-Lw0KPiAtCXNwaW5fbG9jaygmYm9vdF9sb2NrKTsNCj4gLQlzcGluX3VubG9jaygmYm9vdF9sb2Nr
-KTsNCj4gLX0NCj4gLQ0KPiAgc3RhdGljIGludCBzdGlfYm9vdF9zZWNvbmRhcnkodW5zaWduZWQg
-aW50IGNwdSwgc3RydWN0IHRhc2tfc3RydWN0ICppZGxlKQ0KPiAgew0KPiAtCXVuc2lnbmVkIGxv
-bmcgdGltZW91dDsNCj4gLQ0KPiAtCS8qDQo+IC0JICogc2V0IHN5bmNocm9uaXNhdGlvbiBzdGF0
-ZSBiZXR3ZWVuIHRoaXMgYm9vdCBwcm9jZXNzb3INCj4gLQkgKiBhbmQgdGhlIHNlY29uZGFyeSBv
-bmUNCj4gLQkgKi8NCj4gLQlzcGluX2xvY2soJmJvb3RfbG9jayk7DQo+IC0NCj4gLQkvKg0KPiAt
-CSAqIFRoZSBzZWNvbmRhcnkgcHJvY2Vzc29yIGlzIHdhaXRpbmcgdG8gYmUgcmVsZWFzZWQgZnJv
-bQ0KPiAtCSAqIHRoZSBob2xkaW5nIHBlbiAtIHJlbGVhc2UgaXQsIHRoZW4gd2FpdCBmb3IgaXQg
-dG8gZmxhZw0KPiAtCSAqIHRoYXQgaXQgaGFzIGJlZW4gcmVsZWFzZWQgYnkgcmVzZXR0aW5nIHBl
-bl9yZWxlYXNlLg0KPiAtCSAqDQo+IC0JICogTm90ZSB0aGF0ICJwZW5fcmVsZWFzZSIgaXMgdGhl
-IGhhcmR3YXJlIENQVSBJRCwgd2hlcmVhcw0KPiAtCSAqICJjcHUiIGlzIExpbnV4J3MgaW50ZXJu
-YWwgSUQuDQo+IC0JICovDQo+IC0Jd3JpdGVfcGVuX3JlbGVhc2UoY3B1X2xvZ2ljYWxfbWFwKGNw
-dSkpOw0KPiAtDQo+ICAJLyoNCj4gIAkgKiBTZW5kIHRoZSBzZWNvbmRhcnkgQ1BVIGEgc29mdCBp
-bnRlcnJ1cHQsIHRoZXJlYnkgY2F1c2luZw0KPiAgCSAqIGl0IHRvIGp1bXAgdG8gdGhlIHNlY29u
-ZGFyeSBlbnRyeXBvaW50Lg0KPiAgCSAqLw0KPiAgCWFyY2hfc2VuZF93YWtldXBfaXBpX21hc2so
-Y3B1bWFza19vZihjcHUpKTsNCj4gIA0KPiAtCXRpbWVvdXQgPSBqaWZmaWVzICsgKDEgKiBIWik7
-DQo+IC0Jd2hpbGUgKHRpbWVfYmVmb3JlKGppZmZpZXMsIHRpbWVvdXQpKSB7DQo+IC0JCXNtcF9y
-bWIoKTsNCj4gLQkJaWYgKHBlbl9yZWxlYXNlID09IC0xKQ0KPiAtCQkJYnJlYWs7DQo+IC0NCj4g
-LQkJdWRlbGF5KDEwKTsNCj4gLQl9DQo+IC0NCj4gLQkvKg0KPiAtCSAqIG5vdyB0aGUgc2Vjb25k
-YXJ5IGNvcmUgaXMgc3RhcnRpbmcgdXAgbGV0IGl0IHJ1biBpdHMNCj4gLQkgKiBjYWxpYnJhdGlv
-bnMsIHRoZW4gd2FpdCBmb3IgaXQgdG8gZmluaXNoDQo+IC0JICovDQo+IC0Jc3Bpbl91bmxvY2so
-JmJvb3RfbG9jayk7DQo+IC0NCj4gLQlyZXR1cm4gcGVuX3JlbGVhc2UgIT0gLTEgPyAtRU5PU1lT
-IDogMDsNCj4gKwlyZXR1cm4gMDsNCj4gIH0NCj4gIA0KPiAgc3RhdGljIHZvaWQgX19pbml0IHN0
-aV9zbXBfcHJlcGFyZV9jcHVzKHVuc2lnbmVkIGludCBtYXhfY3B1cykNCj4gQEAgLTEwMyw3ICs0
-Niw3IEBAIHN0YXRpYyB2b2lkIF9faW5pdCBzdGlfc21wX3ByZXBhcmVfY3B1cyh1bnNpZ25lZCBp
-bnQgbWF4X2NwdXMpDQo+ICAJdTMyIF9faW9tZW0gKmNwdV9zdHJ0X3B0cjsNCj4gIAl1MzIgcmVs
-ZWFzZV9waHlzOw0KPiAgCWludCBjcHU7DQo+IC0JdW5zaWduZWQgbG9uZyBlbnRyeV9wYSA9IF9f
-cGFfc3ltYm9sKHN0aV9zZWNvbmRhcnlfc3RhcnR1cCk7DQo+ICsJdW5zaWduZWQgbG9uZyBlbnRy
-eV9wYSA9IF9fcGFfc3ltYm9sKHNlY29uZGFyeV9zdGFydHVwKTsNCj4gIA0KPiAgCW5wID0gb2Zf
-ZmluZF9jb21wYXRpYmxlX25vZGUoTlVMTCwgTlVMTCwgImFybSxjb3J0ZXgtYTktc2N1Iik7DQo+
-ICANCj4gQEAgLTE1OCw2ICsxMDEsNSBAQCBzdGF0aWMgdm9pZCBfX2luaXQgc3RpX3NtcF9wcmVw
-YXJlX2NwdXModW5zaWduZWQgaW50IG1heF9jcHVzKQ0KPiAgDQo+ICBjb25zdCBzdHJ1Y3Qgc21w
-X29wZXJhdGlvbnMgc3RpX3NtcF9vcHMgX19pbml0Y29uc3QgPSB7DQo+ICAJLnNtcF9wcmVwYXJl
-X2NwdXMJPSBzdGlfc21wX3ByZXBhcmVfY3B1cywNCj4gLQkuc21wX3NlY29uZGFyeV9pbml0CT0g
-c3RpX3NlY29uZGFyeV9pbml0LA0KPiAgCS5zbXBfYm9vdF9zZWNvbmRhcnkJPSBzdGlfYm9vdF9z
-ZWNvbmRhcnksDQo+ICB9Ow0KPiANCg0KRXZlbiBpZiB0aGlzIHBhdGNoIGlzIGJyZWFraW5nIHRo
-ZSBzZWNvbmRhcnkgQ1BVJ3MgYnJpbmd1cCwgaXQgY2FuIGJlDQptZXJnZWQgYXMgZXhwbGFpbmVk
-IGluIHRoZSBjb21taXQgbWVzc2FnZS4NCg0KSSB3aWxsIHNlbmQgYW4gYWRkaXRpb25uYWwgcGF0
-Y2ggdG8gcmVzdG9yZSB0aGUgc2Vjb25kYXJ5IENQVSdzIGJyaW5ndXAuDQoNClRoYW5rcyBmb3Ig
-dGhpcyBjbGVhbi11cC4NCg0KUGF0cmljZQ==
+On 13/12/2018 19:00, Russell King wrote:
+> The CPU hotplug implementation on this platform is cargo-culted from
+> the plat-versatile implementation, and is buggy.  Once a CPU hits the
+> "low power" loop, it will wait for pen_release to be set to the CPU
+> number to wake up again - but nothing in this implementation does that.
+> 
+> So, once a CPU has entered cpu_die() it will never, ever leave.
+> 
+> Remove this useless cargo-culted implementation.
+> 
+> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+> ---
+>  arch/arm/mach-oxnas/Makefile  |   1 -
+>  arch/arm/mach-oxnas/hotplug.c | 109 ------------------------------------------
+>  arch/arm/mach-oxnas/platsmp.c |   4 --
+>  3 files changed, 114 deletions(-)
+>  delete mode 100644 arch/arm/mach-oxnas/hotplug.c
+> 
+> diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
+> index b625906a9970..61a34e1c0f22 100644
+> --- a/arch/arm/mach-oxnas/Makefile
+> +++ b/arch/arm/mach-oxnas/Makefile
+> @@ -1,2 +1 @@
+>  obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
+> -obj-$(CONFIG_HOTPLUG_CPU) 	+= hotplug.o
+> diff --git a/arch/arm/mach-oxnas/hotplug.c b/arch/arm/mach-oxnas/hotplug.c
+> deleted file mode 100644
+> index 854f29b8cba6..000000000000
+> --- a/arch/arm/mach-oxnas/hotplug.c
+> +++ /dev/null
+> @@ -1,109 +0,0 @@
+> -/*
+> - *  Copyright (C) 2002 ARM Ltd.
+> - *  All Rights Reserved
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License version 2 as
+> - * published by the Free Software Foundation.
+> - */
+> -#include <linux/kernel.h>
+> -#include <linux/errno.h>
+> -#include <linux/smp.h>
+> -
+> -#include <asm/cp15.h>
+> -#include <asm/smp_plat.h>
+> -
+> -static inline void cpu_enter_lowpower(void)
+> -{
+> -	unsigned int v;
+> -
+> -	asm volatile(
+> -	"	mcr	p15, 0, %1, c7, c5, 0\n"
+> -	"	mcr	p15, 0, %1, c7, c10, 4\n"
+> -	/*
+> -	 * Turn off coherency
+> -	 */
+> -	"	mrc	p15, 0, %0, c1, c0, 1\n"
+> -	"	bic	%0, %0, #0x20\n"
+> -	"	mcr	p15, 0, %0, c1, c0, 1\n"
+> -	"	mrc	p15, 0, %0, c1, c0, 0\n"
+> -	"	bic	%0, %0, %2\n"
+> -	"	mcr	p15, 0, %0, c1, c0, 0\n"
+> -	  : "=&r" (v)
+> -	  : "r" (0), "Ir" (CR_C)
+> -	  : "cc");
+> -}
+> -
+> -static inline void cpu_leave_lowpower(void)
+> -{
+> -	unsigned int v;
+> -
+> -	asm volatile(	"mrc	p15, 0, %0, c1, c0, 0\n"
+> -	"	orr	%0, %0, %1\n"
+> -	"	mcr	p15, 0, %0, c1, c0, 0\n"
+> -	"	mrc	p15, 0, %0, c1, c0, 1\n"
+> -	"	orr	%0, %0, #0x20\n"
+> -	"	mcr	p15, 0, %0, c1, c0, 1\n"
+> -	  : "=&r" (v)
+> -	  : "Ir" (CR_C)
+> -	  : "cc");
+> -}
+> -
+> -static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
+> -{
+> -	/*
+> -	 * there is no power-control hardware on this platform, so all
+> -	 * we can do is put the core into WFI; this is safe as the calling
+> -	 * code will have already disabled interrupts
+> -	 */
+> -	for (;;) {
+> -		/*
+> -		 * here's the WFI
+> -		 */
+> -		asm(".word	0xe320f003\n"
+> -		    :
+> -		    :
+> -		    : "memory", "cc");
+> -
+> -		if (pen_release == cpu_logical_map(cpu)) {
+> -			/*
+> -			 * OK, proper wakeup, we're done
+> -			 */
+> -			break;
+> -		}
+> -
+> -		/*
+> -		 * Getting here, means that we have come out of WFI without
+> -		 * having been woken up - this shouldn't happen
+> -		 *
+> -		 * Just note it happening - when we're woken, we can report
+> -		 * its occurrence.
+> -		 */
+> -		(*spurious)++;
+> -	}
+> -}
+> -
+> -/*
+> - * platform-specific code to shutdown a CPU
+> - *
+> - * Called with IRQs disabled
+> - */
+> -void ox820_cpu_die(unsigned int cpu)
+> -{
+> -	int spurious = 0;
+> -
+> -	/*
+> -	 * we're ready for shutdown now, so do it
+> -	 */
+> -	cpu_enter_lowpower();
+> -	platform_do_lowpower(cpu, &spurious);
+> -
+> -	/*
+> -	 * bring this CPU back into the world of cache
+> -	 * coherency, and then restore interrupts
+> -	 */
+> -	cpu_leave_lowpower();
+> -
+> -	if (spurious)
+> -		pr_warn("CPU%u: %u spurious wakeup calls\n", cpu, spurious);
+> -}
+> diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
+> index 442cc8a2f7dc..735141c0e3a3 100644
+> --- a/arch/arm/mach-oxnas/platsmp.c
+> +++ b/arch/arm/mach-oxnas/platsmp.c
+> @@ -19,7 +19,6 @@
+>  #include <asm/smp_scu.h>
+>  
+>  extern void ox820_secondary_startup(void);
+> -extern void ox820_cpu_die(unsigned int cpu);
+>  
+>  static void __iomem *cpu_ctrl;
+>  static void __iomem *gic_cpu_ctrl;
+> @@ -94,9 +93,6 @@ static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
+>  static const struct smp_operations ox820_smp_ops __initconst = {
+>  	.smp_prepare_cpus	= ox820_smp_prepare_cpus,
+>  	.smp_boot_secondary	= ox820_boot_secondary,
+> -#ifdef CONFIG_HOTPLUG_CPU
+> -	.cpu_die		= ox820_cpu_die,
+> -#endif
+>  };
+>  
+>  CPU_METHOD_OF_DECLARE(ox820_smp, "oxsemi,ox820-smp", &ox820_smp_ops);
+> 
+
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
