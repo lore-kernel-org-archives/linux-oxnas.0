@@ -1,39 +1,293 @@
-Received: by mail-qt1-f196.google.com with SMTP id l12so133685qtf.8
-        for <linux-oxnas@groups.io>; Wed, 30 Jan 2019 08:31:48 -0800 (PST)
+Date: Sun, 3 Mar 2019 17:32:37 +0100
+From: "Daniel Golle" <daniel@makrotopia.org>
+Subject: [PATCH] power: reset: introduce oxnas-restart
+Message-ID: <20190303163229.GA9246@makrotopia.org>
 MIME-Version: 1.0
-References: <20190109162614.30855-1-robh@kernel.org> <87h8ehpwm2.fsf@FE-laptop>
-In-Reply-To: <87h8ehpwm2.fsf@FE-laptop>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 30 Jan 2019 17:31:31 +0100
-Message-ID: <CAK8P3a04uO2Nz-M4NVgMsGy2BPRx9pM1cCuUeS54Jf8N18-9NQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: dts: Kill off skeleton{64}.dtsi
-Content-Type: text/plain; charset="UTF-8"
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Rob Herring <robh@kernel.org>, arm-soc <arm@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, Tsahee Zidenberg <tsahee@annapurnalabs.com>, Antoine Tenart <antoine.tenart@bootlin.com>, Linus Walleij <linus.walleij@linaro.org>, Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Jesper Nilsson <jesper.nilsson@axis.com>, Lars Persson <lars.persson@axis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Ludovic Desroches <ludovic.desroches@microchip.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Jon Mason <jonmason@broadcom.com>, bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>, Florian Fainelli <f.fainelli@gmail.com>, Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, Brian Norris <computersforpeace@gmail.com>, Gregory Fong <gregory.0xf0@gmail.com>, Baruch Siach <baruch@tkos.co.il>, Vladimir Zapolskiy <vz@mleia.com>, Sylvain Lemieux <slemieux.tyco@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>, Carlo Caione <carlo@caione.org>, Kevin Hilman <khilman@baylibre.com>, Eric Miao <eric.y.miao@gmail.com>, Haojian Zhuang <haojian.zhuang@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, Neil Armstrong <narmstrong@baylibre.com>, Jamie Iles <jamie@jamieiles.com>, Barry Song <baohua@kernel.org>, Daniel Mack <daniel@zonque.org>, Robert Jarzmik <robert.jarzmik@free.fr>, Andy Gross <andy.gross@linaro.org>, David Brown <david.brown@linaro.org>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@st.com>, Jun Nie <jun.nie@linaro.org>, linux-arm-kernel@axis.com, "open list:ARM/Amlogic Meson SoC support" <linux-amlogic@lists.infradead.org>, "moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, Viresh Kumar <viresh.kumar@linaro.org>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+To: Neil Armstrong <narmstrong@baylibre.com>
+Cc: linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
 List-ID: <linux-oxnas@groups.io>
 
-On Wed, Jan 9, 2019 at 6:30 PM Gregory CLEMENT
-<gregory.clement@bootlin.com> wrote:
->
-> Hi Rob,
->
->  On mer., janv. 09 2019, Rob Herring <robh@kernel.org> wrote:
->
-> > Remove the usage of skeleton.dtsi in the remaining dts files. It was
-> > deprecated since commit 9c0da3cc61f1 ("ARM: dts: explicitly mark
-> > skeleton.dtsi as deprecated"). This will make adding a unit-address to
-> > memory nodes easier.
-> >
-> > The main tricky part to removing skeleton.dtsi is we could end up with
-> > no /memory node at all when a bootloader depends on one being present. I
-> > hacked up dtc to check for this condition.
->
->
-> Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> and for Armada 38x:
-> Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->
+Add reboot handler for OXNAS OX820 chips as reboot currenly hangs on
+those boards. Code is based on ox820_assert_system_reset() found in
+https://github.com/kref/linux-oxnas/blob/master/arch/arm/mach-oxnas/mach-ox820.c#L181
 
-Applied to arm/dt now, thanks!
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/power/reset/Kconfig         |   9 ++
+ drivers/power/reset/Makefile        |   1 +
+ drivers/power/reset/oxnas-restart.c | 229 ++++++++++++++++++++++++++++
+ 3 files changed, 239 insertions(+)
+ create mode 100644 drivers/power/reset/oxnas-restart.c
 
-     Arnd
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 6533aa560aa1..6d5f2a3810ed 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -122,6 +122,15 @@ config POWER_RESET_OCELOT_RESET
+ 	help
+ 	  This driver supports restart for Microsemi Ocelot SoC.
+ 
++config POWER_RESET_OXNAS
++	bool "OXNAS OX820 SoC restart driver"
++	depends on ARM || COMPILE_TEST
++	depends on OF
++	select MFD_SYSCON
++	default ARCH_OXNAS
++	help
++	  Restart support for OXNAS OX820 boards.
++
+ config POWER_RESET_PIIX4_POWEROFF
+ 	tristate "Intel PIIX4 power-off driver"
+ 	depends on PCI
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 0aebee954ac1..1420a20370a3 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
+ obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
+ obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+ obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
++obj-$(CONFIG_POWER_RESET_OXNAS) += oxnas-restart.o
+ obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+ obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
+ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+diff --git a/drivers/power/reset/oxnas-restart.c b/drivers/power/reset/oxnas-restart.c
+new file mode 100644
+index 000000000000..5664914ea489
+--- /dev/null
++++ b/drivers/power/reset/oxnas-restart.c
+@@ -0,0 +1,229 @@
++// SPDX-License-Identifier: (GPL-2.0)
++/*
++ * oxnas SoC reset driver
++ * based on:
++ * Microsemi MIPS SoC reset driver
++ * and ox820_assert_system_reset() written by Ma Hajun <mahaijuns@gmail.com>
++ *
++ * License: GPL
++ * Copyright (c) 2013 Ma Hajun <mahaijuns@gmail.com>
++ * Copyright (c) 2017 Microsemi Corporation
++ * Copyright (c) 2019 Daniel Golle <daniel@makrotopia.org>
++ */
++#include <linux/delay.h>
++#include <linux/io.h>
++#include <linux/notifier.h>
++#include <linux/mfd/syscon.h>
++#include <linux/of_address.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/reboot.h>
++#include <linux/regmap.h>
++
++/* bit numbers of reset control register */
++#define SYS_CTRL_RST_SCU                0
++#define SYS_CTRL_RST_COPRO              1
++#define SYS_CTRL_RST_ARM0               2
++#define SYS_CTRL_RST_ARM1               3
++#define SYS_CTRL_RST_USBHS              4
++#define SYS_CTRL_RST_USBHSPHYA          5
++#define SYS_CTRL_RST_MACA               6
++#define SYS_CTRL_RST_MAC                SYS_CTRL_RST_MACA
++#define SYS_CTRL_RST_PCIEA              7
++#define SYS_CTRL_RST_SGDMA              8
++#define SYS_CTRL_RST_CIPHER             9
++#define SYS_CTRL_RST_DDR                10
++#define SYS_CTRL_RST_SATA               11
++#define SYS_CTRL_RST_SATA_LINK          12
++#define SYS_CTRL_RST_SATA_PHY           13
++#define SYS_CTRL_RST_PCIEPHY            14
++#define SYS_CTRL_RST_STATIC             15
++#define SYS_CTRL_RST_GPIO               16
++#define SYS_CTRL_RST_UART1              17
++#define SYS_CTRL_RST_UART2              18
++#define SYS_CTRL_RST_MISC               19
++#define SYS_CTRL_RST_I2S                20
++#define SYS_CTRL_RST_SD                 21
++#define SYS_CTRL_RST_MACB               22
++#define SYS_CTRL_RST_PCIEB              23
++#define SYS_CTRL_RST_VIDEO              24
++#define SYS_CTRL_RST_DDR_PHY            25
++#define SYS_CTRL_RST_USBHSPHYB          26
++#define SYS_CTRL_RST_USBDEV             27
++#define SYS_CTRL_RST_ARMDBG             29
++#define SYS_CTRL_RST_PLLA               30
++#define SYS_CTRL_RST_PLLB               31
++
++/* bit numbers of clock control register */
++#define SYS_CTRL_CLK_COPRO              0
++#define SYS_CTRL_CLK_DMA                1
++#define SYS_CTRL_CLK_CIPHER             2
++#define SYS_CTRL_CLK_SD                 3
++#define SYS_CTRL_CLK_SATA               4
++#define SYS_CTRL_CLK_I2S                5
++#define SYS_CTRL_CLK_USBHS              6
++#define SYS_CTRL_CLK_MACA               7
++#define SYS_CTRL_CLK_MAC                SYS_CTRL_CLK_MACA
++#define SYS_CTRL_CLK_PCIEA              8
++#define SYS_CTRL_CLK_STATIC             9
++#define SYS_CTRL_CLK_MACB               10
++#define SYS_CTRL_CLK_PCIEB              11
++#define SYS_CTRL_CLK_REF600             12
++#define SYS_CTRL_CLK_USBDEV             13
++#define SYS_CTRL_CLK_DDR                14
++#define SYS_CTRL_CLK_DDRPHY             15
++#define SYS_CTRL_CLK_DDRCK              16
++
++/* Regmap offsets */
++#define CLK_SET_REGOFFSET               0x2c
++#define CLK_CLR_REGOFFSET               0x30
++#define RST_SET_REGOFFSET               0x34
++#define RST_CLR_REGOFFSET               0x38
++#define SECONDARY_SEL_REGOFFSET         0x14
++#define TERTIARY_SEL_REGOFFSET          0x8c
++#define QUATERNARY_SEL_REGOFFSET        0x94
++#define DEBUG_SEL_REGOFFSET             0x9c
++#define ALTERNATIVE_SEL_REGOFFSET       0xa4
++#define PULLUP_SEL_REGOFFSET            0xac
++#define SEC_SECONDARY_SEL_REGOFFSET     0x100014
++#define SEC_TERTIARY_SEL_REGOFFSET      0x10008c
++#define SEC_QUATERNARY_SEL_REGOFFSET    0x100094
++#define SEC_DEBUG_SEL_REGOFFSET         0x10009c
++#define SEC_ALTERNATIVE_SEL_REGOFFSET   0x1000a4
++#define SEC_PULLUP_SEL_REGOFFSET        0x1000ac
++
++
++struct oxnas_restart_context {
++	struct regmap *sys_ctrl;
++	struct notifier_block restart_handler;
++};
++
++static int oxnas_restart_handle(struct notifier_block *this,
++				 unsigned long mode, void *cmd)
++{
++	struct oxnas_restart_context *ctx = container_of(this, struct
++							oxnas_restart_context,
++							restart_handler);
++	u32 value;
++
++	/* Assert reset to cores as per power on defaults
++	 * Don't touch the DDR interface as things will come to an impromptu stop
++	 * NB Possibly should be asserting reset for PLLB, but there are timing
++	 *    concerns here according to the docs */
++	value = BIT(SYS_CTRL_RST_COPRO)		|
++		BIT(SYS_CTRL_RST_USBHS)		|
++		BIT(SYS_CTRL_RST_USBHSPHYA)	|
++		BIT(SYS_CTRL_RST_MACA)		|
++		BIT(SYS_CTRL_RST_PCIEA)		|
++		BIT(SYS_CTRL_RST_SGDMA)		|
++		BIT(SYS_CTRL_RST_CIPHER)	|
++		BIT(SYS_CTRL_RST_SATA)		|
++		BIT(SYS_CTRL_RST_SATA_LINK)	|
++		BIT(SYS_CTRL_RST_SATA_PHY)	|
++		BIT(SYS_CTRL_RST_PCIEPHY)	|
++		BIT(SYS_CTRL_RST_STATIC)	|
++		BIT(SYS_CTRL_RST_UART1)		|
++		BIT(SYS_CTRL_RST_UART2)		|
++		BIT(SYS_CTRL_RST_MISC)		|
++		BIT(SYS_CTRL_RST_I2S)		|
++		BIT(SYS_CTRL_RST_SD)		|
++		BIT(SYS_CTRL_RST_MACB)		|
++		BIT(SYS_CTRL_RST_PCIEB)		|
++		BIT(SYS_CTRL_RST_VIDEO)		|
++		BIT(SYS_CTRL_RST_USBHSPHYB)	|
++		BIT(SYS_CTRL_RST_USBDEV);
++
++	regmap_write(ctx->sys_ctrl, RST_SET_REGOFFSET, value);
++
++	/* Release reset to cores as per power on defaults */
++	regmap_write(ctx->sys_ctrl, RST_CLR_REGOFFSET, BIT(SYS_CTRL_RST_GPIO));
++
++	/* Disable clocks to cores as per power-on defaults - must leave DDR
++	 * related clocks enabled otherwise we'll stop rather abruptly. */
++	value =
++		BIT(SYS_CTRL_CLK_COPRO)		|
++		BIT(SYS_CTRL_CLK_DMA)		|
++		BIT(SYS_CTRL_CLK_CIPHER)	|
++		BIT(SYS_CTRL_CLK_SD)		|
++		BIT(SYS_CTRL_CLK_SATA)		|
++		BIT(SYS_CTRL_CLK_I2S)		|
++		BIT(SYS_CTRL_CLK_USBHS)		|
++		BIT(SYS_CTRL_CLK_MAC)		|
++		BIT(SYS_CTRL_CLK_PCIEA)		|
++		BIT(SYS_CTRL_CLK_STATIC)	|
++		BIT(SYS_CTRL_CLK_MACB)		|
++		BIT(SYS_CTRL_CLK_PCIEB)		|
++		BIT(SYS_CTRL_CLK_REF600)	|
++		BIT(SYS_CTRL_CLK_USBDEV);
++
++	regmap_write(ctx->sys_ctrl, CLK_CLR_REGOFFSET, value);
++
++	/* Enable clocks to cores as per power-on defaults */
++
++	/* Set sys-control pin mux'ing as per power-on defaults */
++	regmap_write(ctx->sys_ctrl, SECONDARY_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, TERTIARY_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, QUATERNARY_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, DEBUG_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, ALTERNATIVE_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, PULLUP_SEL_REGOFFSET, 0);
++
++	regmap_write(ctx->sys_ctrl, SEC_SECONDARY_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, SEC_TERTIARY_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, SEC_QUATERNARY_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, SEC_DEBUG_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, SEC_ALTERNATIVE_SEL_REGOFFSET, 0);
++	regmap_write(ctx->sys_ctrl, SEC_PULLUP_SEL_REGOFFSET, 0);
++
++	/* No need to save any state, as the ROM loader can determine whether
++	 * reset is due to power cycling or programatic action, just hit the
++	 * (self-clearing) CPU reset bit of the block reset register */
++	value =
++		BIT(SYS_CTRL_RST_SCU) |
++		BIT(SYS_CTRL_RST_ARM0) |
++		BIT(SYS_CTRL_RST_ARM1);
++
++	regmap_write(ctx->sys_ctrl, RST_SET_REGOFFSET, value);
++
++	pr_emerg("Unable to restart system\n");
++	return NOTIFY_DONE;
++}
++
++static int oxnas_restart_probe(struct platform_device *pdev)
++{
++	struct oxnas_restart_context *ctx;
++	struct regmap *sys_ctrl;
++	struct device *dev = &pdev->dev;
++	int err = 0;
++
++	sys_ctrl = syscon_regmap_lookup_by_compatible("oxsemi,ox820-sys-ctrl");
++	if (IS_ERR(sys_ctrl))
++		return PTR_ERR(sys_ctrl);
++
++	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	ctx->sys_ctrl = sys_ctrl;
++	ctx->restart_handler.notifier_call = oxnas_restart_handle;
++	ctx->restart_handler.priority = 192;
++	err = register_restart_handler(&ctx->restart_handler);
++	if (err)
++		dev_err(dev, "can't register restart notifier (err=%d)\n", err);
++
++	return err;
++}
++
++static const struct of_device_id oxnas_restart_of_match[] = {
++	{ .compatible = "oxsemi,ox820-sys-ctrl" },
++	{}
++};
++
++static struct platform_driver oxnas_restart_driver = {
++	.probe = oxnas_restart_probe,
++	.driver = {
++		.name = "oxnas-chip-reset",
++		.of_match_table = oxnas_restart_of_match,
++	},
++};
++builtin_platform_driver(oxnas_restart_driver);
+-- 
+2.21.0
+
