@@ -1,66 +1,76 @@
-From: YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH] pinctrl: oxnas: remove set but not used variable 'arg'
-Date: Thu, 25 Jul 2019 22:24:19 +0800
-Message-ID: <20190725142419.29892-1-yuehaibing@huawei.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	 bh=D2YPQJSssFXG6XJhGCQI9LtrGRYEbm9Vq4RoLp19BNU=; b=rHu2BycLd+YYaFD2GZaq7O3Et
+	jHoKHhun6/D56t5jU2t8Omk80fN8N1YT451NzhorKaNVhIVSUxc+oswCEnESSIxvKvfipUg4/CmC9
+	4ul/BXAb+qPSQrXBvaxhiYElXkXup2Ti43+8SXJFU2OVk8eyiw2JHLabnsnqDAAB+tO5Y=;
+Date: Tue, 30 Jul 2019 13:34:25 +0100
+From: Mark Brown <broonie@kernel.org>
+Subject: Re: next/master boot: 265 boots: 17 failed, 184 passed with 64 offline (next-20190730)
+Message-ID: <20190730123425.GB4264@sirena.org.uk>
+References: <5d403574.1c69fb81.14163.65d3@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-To: linus.walleij@linaro.org, narmstrong@baylibre.com
-Cc: linux-kernel@vger.kernel.org, linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>
+In-Reply-To: <5d403574.1c69fb81.14163.65d3@mx.google.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yEPQxsgoJgBvi8ip"
+Content-Disposition: inline
+To: khilman@baylibre.com, Neil Armstrong <narmstrong@baylibre.com>
+Cc: kernel-build-reports@lists.linaro.org, linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org, linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-Fixes gcc '-Wunused-but-set-variable' warning:
+--yEPQxsgoJgBvi8ip
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-drivers/pinctrl/pinctrl-oxnas.c: In function oxnas_ox810se_pinconf_set:
-drivers/pinctrl/pinctrl-oxnas.c:905:6: warning: variable arg set but not used [-Wunused-but-set-variable]
-drivers/pinctrl/pinctrl-oxnas.c: In function oxnas_ox820_pinconf_set:
-drivers/pinctrl/pinctrl-oxnas.c:944:6: warning: variable arg set but not used [-Wunused-but-set-variable]
+On Tue, Jul 30, 2019 at 05:17:56AM -0700, kernelci.org bot wrote:
 
-It is never used since commit 4b0c0c25fa79 ("pinctrl:
-oxnas: Add support for OX820"), so can be removed.
+> Boot Failures Detected:
+>=20
+> arm:
+>     oxnas_v6_defconfig:
+>         gcc-8:
+>             ox820-cloudengines-pogoplug-series-3: 1 failed lab
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/pinctrl/pinctrl-oxnas.c | 4 ----
- 1 file changed, 4 deletions(-)
+For some time now -next and mainline have been failing to boot on
+Pogoplug 3 with the oxnas_v6_defconfig, the kernel seems to start fine
+but fails to parse the ramdisk it's passed:
 
-diff --git a/drivers/pinctrl/pinctrl-oxnas.c b/drivers/pinctrl/pinctrl-oxnas.c
-index b4edbe0..fa81a09 100644
---- a/drivers/pinctrl/pinctrl-oxnas.c
-+++ b/drivers/pinctrl/pinctrl-oxnas.c
-@@ -902,7 +902,6 @@ static int oxnas_ox810se_pinconf_set(struct pinctrl_dev *pctldev,
- 	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
- 	struct oxnas_gpio_bank *bank = pctl_to_bank(pctl, pin);
- 	unsigned int param;
--	u32 arg;
- 	unsigned int i;
- 	u32 offset = pin - bank->gpio_chip.base;
- 	u32 mask = BIT(offset);
-@@ -912,7 +911,6 @@ static int oxnas_ox810se_pinconf_set(struct pinctrl_dev *pctldev,
- 
- 	for (i = 0; i < num_configs; i++) {
- 		param = pinconf_to_config_param(configs[i]);
--		arg = pinconf_to_config_argument(configs[i]);
- 
- 		switch (param) {
- 		case PIN_CONFIG_BIAS_PULL_UP:
-@@ -941,7 +939,6 @@ static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
- 	struct oxnas_gpio_bank *bank = pctl_to_bank(pctl, pin);
- 	unsigned int bank_offset = (bank->id ? PINMUX_820_BANK_OFFSET : 0);
- 	unsigned int param;
--	u32 arg;
- 	unsigned int i;
- 	u32 offset = pin - bank->gpio_chip.base;
- 	u32 mask = BIT(offset);
-@@ -951,7 +948,6 @@ static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
- 
- 	for (i = 0; i < num_configs; i++) {
- 		param = pinconf_to_config_param(configs[i]);
--		arg = pinconf_to_config_argument(configs[i]);
- 
- 		switch (param) {
- 		case PIN_CONFIG_BIAS_PULL_UP:
--- 
-2.7.4
+08:50:02.086589  <6>[    7.719854] IP-Config: Complete:
+08:50:02.087213  <6>[    7.723330]      device=3Deth0, hwaddr=3D0a:a2:89:27=
+:10:1b, ipaddr=3D10.201.4.144, mask=3D255.255.0.0, gw=3D10.201.0.1
+08:50:02.087413  <6>[    7.733409]      host=3D10.201.4.144, domain=3D, nis=
+-domain=3D(none)
+08:50:02.088056  <6>[    7.739499]      bootserver=3D10.201.1.1, rootserver=
+=3D10.201.1.1, rootpath=3D
+08:50:02.088248  <6>[    7.739504]      nameserver0=3D10.201.1.1
+08:50:02.129966  <5>[    7.752025] RAMDISK: Couldn't find valid RAM disk im=
+age starting at 0.
+08:50:02.130381  <4>[    7.759616] List of all partitions:
+08:50:02.131333  <4>[    7.763363] 0100           65536 ram0=20
 
+Possibly an issue with the ramdisk getting overwritten or something?
 
+Full details for today's -next can be seen here:
+
+	https://kernelci.org/boot/id/5d4004bb59b51489d631b28d/
+
+--yEPQxsgoJgBvi8ip
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1AOVAACgkQJNaLcl1U
+h9ALMgf/UsXvdF4Sayi9hNUwwm0wCOJ9dB1n8L76v9DjPI1cN8MvrF+3M3HS7M7S
+6jNyB7dFoxrMILacFV4Co45NcBMF+ZgeJjPcWDHpF/vwj0XsV8d2C9aIvdLpqdVy
+Jh65+wIkFnTPWhrjTzFUxAlWclv/6i7ZBBe42oC79SInfsieyNH5V1OMoO01XI7i
+CyTqDXmbQL72Nmp2r5jCi/SwrC5Sh1xYWVFynDoyGVZieOr8oQOIsRyaDzqAj+nc
+Zqw0nmzkVJzkBYqqSs+P4IaD5BKrWUwiofTMspxnAPXt8X5K57GfXvgswGxBNvhE
+4ut4elXlKKD4+AwZAiwwAe05rE3iCA==
+=+oW9
+-----END PGP SIGNATURE-----
+
+--yEPQxsgoJgBvi8ip--
