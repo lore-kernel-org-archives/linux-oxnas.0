@@ -1,76 +1,94 @@
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	 bh=D2YPQJSssFXG6XJhGCQI9LtrGRYEbm9Vq4RoLp19BNU=; b=rHu2BycLd+YYaFD2GZaq7O3Et
-	jHoKHhun6/D56t5jU2t8Omk80fN8N1YT451NzhorKaNVhIVSUxc+oswCEnESSIxvKvfipUg4/CmC9
-	4ul/BXAb+qPSQrXBvaxhiYElXkXup2Ti43+8SXJFU2OVk8eyiw2JHLabnsnqDAAB+tO5Y=;
-Date: Tue, 30 Jul 2019 13:34:25 +0100
-From: Mark Brown <broonie@kernel.org>
-Subject: Re: next/master boot: 265 boots: 17 failed, 184 passed with 64 offline (next-20190730)
-Message-ID: <20190730123425.GB4264@sirena.org.uk>
-References: <5d403574.1c69fb81.14163.65d3@mx.google.com>
+Received: by mail-wm1-f67.google.com with SMTP id n10so2201281wmj.0
+        for <linux-oxnas@groups.io>; Wed, 11 Sep 2019 00:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ntQnlZ165aoTq9A7WDI2toA4HdgPISzpICPAyGRYlc4=;
+        b=DMMbzJxxUXHFi6Z63lgJ1y7Sb/XAkiZLWF0D1+uoabJCHSepnQp4es4L6JW2eVagzh
+         72rCnxWkdINIZffgA6FJDDv1cZsc+xCJ96gjFDGsnFT/hoLUjJPTrbgYaJd7PokhtWnH
+         OTfaJl12/d5r/1ERItxyTyhsgX31+DwTKVVyoNiRpdAo1kVz31c2aiTgxAUBVDnpjMAV
+         DjtgPgaTKqzDjK8Ac7atghJQxxGqy9uZA+Mg+e9bu/zTWhUlugNecrmiCFU/k80GDkh6
+         fuT2Iwj60ftMrfIVjjBd2usNbSjEkk428eJwTjzYtZ3c+FGD6oRv2oFmwmg93VzpK1Sh
+         ca5g==
+Return-Path: <narmstrong@baylibre.com>
+Subject: Re: [PATCH 4/7] dt-bindings: chosen: Add clocksource and clockevent selection
+References: <1568123236-767-1-git-send-email-claudiu.beznea@microchip.com>
+ <1568123236-767-5-git-send-email-claudiu.beznea@microchip.com>
+From: "Neil Armstrong" <narmstrong@baylibre.com>
+Message-ID: <81da473f-54d7-2a00-61ec-9351cdfcaaf3@baylibre.com>
+Date: Wed, 11 Sep 2019 09:34:27 +0200
 MIME-Version: 1.0
-In-Reply-To: <5d403574.1c69fb81.14163.65d3@mx.google.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yEPQxsgoJgBvi8ip"
-Content-Disposition: inline
-To: khilman@baylibre.com, Neil Armstrong <narmstrong@baylibre.com>
-Cc: kernel-build-reports@lists.linaro.org, linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org, linux-oxnas@groups.io
+In-Reply-To: <1568123236-767-5-git-send-email-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+To: Claudiu Beznea <claudiu.beznea@microchip.com>, daniel.lezcano@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com, linux@armlinux.org.uk, nsekhar@ti.com, bgolaszewski@baylibre.com, monstr@monstr.eu, john@phrozen.org, ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org, lftan@altera.com, tglx@linutronix.de, vgupta@synopsys.com, marc.zyngier@arm.com, patrice.chotard@st.com, mcoquelin.stm32@gmail.com, alexandre.torgue@st.com, eric@anholt.net, wahrenst@gmx.net, f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com, linus.walleij@linaro.org, shc_work@mail.ru, kgene@kernel.org, krzk@kernel.org, ysato@users.sourceforge.jp, liviu.dudau@arm.com, sudeep.holla@arm.com, lorenzo.pieralisi@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, baohua@kernel.org, nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com, baruch@tkos.co.il, u.kleine-koenig@pengutronix.de, guoren@kernel.org, kaloz@openwrt.org, khalasa@piap.pl, ssantosh@kernel.org, vz@mleia.com, slemieux.tyco@gmail.com, khilman@baylibre.com, avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com, yuenn@google.com, benjaminfair@google.com, afaerber@suse.de, manivannan.sadhasivam@linaro.org, agross@kernel.org, palmer@sifive.com, aou@eecs.berkeley.edu, heiko@sntech.de, orsonzhai@gmail.com, baolin.wang@linaro.org, zhang.lyra@gmail.com, maxime.ripard@bootlin.com, wens@csie.org, thierry.reding@gmail.com, jonathanh@nvidia.com, linux@prisktech.co.nz, john.stultz@linaro.org, sboyd@kernel.org, matthias.bgg@gmail.com
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, nios2-dev@lists.rocketboards.org, linux-snps-arc@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, linux-rpi-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp, linux-amlogic@lists.infradead.org, openbmc@lists.ozlabs.org, linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org, linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
---yEPQxsgoJgBvi8ip
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Tue, Jul 30, 2019 at 05:17:56AM -0700, kernelci.org bot wrote:
+On 10/09/2019 15:47, Claudiu Beznea wrote:
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> 
+> Some timer drivers may behave either as clocksource or clockevent
+> or both. Until now, in case of platforms with multiple hardware
+> resources of the same type, the drivers were chosing the first
+> registered hardware resource as clocksource/clockevent and the
+> next one as clockevent/clocksource. Other were using different
+> compatibles (one for each functionality, although its about the
+> same hardware). Add DT bindings to be able to choose the
+> functionality of a timer.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/chosen.txt | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
+> index 45e79172a646..aad3034cdbdf 100644
+> --- a/Documentation/devicetree/bindings/chosen.txt
+> +++ b/Documentation/devicetree/bindings/chosen.txt
+> @@ -135,3 +135,23 @@ e.g.
+>  		linux,initrd-end = <0x82800000>;
+>  	};
+>  };
+> +
+> +linux,clocksource and linux,clockevent
+> +--------------------------------------
+> +
+> +Those nodes have a timer property. This property is a phandle to the timer to be
+> +chosen as the clocksource or clockevent. This is only useful when the platform
+> +has multiple identical timers and it is not possible to let linux make the
+> +correct choice.
+> +
+> +/ {
+> +	chosen {
+> +		linux,clocksource {
+> +			timer = <&timer0>;
+> +		};
+> +
+> +		linux,clockevent {
+> +			timer = <&timer1>;
+> +		};
+> +	};
+> +};
+> 
 
-> Boot Failures Detected:
->=20
-> arm:
->     oxnas_v6_defconfig:
->         gcc-8:
->             ox820-cloudengines-pogoplug-series-3: 1 failed lab
+Why not in aliases ?
 
-For some time now -next and mainline have been failing to boot on
-Pogoplug 3 with the oxnas_v6_defconfig, the kernel seems to start fine
-but fails to parse the ramdisk it's passed:
+aliases {
+    clocksource0 = &timer0;
+    clockevent0 = &timer1;
+};
 
-08:50:02.086589  <6>[    7.719854] IP-Config: Complete:
-08:50:02.087213  <6>[    7.723330]      device=3Deth0, hwaddr=3D0a:a2:89:27=
-:10:1b, ipaddr=3D10.201.4.144, mask=3D255.255.0.0, gw=3D10.201.0.1
-08:50:02.087413  <6>[    7.733409]      host=3D10.201.4.144, domain=3D, nis=
--domain=3D(none)
-08:50:02.088056  <6>[    7.739499]      bootserver=3D10.201.1.1, rootserver=
-=3D10.201.1.1, rootpath=3D
-08:50:02.088248  <6>[    7.739504]      nameserver0=3D10.201.1.1
-08:50:02.129966  <5>[    7.752025] RAMDISK: Couldn't find valid RAM disk im=
-age starting at 0.
-08:50:02.130381  <4>[    7.759616] List of all partitions:
-08:50:02.131333  <4>[    7.763363] 0100           65536 ram0=20
+since we can have multiple of each, we should not limit ourselves to 1 clkevent
+and 1 clksource.
 
-Possibly an issue with the ramdisk getting overwritten or something?
+In the aliases case, each driver would expose both capabilities, and the core would select
+what to enable.
 
-Full details for today's -next can be seen here:
-
-	https://kernelci.org/boot/id/5d4004bb59b51489d631b28d/
-
---yEPQxsgoJgBvi8ip
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1AOVAACgkQJNaLcl1U
-h9ALMgf/UsXvdF4Sayi9hNUwwm0wCOJ9dB1n8L76v9DjPI1cN8MvrF+3M3HS7M7S
-6jNyB7dFoxrMILacFV4Co45NcBMF+ZgeJjPcWDHpF/vwj0XsV8d2C9aIvdLpqdVy
-Jh65+wIkFnTPWhrjTzFUxAlWclv/6i7ZBBe42oC79SInfsieyNH5V1OMoO01XI7i
-CyTqDXmbQL72Nmp2r5jCi/SwrC5Sh1xYWVFynDoyGVZieOr8oQOIsRyaDzqAj+nc
-Zqw0nmzkVJzkBYqqSs+P4IaD5BKrWUwiofTMspxnAPXt8X5K57GfXvgswGxBNvhE
-4ut4elXlKKD4+AwZAiwwAe05rE3iCA==
-=+oW9
------END PGP SIGNATURE-----
-
---yEPQxsgoJgBvi8ip--
+Neil
