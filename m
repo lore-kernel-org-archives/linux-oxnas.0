@@ -1,57 +1,40 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
- by mx.groups.io with SMTP id smtpd.web10.2764.1589363710256426224
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+ by mx.groups.io with SMTP id smtpd.web10.757.1614873843387181126
  for <linux-oxnas@groups.io>;
- Wed, 13 May 2020 02:55:10 -0700
-Received: by mail-wr1-f67.google.com with SMTP id l17so6522585wrr.4
-        for <linux-oxnas@groups.io>; Wed, 13 May 2020 02:55:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:subject:to:cc:autocrypt:organization:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=0/6+M/G1GVlfy5yA6uPVUor1jsLYSluIQPHWs78Q8oI=;
-        b=oO4OijU4LnNNtOiRlbtEy5sdCHQ/XAV/yt36DPE8SUBkHRruUpYmRJfY49iXGVyRlz
-         lURvzBTetf0lGLGpD13uspKDsscLETzhXJ6edUw5D12Q+F/9VgalcaghiXIXjlfE3NYU
-         KSD1eNZoGLKzch8HRtcolSM4l35tAS/4YAhzQIYRU0eexzILRpCwuaiNr90AOAqKWeih
-         dCGLlCA/yYbtSbceHIoL6jeFZLeDEBzwopIk6KgIXWWq9Ywm1k/oThPI0PYACr+j0Btd
-         6I5Y/xJ/GhxXsiwtysGHUKZBaxGJ8wyo1yabZ7lG8aP5bl4s36izpwJppiQ8kVOOT1o6
-         yBag==
-Return-Path: <narmstrong@baylibre.com>
-From: "Neil Armstrong" <narmstrong@baylibre.com>
-Subject: [GIT PULL] oxnas fixes for 5.7
-Message-ID: <95bf4813-93a1-735d-1d27-2cbe59986845@baylibre.com>
-Date: Wed, 13 May 2020 11:55:06 +0200
+ Thu, 04 Mar 2021 08:04:04 -0800
+From: Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH] reset: oxnas: replace file name with short description
+Date: Thu,  4 Mar 2021 17:03:58 +0100
+Message-Id: <20210304160358.21030-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org
+Content-Transfer-Encoding: 8bit
+To: linux-kernel@vger.kernel.org
+Cc: Neil Armstrong <narmstrong@baylibre.com>, linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-Hi,
+Fixes a checkpatch warning:
 
-Simple fix for mach-oxnas SMP code fixing a sparse warning.
+  WARNING: It's generally not useful to have the filename in the file
+  #3: FILE: drivers/reset/reset-oxnas.c:3:
+  + * drivers/reset/reset-oxnas.c
 
-Neil
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/reset/reset-oxnas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+diff --git a/drivers/reset/reset-oxnas.c b/drivers/reset/reset-oxnas.c
+index c4013165bdda..8209f922dc16 100644
+--- a/drivers/reset/reset-oxnas.c
++++ b/drivers/reset/reset-oxnas.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * drivers/reset/reset-oxnas.c
++ * Oxford Semiconductor Reset Controller driver
+  *
+  * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+  * Copyright (C) 2014 Ma Haijun <mahaijuns@gmail.com>
+-- 
+2.29.2
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/narmstrong/linux-oxnas.git tags/arm-soc-fixes-for-5.7
-
-for you to fetch changes up to bd84dff0217414d9f9b829a3b75b2487aff857b7:
-
-  ARM: oxnas: make ox820_boot_secondary static (2020-05-12 10:29:33 +0200)
-
-----------------------------------------------------------------
-- mach-oxnas: make ox820_boot_secondary static to fix sparse warning
-
-----------------------------------------------------------------
-Ma Feng (1):
-      ARM: oxnas: make ox820_boot_secondary static
-
- arch/arm/mach-oxnas/platsmp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
