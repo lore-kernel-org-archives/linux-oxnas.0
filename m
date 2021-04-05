@@ -1,60 +1,139 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
- by mx.groups.io with SMTP id smtpd.web09.33313.1615193815232555972
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+ by mx.groups.io with SMTP id smtpd.web08.91.1617641257491826888
  for <linux-oxnas@groups.io>;
- Mon, 08 Mar 2021 00:56:56 -0800
-Received: by mail-wr1-f45.google.com with SMTP id v15so10546714wrx.4
-        for <linux-oxnas@groups.io>; Mon, 08 Mar 2021 00:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S0kXMv1KhXA1L/lPLco3OI9Kq8yC83nBtYw81gut9/A=;
-        b=lA5Jw0aJ5ydOOSIygPuUjKGKJsAXMgVWkVohvGLvre3n4O2aFJYvnN82ewVY7+qni4
-         UZxOKcWYOrwrNC6wjuKagE1Ya2lSmHUEWvkCpGH21jg9NyqmShB93kyy3qW2x0/X7o6Q
-         DML3g5WDksvOtGeI0w9tuIW+7idUZARF8myV+rM9frZrW1Y/xCOSBF++WOLqlpvUK/7m
-         fIkKhfs9MXQqxMjXRPiiPhBPOAUSGEIlKy5GTPUoLxp1Fq6oyBjy11XlqMP1sHnTnEIr
-         AwKC6N7hvSG5dsGZILa76Zm+DXuQ2R5FhiMrjRb3TgGdqvVBcOGq48aQfS1j6pNFn/xx
-         dwEg==
-Return-Path: <narmstrong@baylibre.com>
-Subject: Re: [PATCH] reset: oxnas: replace file name with short description
-References: <20210304160358.21030-1-p.zabel@pengutronix.de>
-From: "Neil Armstrong" <narmstrong@baylibre.com>
-Message-ID: <586b67bb-d842-16c5-ca21-98914e101535@baylibre.com>
-Date: Mon, 8 Mar 2021 09:54:42 +0100
+ Mon, 05 Apr 2021 09:47:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+	t=1617641254;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AMvNsnRAyp9ImqdIaqAKnobrExuCp8y4rK+qdkmyL+A=;
+	b=XxUNcLxeArzooNnp2oQnhkNloV0eL0Wl4hRCQXgbzXFxZg2oBZE/l9yuNFFuuO+Sstl5Ng
+	iHSiQXnR1qjkZ7IO1d7WGGZF3jjuuEKfeS44IyJsY2eBeSFHsmEdxBv0JvZu9qlAfvDhHC
+	hEcotvvIgfaSYTfiYVVvKXoKVQUZDno=
+From: Michael Walle <michael@walle.cc>
+Subject: [PATCH 0/2] of: net: support non-platform devices in of_get_mac_address()
+Date: Mon,  5 Apr 2021 18:46:41 +0200
+Message-Id: <20210405164643.21130-1-michael@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <20210304160358.21030-1-p.zabel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-To: Philipp Zabel <p.zabel@pengutronix.de>, linux-kernel@vger.kernel.org
-Cc: linux-oxnas@groups.io
+Content-Transfer-Encoding: quoted-printable
+To: ath9k-devel@qca.qualcomm.com, UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-amlogic@lists.infradead.org, linux-oxnas@groups.io, linux-omap@vger.kernel.org, linux-wireless@vger.kernel.org, devicetree@vger.kernel.org, linux-staging@lists.linux.dev
+Cc: Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Russell King <linux@armlinux.org.uk>, Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, Andreas Larsson <andreas@gaisler.com>, "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@siol.net>, Joyce Ooi <joyce.ooi@intel.com>, Chris Snook <chris.snook@gmail.com>, =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>, bcm-kernel-feedback-list@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@microchip.com>, Sunil Goutham <sgoutham@marvell.com>, Fugang Duan <fugang.duan@nxp.com>, Madalin Bucur <madalin.bucur@nxp.com>, Pantelis Antoniou <pantelis.antoniou@gmail.com>, Claudiu Manoil <claudiu.manoil@nxp.com>, Li Yang <leoyang.li@nxp.com>, Yisen Zhuang <yisen.zhuang@huawei.com>, Salil Mehta <salil.mehta@huawei.com>, Hauke Mehrtens <hauke@hauke-m.de>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Vadym Kochan <vkochan@marvell.com>, Taras Chornyi <tchornyi@marvell.com>, Mirko Lindner <mlindner@marvell.com>, Stephen Hemminger <stephen@networkplumber.org>, Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>, Sean Wang <sean.wang@mediatek.com>, Mark Lee <Mark-MC.Lee@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>, Bryan Whitehead <bryan.whitehead@microchip.com>, Vladimir Zapolskiy <vz@mleia.com>, Sergei Shtylyov <sergei.shtylyov@gmail.com>, Byungho An <bh74.an@samsung.com>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@st.com>, Jose Abreu <joabreu@synopsys.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Kevin Hilman <khilman@baylibre.com>, Neil Armstrong <narmstrong@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Vinod Koul <vkoul@kernel.org>, Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, Grygorii Strashko <grygorii.strashko@ti.com>, Wingman Kwok <w-kwok2@ti.com>, Murali Karicheri <m-karicheri2@ti.com>, Michal Simek <michal.simek@xilinx.com>, Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>, Kalle Valo <kvalo@codeaurora.org>, Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>, Ryder Lee <ryder.lee@mediatek.com>, Stanislaw Gruszka <stf_xl@wp.pl>, Helmut Schaa <helmut.schaa@googlemail.com>, Heiner Kallweit <hkallweit1@gmail.com>, Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jerome.pouiller@silabs.com>, Vivien Didelot <vivien.didelot@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, Michael Walle <michael@walle.cc>
 List-ID: <linux-oxnas@groups.io>
 
-On 04/03/2021 17:03, Philipp Zabel wrote:
-> Fixes a checkpatch warning:
-> 
->   WARNING: It's generally not useful to have the filename in the file
->   #3: FILE: drivers/reset/reset-oxnas.c:3:
->   + * drivers/reset/reset-oxnas.c
-> 
-> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> ---
->  drivers/reset/reset-oxnas.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/reset/reset-oxnas.c b/drivers/reset/reset-oxnas.c
-> index c4013165bdda..8209f922dc16 100644
-> --- a/drivers/reset/reset-oxnas.c
-> +++ b/drivers/reset/reset-oxnas.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * drivers/reset/reset-oxnas.c
-> + * Oxford Semiconductor Reset Controller driver
->   *
->   * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
->   * Copyright (C) 2014 Ma Haijun <mahaijuns@gmail.com>
-> 
+of_get_mac_address() is commonly used to fetch the MAC address
+from the device tree. It also supports reading it from a NVMEM
+provider. But the latter is only possible for platform devices,
+because only platform devices are searched for a matching device
+node.
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Add a second method to fetch the NVMEM cell by a device tree node
+instead of a "struct device".
+
+Moreover, the NVMEM subsystem will return dynamically allocated
+data which has to be freed after use. Currently, this is handled
+by allocating a device resource manged buffer to store the MAC
+address. of_get_mac_address() then returns a pointer to this
+buffer. Without a device, this trick is not possible anymore.
+Thus, change the of_get_mac_address() API to have the caller
+supply a buffer.
+
+It was considered to use the network device to attach the buffer
+to, but then the order matters and netdev_register() has to be
+called before of_get_mac_address(). No driver does it this way.
+
+
+Michael Walle (2):
+  of: of_net: pass the dst buffer to of_get_mac_address()
+  of: net: fix of_get_mac_address_nvmem() for PCI and DSA nodes
+
+ arch/arm/mach-mvebu/kirkwood.c                |  3 +-
+ arch/powerpc/sysdev/tsi108_dev.c              |  5 +-
+ drivers/net/ethernet/aeroflex/greth.c         |  6 +-
+ drivers/net/ethernet/allwinner/sun4i-emac.c   | 10 +--
+ drivers/net/ethernet/altera/altera_tse_main.c |  7 +-
+ drivers/net/ethernet/arc/emac_main.c          |  8 +-
+ drivers/net/ethernet/atheros/ag71xx.c         |  7 +-
+ drivers/net/ethernet/broadcom/bcm4908_enet.c  |  7 +-
+ drivers/net/ethernet/broadcom/bcmsysport.c    |  7 +-
+ drivers/net/ethernet/broadcom/bgmac-bcma.c    | 10 +--
+ .../net/ethernet/broadcom/bgmac-platform.c    | 11 ++-
+ drivers/net/ethernet/cadence/macb_main.c      | 11 +--
+ .../net/ethernet/cavium/octeon/octeon_mgmt.c  |  8 +-
+ .../net/ethernet/cavium/thunder/thunder_bgx.c |  5 +-
+ drivers/net/ethernet/davicom/dm9000.c         | 10 +--
+ drivers/net/ethernet/ethoc.c                  |  6 +-
+ drivers/net/ethernet/ezchip/nps_enet.c        |  7 +-
+ drivers/net/ethernet/freescale/fec_main.c     |  7 +-
+ drivers/net/ethernet/freescale/fec_mpc52xx.c  |  7 +-
+ drivers/net/ethernet/freescale/fman/mac.c     |  9 +-
+ .../ethernet/freescale/fs_enet/fs_enet-main.c |  5 +-
+ drivers/net/ethernet/freescale/gianfar.c      |  8 +-
+ drivers/net/ethernet/freescale/ucc_geth.c     |  5 +-
+ drivers/net/ethernet/hisilicon/hisi_femac.c   |  7 +-
+ drivers/net/ethernet/hisilicon/hix5hd2_gmac.c |  7 +-
+ drivers/net/ethernet/lantiq_xrx200.c          |  7 +-
+ drivers/net/ethernet/marvell/mv643xx_eth.c    |  5 +-
+ drivers/net/ethernet/marvell/mvneta.c         |  6 +-
+ .../ethernet/marvell/prestera/prestera_main.c | 11 +--
+ drivers/net/ethernet/marvell/pxa168_eth.c     |  9 +-
+ drivers/net/ethernet/marvell/sky2.c           |  8 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   | 11 +--
+ drivers/net/ethernet/micrel/ks8851_common.c   |  7 +-
+ drivers/net/ethernet/microchip/lan743x_main.c |  5 +-
+ drivers/net/ethernet/nxp/lpc_eth.c            |  4 +-
+ drivers/net/ethernet/qualcomm/qca_spi.c       | 10 +--
+ drivers/net/ethernet/qualcomm/qca_uart.c      |  9 +-
+ drivers/net/ethernet/renesas/ravb_main.c      | 12 +--
+ drivers/net/ethernet/renesas/sh_eth.c         |  5 +-
+ .../ethernet/samsung/sxgbe/sxgbe_platform.c   | 13 +--
+ drivers/net/ethernet/socionext/sni_ave.c      | 10 +--
+ .../ethernet/stmicro/stmmac/dwmac-anarion.c   |  2 +-
+ .../stmicro/stmmac/dwmac-dwc-qos-eth.c        |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-generic.c   |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |  2 +-
+ .../stmicro/stmmac/dwmac-intel-plat.c         |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-ipq806x.c   |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-lpc18xx.c   |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-mediatek.c  |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-meson.c |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-meson8b.c   |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-oxnas.c |  2 +-
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-rk.c    |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-socfpga.c   |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-sti.c   |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-stm32.c |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-sunxi.c |  2 +-
+ .../ethernet/stmicro/stmmac/dwmac-visconti.c  |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  2 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  4 +-
+ .../ethernet/stmicro/stmmac/stmmac_platform.c | 12 +--
+ .../ethernet/stmicro/stmmac/stmmac_platform.h |  2 +-
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c      | 19 ++---
+ drivers/net/ethernet/ti/cpsw.c                |  7 +-
+ drivers/net/ethernet/ti/cpsw_new.c            |  7 +-
+ drivers/net/ethernet/ti/davinci_emac.c        |  8 +-
+ drivers/net/ethernet/ti/netcp_core.c          |  7 +-
+ drivers/net/ethernet/wiznet/w5100-spi.c       |  8 +-
+ drivers/net/ethernet/wiznet/w5100.c           |  2 +-
+ drivers/net/ethernet/xilinx/ll_temac_main.c   |  6 +-
+ .../net/ethernet/xilinx/xilinx_axienet_main.c | 11 +--
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c |  8 +-
+ drivers/net/wireless/ath/ath9k/init.c         |  5 +-
+ drivers/net/wireless/mediatek/mt76/eeprom.c   |  9 +-
+ .../net/wireless/ralink/rt2x00/rt2x00dev.c    |  6 +-
+ drivers/of/of_net.c                           | 85 ++++++++++++-------
+ drivers/staging/octeon/ethernet.c             | 10 +--
+ drivers/staging/wfx/main.c                    |  7 +-
+ include/linux/of_net.h                        |  6 +-
+ include/net/dsa.h                             |  2 +-
+ net/dsa/dsa2.c                                |  2 +-
+ net/dsa/slave.c                               |  2 +-
+ net/ethernet/eth.c                            | 11 +--
+ 85 files changed, 240 insertions(+), 361 deletions(-)
+
+--=20
+2.20.1
+
