@@ -1,102 +1,58 @@
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
- by mx.groups.io with SMTP id smtpd.web09.704.1618249669212491016
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ by mx.groups.io with SMTP id smtpd.web10.4123.1618350015378467862
  for <linux-oxnas@groups.io>;
- Mon, 12 Apr 2021 10:47:49 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1618249667;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c+yRIxX6YaLNAHOU45LRTNERm8zuPZ6Nr6ms7o1jHdY=;
-	b=SzFeahlu14nK6lzpcdcdqIds+W3bdnvfv8MDl2HwNG72reKqItDuqKfd2OefWkj0+CCjLu
-	2i6/lT9RccSxY32Z2fkRRrsYiFeNlYFm4RHTcR+Ber1W7+h4Vr2FjH+T2K9LZ+QYJnbzGg
-	fdP0WDJWD66X0dJG0cIeWKdSs2V/dPc=
-From: Michael Walle <michael@walle.cc>
-Subject: [PATCH net-next v4 2/2] of: net: fix of_get_mac_addr_nvmem() for non-platform devices
-Date: Mon, 12 Apr 2021 19:47:18 +0200
-Message-Id: <20210412174718.17382-3-michael@walle.cc>
-In-Reply-To: <20210412174718.17382-1-michael@walle.cc>
-References: <20210412174718.17382-1-michael@walle.cc>
+ Tue, 13 Apr 2021 14:40:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1618350012;
+	bh=toVub+slEHyxpan1zl2EKjAs+n9L+DqJjmVyXdpSda8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=pRV3XRV88aPlnwLClx5LDM21mdefxIbRGFcsOMAWKDGAPSf1o7HWMcUJArQ3XXTo2
+	 omQ7Z2UBYmJ/4VEgdmDWMtz3nLyeoWfPZMbM/epzVuNn/dfLkNcaqGX/sQ3OpMjUBS
+	 bAKgZugFWBnTeaINp8LqtfjdEpx90+cwvi+asWJoSAi80GbrFagrnhafBEMs9d/q64
+	 V1GuK22jWWyeImHuDUYrsXisI7HOHaVrq3GZpA1n6OF84dCG4EQ57enrHgZGDRNpgk
+	 +wx2yJOLG9rxC5gEKrr9mBBot2pLRQqzLRJSzYPRKCwgwQuIOp0m7AJtIXo8z3kOIr
+	 TcOoK6hf+PaXg==
 MIME-Version: 1.0
+Subject: Re: [PATCH net-next v4 0/2] of: net: support non-platform devices in of_get_mac_address()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <161835001262.18297.4500601910911096840.git-patchwork-notify@kernel.org>
+Date: Tue, 13 Apr 2021 21:40:12 +0000
+References: <20210412174718.17382-1-michael@walle.cc>
+In-Reply-To: <20210412174718.17382-1-michael@walle.cc>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-To: ath9k-devel@qca.qualcomm.com, UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-amlogic@lists.infradead.org, linux-oxnas@groups.io, linux-omap@vger.kernel.org, linux-wireless@vger.kernel.org, devicetree@vger.kernel.org, linux-staging@lists.linux.dev
-Cc: Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Russell King <linux@armlinux.org.uk>, Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, Paul Mackerras <paulus@samba.org>, Andreas Larsson <andreas@gaisler.com>, "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@siol.net>, Joyce Ooi <joyce.ooi@intel.com>, Chris Snook <chris.snook@gmail.com>, =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>, bcm-kernel-feedback-list@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@microchip.com>, Sunil Goutham <sgoutham@marvell.com>, Fugang Duan <fugang.duan@nxp.com>, Madalin Bucur <madalin.bucur@nxp.com>, Pantelis Antoniou <pantelis.antoniou@gmail.com>, Claudiu Manoil <claudiu.manoil@nxp.com>, Li Yang <leoyang.li@nxp.com>, Yisen Zhuang <yisen.zhuang@huawei.com>, Salil Mehta <salil.mehta@huawei.com>, Hauke Mehrtens <hauke@hauke-m.de>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Vadym Kochan <vkochan@marvell.com>, Taras Chornyi <tchornyi@marvell.com>, Mirko Lindner <mlindner@marvell.com>, Stephen Hemminger <stephen@networkplumber.org>, Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>, Sean Wang <sean.wang@mediatek.com>, Mark Lee <Mark-MC.Lee@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>, Bryan Whitehead <bryan.whitehead@microchip.com>, Vladimir Zapolskiy <vz@mleia.com>, Sergei Shtylyov <sergei.shtylyov@gmail.com>, Byungho An <bh74.an@samsung.com>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@st.com>, Jose Abreu <joabreu@synopsys.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Kevin Hilman <khilman@baylibre.com>, Neil Armstrong <narmstrong@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Vinod Koul <vkoul@kernel.org>, Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, Grygorii Strashko <grygorii.strashko@ti.com>, Wingman Kwok <w-kwok2@ti.com>, Murali Karicheri <m-karicheri2@ti.com>, Michal Simek <michal.simek@xilinx.com>, Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>, Kalle Valo <kvalo@codeaurora.org>, Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>, Ryder Lee <ryder.lee@mediatek.com>, Stanislaw Gruszka <stf_xl@wp.pl>, Helmut Schaa <helmut.schaa@googlemail.com>, Heiner Kallweit <hkallweit1@gmail.com>, Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jerome.pouiller@silabs.com>, Vivien Didelot <vivien.didelot@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, Michael Walle <michael@walle.cc>
+To: Michael Walle <michael@walle.cc>
+Cc: ath9k-devel@qca.qualcomm.com, UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-amlogic@lists.infradead.org, linux-oxnas@groups.io, linux-omap@vger.kernel.org, linux-wireless@vger.kernel.org, devicetree@vger.kernel.org, linux-staging@lists.linux.dev, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, linux@armlinux.org.uk, mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org, andreas@gaisler.com, davem@davemloft.net, kuba@kernel.org, mripard@kernel.org, wens@csie.org, jernej.skrabec@siol.net, joyce.ooi@intel.com, chris.snook@gmail.com, rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com, nicolas.ferre@microchip.com, claudiu.beznea@microchip.com, sgoutham@marvell.com, fugang.duan@nxp.com, madalin.bucur@nxp.com, pantelis.antoniou@gmail.com, claudiu.manoil@nxp.com, leoyang.li@nxp.com, yisen.zhuang@huawei.com, salil.mehta@huawei.com, hauke@hauke-m.de, thomas.petazzoni@bootlin.com, vkochan@marvell.com, tchornyi@marvell.com, mlindner@marvell.com, stephen@networkplumber.org, nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com, matthias.bgg@gmail.com, bryan.whitehead@microchip.com, vz@mleia.com, sergei.shtylyov@gmail.com, bh74.an@samsung.com, hayashi.kunihiko@socionext.com, peppe.cavallaro@st.com, alexandre.torgue@st.com, joabreu@synopsys.com, mcoquelin.stm32@gmail.com, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, khilman@baylibre.com, narmstrong@baylibre.com, jbrunet@baylibre.com, martin.blumenstingl@googlemail.com, vkoul@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp, grygorii.strashko@ti.com, w-kwok2@ti.com, m-karicheri2@ti.com, michal.simek@xilinx.com, radhey.shyam.pandey@xilinx.com, kvalo@codeaurora.org, lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com, stf_xl@wp.pl, helmut.schaa@googlemail.com, hkallweit1@gmail.com, robh+dt@kernel.org, frowand.list@gmail.com, gregkh@linuxfoundation.org, jerome.pouiller@silabs.com, vivien.didelot@gmail.com, olteanv@gmail.com
 List-ID: <linux-oxnas@groups.io>
 
-of_get_mac_address() already supports fetching the MAC address by an
-nvmem provider. But until now, it was just working for platform devices.
-Esp. it was not working for DSA ports and PCI devices. It gets more
-common that PCI devices have a device tree binding since SoCs contain
-integrated root complexes.
+Hello:
 
-Use the nvmem of_* binding to fetch the nvmem cells by a struct
-device_node. We still have to try to read the cell by device first
-because there might be a nvmem_cell_lookup associated with that device.
+This series was applied to netdev/net-next.git (refs/heads/master):
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/of/of_net.c | 35 ++++++++++++++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 5 deletions(-)
+On Mon, 12 Apr 2021 19:47:16 +0200 you wrote:
+> of_get_mac_address() is commonly used to fetch the MAC address
+> from the device tree. It also supports reading it from a NVMEM
+> provider. But the latter is only possible for platform devices,
+> because only platform devices are searched for a matching device
+> node.
+>=20
+> Add a second method to fetch the NVMEM cell by a device tree node
+> instead of a "struct device".
+>=20
+> [...]
 
-diff --git a/drivers/of/of_net.c b/drivers/of/of_net.c
-index cb77b774bf76..dbac3a172a11 100644
---- a/drivers/of/of_net.c
-+++ b/drivers/of/of_net.c
-@@ -11,6 +11,7 @@
- #include <linux/phy.h>
- #include <linux/export.h>
- #include <linux/device.h>
-+#include <linux/nvmem-consumer.h>
-=20
- /**
-  * of_get_phy_mode - Get phy mode for given device_node
-@@ -59,15 +60,39 @@ static int of_get_mac_addr(struct device_node *np, co=
-nst char *name, u8 *addr)
- static int of_get_mac_addr_nvmem(struct device_node *np, u8 *addr)
- {
- 	struct platform_device *pdev =3D of_find_device_by_node(np);
-+	struct nvmem_cell *cell;
-+	const void *mac;
-+	size_t len;
- 	int ret;
-=20
--	if (!pdev)
--		return -ENODEV;
-+	/* Try lookup by device first, there might be a nvmem_cell_lookup
-+	 * associated with a given device.
-+	 */
-+	if (pdev) {
-+		ret =3D nvmem_get_mac_address(&pdev->dev, addr);
-+		put_device(&pdev->dev);
-+		return ret;
-+	}
-+
-+	cell =3D of_nvmem_cell_get(np, "mac-address");
-+	if (IS_ERR(cell))
-+		return PTR_ERR(cell);
-+
-+	mac =3D nvmem_cell_read(cell, &len);
-+	nvmem_cell_put(cell);
-+
-+	if (IS_ERR(mac))
-+		return PTR_ERR(mac);
-+
-+	if (len !=3D ETH_ALEN || !is_valid_ether_addr(mac)) {
-+		kfree(mac);
-+		return -EINVAL;
-+	}
-=20
--	ret =3D nvmem_get_mac_address(&pdev->dev, addr);
--	put_device(&pdev->dev);
-+	memcpy(addr, mac, ETH_ALEN);
-+	kfree(mac);
-=20
--	return ret;
-+	return 0;
- }
-=20
- /**
---=20
-2.20.1
+Here is the summary with links:
+  - [net-next,v4,1/2] of: net: pass the dst buffer to of_get_mac_address(=
+)
+    https://git.kernel.org/netdev/net-next/c/83216e3988cd
+  - [net-next,v4,2/2] of: net: fix of_get_mac_addr_nvmem() for non-platfo=
+rm devices
+    https://git.kernel.org/netdev/net-next/c/f10843e04a07
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
