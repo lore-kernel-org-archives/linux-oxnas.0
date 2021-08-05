@@ -1,42 +1,42 @@
 Received: from pre5.presidentsummit2021.info (pre5.presidentsummit2021.info [46.173.211.125])
- by mx.groups.io with SMTP id smtpd.web12.5564.1628145575349980262
+ by mx.groups.io with SMTP id smtpd.web11.7736.1628165316392678510
  for <linux-oxnas@groups.io>;
- Wed, 04 Aug 2021 23:39:35 -0700
+ Thu, 05 Aug 2021 05:08:36 -0700
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=default; d=gmail.com;
  h=To:Subject:Message-ID:Date:From:Reply-To:MIME-Version:List-Unsubscribe:Content-Type:Content-Transfer-Encoding; i=olivia.millerbusiness21@gmail.com;
- bh=9nM4Or8dY6Ekai318Faq38h8ajk=;
- b=Bhzjs6rMJTCGgjagkSw0TeOmYtqZrt+IvL3TY4IAtD01p6ncMSL+BUvD9wGxSB2ikMDpLYdcCMGB
-   xOsFPBAjHhaI7bB4Zk++nMp4GEa1jW6o6n6pOlQH8wp4cugtxeYUDzo8QfkjEuUOFsBAQPQ+7XCL
-   prKbQ43RAC8MSKY5qg5oj14xRd9fmniGXcypsZ2e9ozIloo//klpl1eFuaZIusxl49YdgNcHqu2F
-   BtluSw2gv6JNPM9zmCsrSmsBz9hnLF41dAzD0Msz0pNt6D+jFkZkmyeioso70XZBbMbPI9w6a6CQ
-   97VEmLmZhv2NFQ4KwZLjBx9ObUWcyQxJbp34kQ==
-Received: from presidentsummit2021.info (127.0.0.1) by pre2.presidentsummit2021.info id h1e3qfi19tkr for <linux-oxnas@groups.io>; Thu, 5 Aug 2021 09:39:32 +0300 (envelope-from <olivillerbusiness21-linux+2Doxnas=groups.io@gmail.com>)
+ bh=PPSYY0fQL3HJGb5ekJ5Jji0u9H4=;
+ b=C+XeRPDo8Wjc332m1H0+OB1sAslFHo5ZdQH0BP1MI8bFgi/YNWvORCC4YiLXHxPgU+nQK3yGiqZ5
+   J122t58MXRLDdTFEu3MKGtWX3eRcxd7OSR0867rjhBcIJiDK7N+h+RQR7t1ykoPEHV0HSBt5nGCz
+   bb06QRLX/GuZSn5v2y36kXER8OufRi71DtjAJFDDH4LY5oEl0mwwbIDUTFHAex6rECEW3GOkF2fV
+   vxhxDhPzl2Sy4T8ZNIMLHyWvrkvf93M+jq5dqbku4MnHVGhmTJb9/2VJPQY0yWKlMt3sBgBVY6gW
+   Wel+on7waF6S6lORKGC02tixXza2h0FWjTMN4w==
+Received: from presidentsummit2021.info (127.0.0.1) by pre2.presidentsummit2021.info id h1fac9i19tk3 for <linux-oxnas@groups.io>; Thu, 5 Aug 2021 15:08:34 +0300 (envelope-from <ol.millerbusiness21-linux+2Doxnas=groups.io@gmail.com>)
 Subject: Re: Client information
-Message-ID: <8e8610720c5e6c3da39dbd2f3ffef057@presidentsummit2021.info>
-Return-Path: olivillerbusiness21@gmail.com
-Date: Thu, 05 Aug 2021 06:10:09 +0000
+Message-ID: <b50e4882b82656fb6f5ab65923dd6845@presidentsummit2021.info>
+Return-Path: ol.millerbusiness21@gmail.com
+Date: Thu, 05 Aug 2021 11:31:17 +0000
 From: "Olivia Miller" <olivia.millerbusiness21@gmail.com>
 Reply-To: olivia.millerbusiness21@gmail.com
 MIME-Version: 1.0
-List-Unsubscribe: <https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=4>
-Content-Type: multipart/alternative; charset="UTF-8"; boundary="b1_813c84d37423a6b8fb0fed88f687dd05"
+List-Unsubscribe: <https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=6>
+Content-Type: multipart/alternative; charset="UTF-8"; boundary="b1_b84fff5c78fa8e346ab40f6f6624fcab"
 Content-Transfer-Encoding: 8bit
 To: linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
---b1_813c84d37423a6b8fb0fed88f687dd05
+--b1_b84fff5c78fa8e346ab40f6f6624fcab
 Content-Type: text/plain; format=flowed; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 
 Your email client cannot read this email.
 To view it online, please go here:
-https://presidentsummit2021.info/emm/display.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&S=4&L=1&N=1
+https://presidentsummit2021.info/emm/display.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&S=6&L=1&N=1
 
 
 To stop receiving these
-emails:https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=4
+emails:https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=6
 
---b1_813c84d37423a6b8fb0fed88f687dd05
+--b1_b84fff5c78fa8e346ab40f6f6624fcab
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 
@@ -159,8 +159,8 @@ Database</span></span></span></span></span></b></span></span></span><br
 /><span><span><span lang="EN-US">+1-&nbsp;</span><span><span>(678)
 745-8385</span></span></span></span>
 <img
-src="https://presidentsummit2021.info/emm/open.php?M=23461&L=1&N=4&F=H&image=.jpg"
+src="https://presidentsummit2021.info/emm/open.php?M=23461&L=1&N=6&F=H&image=.jpg"
 height="1" width="10"></body>
 </html>
 
---b1_813c84d37423a6b8fb0fed88f687dd05--
+--b1_b84fff5c78fa8e346ab40f6f6624fcab--
