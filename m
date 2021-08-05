@@ -1,42 +1,42 @@
-Received: from pre4.presidentsummit2021.info (pre4.presidentsummit2021.info [46.173.211.74])
- by mx.groups.io with SMTP id smtpd.web11.12961.1628100913159029472
+Received: from pre5.presidentsummit2021.info (pre5.presidentsummit2021.info [46.173.211.125])
+ by mx.groups.io with SMTP id smtpd.web12.5564.1628145575349980262
  for <linux-oxnas@groups.io>;
- Wed, 04 Aug 2021 11:15:13 -0700
+ Wed, 04 Aug 2021 23:39:35 -0700
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=default; d=gmail.com;
  h=To:Subject:Message-ID:Date:From:Reply-To:MIME-Version:List-Unsubscribe:Content-Type:Content-Transfer-Encoding; i=olivia.millerbusiness21@gmail.com;
- bh=hkdLWNeX0enS2Ct7ruJ4LlsvEJk=;
- b=bDOoqN4jWRW6lAn/kmBye5Isveydqf3BxwJp1ayef5xVFXUcgann7bF7W7cSPtj/QbGZyQqB1XyZ
-   m8krJSctWJhUwjVrQKOJ3oZbJSpuVTA31pnl/eEQo3esdZdr/vo43mx2QqOHjgFXhsDqPZxC7JFY
-   DjvLv+iGKSFJ39HYGfz+cXRI/a+rvU8ZMXFCsGJZt3RxLKloxlMjNPQUhjXy7hq49n91d2/XwcO9
-   RV2zARRq1frFunxobgPCUhqR/ljWlehCqPFkuJPBbegNA/QOyY1+nZVObJW65zyzWuapp/I5wyoH
-   KpVEO7U13/9SMUp9ij7+dZWE5vo0bYwwoNWObQ==
-Received: from presidentsummit2021.info (127.0.0.1) by pre2.presidentsummit2021.info id h1bcj3i19tkk for <linux-oxnas@groups.io>; Wed, 4 Aug 2021 21:15:11 +0300 (envelope-from <olivia.mrbusiness21-linux+2Doxnas=groups.io@gmail.com>)
+ bh=9nM4Or8dY6Ekai318Faq38h8ajk=;
+ b=Bhzjs6rMJTCGgjagkSw0TeOmYtqZrt+IvL3TY4IAtD01p6ncMSL+BUvD9wGxSB2ikMDpLYdcCMGB
+   xOsFPBAjHhaI7bB4Zk++nMp4GEa1jW6o6n6pOlQH8wp4cugtxeYUDzo8QfkjEuUOFsBAQPQ+7XCL
+   prKbQ43RAC8MSKY5qg5oj14xRd9fmniGXcypsZ2e9ozIloo//klpl1eFuaZIusxl49YdgNcHqu2F
+   BtluSw2gv6JNPM9zmCsrSmsBz9hnLF41dAzD0Msz0pNt6D+jFkZkmyeioso70XZBbMbPI9w6a6CQ
+   97VEmLmZhv2NFQ4KwZLjBx9ObUWcyQxJbp34kQ==
+Received: from presidentsummit2021.info (127.0.0.1) by pre2.presidentsummit2021.info id h1e3qfi19tkr for <linux-oxnas@groups.io>; Thu, 5 Aug 2021 09:39:32 +0300 (envelope-from <olivillerbusiness21-linux+2Doxnas=groups.io@gmail.com>)
 Subject: Re: Client information
-Message-ID: <254d5ef1031bd53a06094b73f9a51a9e@presidentsummit2021.info>
-Return-Path: olivia.mrbusiness21@gmail.com
-Date: Wed, 04 Aug 2021 17:42:07 +0000
+Message-ID: <8e8610720c5e6c3da39dbd2f3ffef057@presidentsummit2021.info>
+Return-Path: olivillerbusiness21@gmail.com
+Date: Thu, 05 Aug 2021 06:10:09 +0000
 From: "Olivia Miller" <olivia.millerbusiness21@gmail.com>
 Reply-To: olivia.millerbusiness21@gmail.com
 MIME-Version: 1.0
-List-Unsubscribe: <https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=2>
-Content-Type: multipart/alternative; charset="UTF-8"; boundary="b1_5e683c933bbedc9935a34d8e95e4fc43"
+List-Unsubscribe: <https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=4>
+Content-Type: multipart/alternative; charset="UTF-8"; boundary="b1_813c84d37423a6b8fb0fed88f687dd05"
 Content-Transfer-Encoding: 8bit
 To: linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
---b1_5e683c933bbedc9935a34d8e95e4fc43
+--b1_813c84d37423a6b8fb0fed88f687dd05
 Content-Type: text/plain; format=flowed; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 
 Your email client cannot read this email.
 To view it online, please go here:
-https://presidentsummit2021.info/emm/display.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&S=2&L=1&N=1
+https://presidentsummit2021.info/emm/display.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&S=4&L=1&N=1
 
 
 To stop receiving these
-emails:https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=2
+emails:https://presidentsummit2021.info/emm/unsubscribe.php?M=23461&C=e392d33736a860ca684b7c0bd78e5d38&L=1&N=4
 
---b1_5e683c933bbedc9935a34d8e95e4fc43
+--b1_813c84d37423a6b8fb0fed88f687dd05
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 
@@ -159,8 +159,8 @@ Database</span></span></span></span></span></b></span></span></span><br
 /><span><span><span lang="EN-US">+1-&nbsp;</span><span><span>(678)
 745-8385</span></span></span></span>
 <img
-src="https://presidentsummit2021.info/emm/open.php?M=23461&L=1&N=2&F=H&image=.jpg"
+src="https://presidentsummit2021.info/emm/open.php?M=23461&L=1&N=4&F=H&image=.jpg"
 height="1" width="10"></body>
 </html>
 
---b1_5e683c933bbedc9935a34d8e95e4fc43--
+--b1_813c84d37423a6b8fb0fed88f687dd05--
