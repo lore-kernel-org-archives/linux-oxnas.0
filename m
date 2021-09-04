@@ -1,68 +1,71 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
- by mx.groups.io with SMTP id smtpd.web12.5080.1630484070956336651
+Received: from mail-qk1-f202.google.com (mail-qk1-f202.google.com [209.85.222.202])
+ by mx.groups.io with SMTP id smtpd.web08.5658.1630713947824271185
  for <linux-oxnas@groups.io>;
- Wed, 01 Sep 2021 01:14:31 -0700
-Received: by mail-wm1-f54.google.com with SMTP id 79-20020a1c0452000000b002e6cf79e572so4107083wme.1
-        for <linux-oxnas@groups.io>; Wed, 01 Sep 2021 01:14:30 -0700 (PDT)
+ Fri, 03 Sep 2021 17:05:48 -0700
+Received: by mail-qk1-f202.google.com with SMTP id q13-20020a05620a038d00b003d38f784161so2301253qkm.8
+        for <linux-oxnas@groups.io>; Fri, 03 Sep 2021 17:05:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YrKVWBO1f/vW38Nzw0ET7Dtvvx+9TDWUyIhOz8vqs7c=;
-        b=i/B3G1QjYGIKPhWb4mR83VZKwR3jlpFDSE4OlAn/5FfTm2eOXa+r91g/pQQzhUDijQ
-         cFIcs6CRQwVvdhJ+3kE4FRr6MYWfoJ0qA4NMIBLLgAdM5ckRXIbGikB/WLdyfHQrVfgf
-         +WvquCPK7qoc9BfzkWKoIp7tZfdWNBd0CcK3LmXLn0PHXY3cnQ1sTo8E86GHzGxnnZB5
-         Q7cThkviMKoosz4L3WVsAtLBWyh9iXnTAQGMjfXhgkLj9KCcbA4YjXuT2+tJNh9kNhPv
-         H1zmPrjpA+MX2iIEcz7YiGtJ2gBfykfoUTBvPJjyGoJWFaRsQaHmdv4AxH/sPP0nvSCb
-         YVXA==
-Return-Path: <narmstrong@baylibre.com>
-Subject: Re: [PATCH] mtd: rawnand: oxnas: Make use of the helper function devm_platform_ioremap_resource()
-References: <20210901074207.9333-1-caihuoqing@baidu.com>
-From: "Neil Armstrong" <narmstrong@baylibre.com>
-Message-ID: <61ab65d3-bf52-5701-95d2-476b8c2d719c@baylibre.com>
-Date: Wed, 1 Sep 2021 10:14:28 +0200
-MIME-Version: 1.0
-In-Reply-To: <20210901074207.9333-1-caihuoqing@baidu.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-To: Cai Huoqing <caihuoqing@baidu.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, linux-mtd@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, linux-kernel@vger.kernel.org
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=mjzKqamzQmvzyqlVvUVvv6P1c+/kEZztjTn7I8qHctk=;
+        b=VZ4p+EFnl9EXauvJ8dhmEDRVt8YHYnMZhZvV6h6nXYpS8v+LDxHvFjqrQR9eLsDsYy
+         RHTaYj0wnWluvQm7nCyFHpVTY4X8aSkLuiIkTyUOtezLSN/w1eSH1tjAyXzk6Y6V+daF
+         nD4NShWbq6Z7Q6wGJuPFkSLi3XRYi3l8fI7h5O9yxld6cQp6X5zUN7AIWAQFMwtKXCyM
+         HXp04mNEFZ5P1u4dqby0/DAT3CrpF/59RTQZHoVwcvbSNnALUImixWgqC+Qcatbmm+Bl
+         8cGxwkxOX9xAhBKt/slNqZhBiHfmq1ksDBxjPaOWBySvhq6EsQwZdcMREHamx96DGzud
+         O5xg==
+Date: Fri,  3 Sep 2021 17:05:40 -0700
+Message-Id: <20210904000543.2019010-1-saravanak@google.com>
+Mime-Version: 1.0
+Subject: [PATCH v3 0/2] Fix simple-bus issues with fw_devlink
+From: Saravana Kannan <saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
+To: Russell King <linux@armlinux.org.uk>, Neil Armstrong <narmstrong@baylibre.com>, Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, Tony Lindgren <tony@atomide.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Damien Le Moal <damien.lemoal@wdc.com>
+Cc: Saravana Kannan <saravanak@google.com>, Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh+dt@kernel.org>, kernel-team@android.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-oxnas@groups.io, linux-renesas-soc@vger.kernel.org, linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-On 01/09/2021 09:42, Cai Huoqing wrote:
-> Use the devm_platform_ioremap_resource() helper instead of
-> calling platform_get_resource() and devm_ioremap_resource()
-> separately
-> 
-> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
-> ---
->  drivers/mtd/nand/raw/oxnas_nand.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/oxnas_nand.c b/drivers/mtd/nand/raw/oxnas_nand.c
-> index f44947043e5a..cd112d45e0b5 100644
-> --- a/drivers/mtd/nand/raw/oxnas_nand.c
-> +++ b/drivers/mtd/nand/raw/oxnas_nand.c
-> @@ -79,7 +79,6 @@ static int oxnas_nand_probe(struct platform_device *pdev)
->  	struct oxnas_nand_ctrl *oxnas;
->  	struct nand_chip *chip;
->  	struct mtd_info *mtd;
-> -	struct resource *res;
->  	int count = 0;
->  	int err = 0;
->  	int i;
-> @@ -92,8 +91,7 @@ static int oxnas_nand_probe(struct platform_device *pdev)
->  
->  	nand_controller_init(&oxnas->base);
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	oxnas->io_base = devm_ioremap_resource(&pdev->dev, res);
-> +	oxnas->io_base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(oxnas->io_base))
->  		return PTR_ERR(oxnas->io_base);
->  
-> 
+Ulf reported an issue[1] with fw_devlink. This series tries to fix that
+issue.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+I replicated a similar set up on my end and I confirmed:
+- A simple-bus only device is probed.
+- Another device listing simple-bus as a 2nd compatible string isn't
+  probed.
+
+Ulf, mind testing this?
+
+v1->v2:
+- Switched to probing the simple-bus device instead of marking it as
+  NEVER_PROBES.
+
+v2->v3:
+- Moved all the code into the simple-pm-bus driver
+- Addressed Ulf's comment about the remove() code missing a check.
+
+Thanks,
+Saravana
+[1] - https://lore.kernel.org/lkml/CAPDyKFo9Bxremkb1dDrr4OcXSpE0keVze94Cm=zrkOVxHHxBmQ@mail.gmail.com/
+
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Rob Herring <robh+dt@kernel.org>
+
+Saravana Kannan (2):
+  drivers: bus: simple-pm-bus: Add support for probing simple bus only
+    devices
+  drivers: bus: Delete CONFIG_SIMPLE_PM_BUS
+
+ arch/arm/configs/multi_v7_defconfig |  1 -
+ arch/arm/configs/oxnas_v6_defconfig |  1 -
+ arch/arm/configs/shmobile_defconfig |  1 -
+ arch/arm/mach-omap2/Kconfig         |  1 -
+ arch/arm64/configs/defconfig        |  1 -
+ drivers/bus/Kconfig                 | 12 -----------
+ drivers/bus/Makefile                |  2 +-
+ drivers/bus/simple-pm-bus.c         | 32 ++++++++++++++++++++++++++---
+ drivers/soc/canaan/Kconfig          |  1 -
+ 9 files changed, 30 insertions(+), 22 deletions(-)
+
+-- 
+2.33.0.153.gba50c8fa24-goog
+
