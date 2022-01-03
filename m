@@ -1,45 +1,54 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
- by mx.groups.io with SMTP id smtpd.web08.32108.1641232602271203450
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+ by mx.groups.io with SMTP id smtpd.web09.32127.1641232603154937342
  for <linux-oxnas@groups.io>;
- Mon, 03 Jan 2022 09:56:42 -0800
-Received: by mail-wm1-f50.google.com with SMTP id k66-20020a1ca145000000b00345fa984108so260730wme.2
-        for <linux-oxnas@groups.io>; Mon, 03 Jan 2022 09:56:41 -0800 (PST)
+ Mon, 03 Jan 2022 09:56:43 -0800
+Received: by mail-wr1-f45.google.com with SMTP id o3so13131195wrh.10
+        for <linux-oxnas@groups.io>; Mon, 03 Jan 2022 09:56:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6WMK9r9U40TC3q1VP7bdOOZDIr/rVvLVzPk/2iDskuQ=;
-        b=vOJu7+LvPnji/6CMcHF1ZEi/tNY0JzDumoerl3uWTrZlBM31/cVL0gPqHe0QWNrqEu
-         OukXRNTrYFCXcJJCXcccdIUv/wAP5Edbi4Mhd5Cu/C5Xd4RdfanHnNmpFP8qlkhx9+Ge
-         hmO8fe57tgdsyVDZOsROxdE5MJd4z40FGK/KNHF2ZkXarBuoivACBbbRMk/s30nKEM8w
-         RaXGuo21q3nC1wxfppyiosK1sDcAZqC5PfeUtmbn8/lDoCLPxSKYC1WnrEgPVz5gDnXs
-         NkCQ1AwCjGSdVxrHNUlrLsj2Pm88RjtfkHI6JYyDEsiTggNKoN+1Yka3y+ZGtr+QBnzZ
-         RNLQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=neH7i+26OYLpeC5cMlHViFNMwrfPO3xPJ5Z7DAt5pN8=;
+        b=XvTHDJevsy0ZSrMi+se2sklxBwlITB/hybQLSG/lMV6WXD0xQn+yILwcirk/NVHH8N
+         y5cSTYrKo/Z515VeTJsDn3ON6gufP4KRJNeoc3luWerqUVvGFkKB06JcyTcrTCIl9l/M
+         ygPKlJgUlChyH36b8GV0ox/Isxi8z+lV1ckPQPQwDphX+q42mcFH3qe18mDTe+OGrF2+
+         QyVmUvkcCSigenymoDPRF6E8uDgEnoyqfXlM77ZRQn26WSGFn9RyGSrbmDd1zy/Dm7LT
+         0Y5Wfi/pkxGViP79Io2eyNB5PH2dc04N5zhpKGpYuXUmB0YGFnVUWaNDI0AXO5xtoZjW
+         vcVA==
 Return-Path: <narmstrong@baylibre.com>
 From: "Neil Armstrong" <narmstrong@baylibre.com>
-Subject: [PATCH 0/3] ARM: ox810se: Add Ethernet support
-Date: Mon,  3 Jan 2022 18:56:35 +0100
-Message-Id: <20220103175638.89625-1-narmstrong@baylibre.com>
+Subject: [PATCH net-next 1/3] dt-bindings: net: oxnas-dwmac: Add bindings for OX810SE
+Date: Mon,  3 Jan 2022 18:56:36 +0100
+Message-Id: <20220103175638.89625-2-narmstrong@baylibre.com>
+In-Reply-To: <20220103175638.89625-1-narmstrong@baylibre.com>
+References: <20220103175638.89625-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To: davem@davemloft.net
+To: davem@davemloft.net, devicetree@vger.kernel.org
 Cc: Neil Armstrong <narmstrong@baylibre.com>, netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, linux-kernel@vger.kernel.org
 List-ID: <linux-oxnas@groups.io>
 
-This adds support for the Synopsys DWMAC controller found in the
-OX820SE SoC, by using almost the same glue code as the OX820.
+Add SoC specific bindings for OX810SE support.
 
-Neil Armstrong (3):
-  dt-bindings: net: oxnas-dwmac: Add bindings for OX810SE
-  net: stmmac: dwmac-oxnas: Add support for OX810SE
-  ARM: dts: ox810se: Add Ethernet support
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ Documentation/devicetree/bindings/net/oxnas-dwmac.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
- .../devicetree/bindings/net/oxnas-dwmac.txt   |  3 +
- arch/arm/boot/dts/ox810se-wd-mbwe.dts         |  4 +
- arch/arm/boot/dts/ox810se.dtsi                | 18 ++++
- .../net/ethernet/stmicro/stmmac/dwmac-oxnas.c | 92 ++++++++++++++-----
- 4 files changed, 95 insertions(+), 22 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/net/oxnas-dwmac.txt b/Documentation/devicetree/bindings/net/oxnas-dwmac.txt
+index d7117a22fd87..27db496f1ce8 100644
+--- a/Documentation/devicetree/bindings/net/oxnas-dwmac.txt
++++ b/Documentation/devicetree/bindings/net/oxnas-dwmac.txt
+@@ -9,6 +9,9 @@ Required properties on all platforms:
+ - compatible:	For the OX820 SoC, it should be :
+ 		- "oxsemi,ox820-dwmac" to select glue
+ 		- "snps,dwmac-3.512" to select IP version.
++		For the OX810SE SoC, it should be :
++		- "oxsemi,ox810se-dwmac" to select glue
++		- "snps,dwmac-3.512" to select IP version.
+ 
+ - clocks: Should contain phandles to the following clocks
+ - clock-names:	Should contain the following:
 -- 
 2.25.1
 
