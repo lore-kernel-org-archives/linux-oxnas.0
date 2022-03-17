@@ -1,68 +1,57 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
- by mx.groups.io with SMTP id smtpd.web09.8719.1646294834252998922
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+ by mx.groups.io with SMTP id smtpd.web08.94.1647536130944713444
  for <linux-oxnas@groups.io>;
- Thu, 03 Mar 2022 00:07:15 -0800
-Received: by mail-wm1-f46.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso2734468wmr.1
-        for <linux-oxnas@groups.io>; Thu, 03 Mar 2022 00:07:13 -0800 (PST)
+ Thu, 17 Mar 2022 09:55:31 -0700
+Received: by mail-wr1-f48.google.com with SMTP id p9so8159764wra.12
+        for <linux-oxnas@groups.io>; Thu, 17 Mar 2022 09:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=T4kbvdEkJq7G6CWV0LAt8KL4gr8THBwbvBRsRaY/1QQ=;
-        b=M/tb1iQDePqb2cmCw0hU63ea8SHPbgBraIobX1tCakB233EkdlNYqSdYUoLFfOEPTs
-         t5ECrCvd788ldBGHa1nJbxRykpHBaD/HEQGExMpiH5o+y6fJHq3HbMDVIDD2xNJEsSzi
-         O5hoF7fTiPL9/GC6fZ1CNfQLtjhiMrnIapRJosNBhe8s7P794FZnVdV/Wpl9z2+feW3f
-         MgpzrD7p9NfGYUVXfzr5FQDt/Y4OGOwx2Hi50nfkD3tkx0uuzQxuu6NqevUrwDJpMtLW
-         E0+pygTamKjNW+kD/MrM+puuyLqXpryxCWyFRdG8bj6+/jHGIPgu5+ITm8onuR1OtlQw
-         AwbQ==
+         :references:from:organization:in-reply-to:content-transfer-encoding;
+        bh=i/Fk6gDMt/Grt4NJkS0bE/RE15fansbwCg4R3aEXH2U=;
+        b=ozNezHAQFm92bl3PCurfC7T22hhihc8I0s6w6D+NJXW8UBmlb9DBHUe3VmtcPvU95J
+         lPa7l6QL2qa7i7CyKyRW4CtaGJnJr8rZ54Ptk7RwizCnoehZakTY7XlK2Lu51SEzg+YB
+         vgCEI2W8MwBol81BtpywAtivFLGxRLRAj7/8scHDG7WGnMeNvYfkAp5yFTMzvqkOkHfI
+         ZdpqCYINy33Y6PnSVOmzkPCduhiESww8VzMJsrDRCh8DkkCm5MWTSkVRQnQY5EX+kwn+
+         MgIr7V+c5el1XET1TCWAMv8rc6nmnMmLad5KunbZC/WZT/EYkqOylQCQVhxngtxl+qZS
+         qVxA==
 Return-Path: <narmstrong@baylibre.com>
-Message-ID: <7d585748-7a41-13ca-60da-20eb4fe78374@baylibre.com>
-Date: Thu, 3 Mar 2022 09:07:11 +0100
+Message-ID: <d53764bd-8b49-37eb-c393-1317180979d1@baylibre.com>
+Date: Thu, 17 Mar 2022 17:55:27 +0100
 MIME-Version: 1.0
-Subject: Re: [PATCH] clk: Use of_device_get_match_data()
-References: <20220303014856.2059307-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH 02/18] ARM: dts: ox820: align interrupt controller node name with dtschema
+References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
+ <20220317115705.450427-1-krzysztof.kozlowski@canonical.com>
 From: "Neil Armstrong" <narmstrong@baylibre.com>
-In-Reply-To: <20220303014856.2059307-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220317115705.450427-1-krzysztof.kozlowski@canonical.com>
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-To: cgel.zte@gmail.com, mturquette@baylibre.com
-Cc: sboyd@kernel.org, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-On 03/03/2022 02:48, cgel.zte@gmail.com wrote:
-> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+On 17/03/2022 12:56, Krzysztof Kozlowski wrote:
+> Fixes dtbs_check warnings like:
 > 
-> Use of_device_get_match_data() to simplify the code.
+>    gic@1000: $nodename:0: 'gic@1000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->   drivers/clk/clk-oxnas.c | 6 +-----
->   1 file changed, 1 insertion(+), 5 deletions(-)
+>   arch/arm/boot/dts/ox820.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/clk/clk-oxnas.c b/drivers/clk/clk-oxnas.c
-> index 78d5ea669fea..cda5e258355b 100644
-> --- a/drivers/clk/clk-oxnas.c
-> +++ b/drivers/clk/clk-oxnas.c
-> @@ -209,15 +209,11 @@ static int oxnas_stdclk_probe(struct platform_device *pdev)
->   {
->   	struct device_node *np = pdev->dev.of_node;
->   	const struct oxnas_stdclk_data *data;
-> -	const struct of_device_id *id;
->   	struct regmap *regmap;
->   	int ret;
->   	int i;
+> diff --git a/arch/arm/boot/dts/ox820.dtsi b/arch/arm/boot/dts/ox820.dtsi
+> index 90846a7655b4..dde4364892bf 100644
+> --- a/arch/arm/boot/dts/ox820.dtsi
+> +++ b/arch/arm/boot/dts/ox820.dtsi
+> @@ -287,7 +287,7 @@ local-timer@600 {
+>   				clocks = <&armclk>;
+>   			};
 >   
-> -	id = of_match_device(oxnas_stdclk_dt_ids, &pdev->dev);
-> -	if (!id)
-> -		return -ENODEV;
-> -	data = id->data;
-> +	data = of_device_get_match_data(&pdev->dev);
->   
->   	regmap = syscon_node_to_regmap(of_get_parent(np));
->   	if (IS_ERR(regmap)) {
-
+> -			gic: gic@1000 {
+> +			gic: interrupt-controller@1000 {
+>   				compatible = "arm,arm11mp-gic";
+>   				interrupt-controller;
+>   				#interrupt-cells = <3>;
 
 Acked-by: Neil Armstrong <narmstrong@baylibre.com>
