@@ -1,45 +1,39 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
- by mx.groups.io with SMTP id smtpd.web10.10613.1650644542179852645
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+ by mx.groups.io with SMTP id smtpd.web10.10614.1650644547474222405
  for <linux-oxnas@groups.io>;
- Fri, 22 Apr 2022 09:22:23 -0700
-Received: by mail-wm1-f48.google.com with SMTP id r187-20020a1c44c4000000b0038ccb70e239so8289378wma.3
-        for <linux-oxnas@groups.io>; Fri, 22 Apr 2022 09:22:21 -0700 (PDT)
+ Fri, 22 Apr 2022 09:22:28 -0700
+Received: by mail-wm1-f49.google.com with SMTP id q20so5395640wmq.1
+        for <linux-oxnas@groups.io>; Fri, 22 Apr 2022 09:22:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=IDDAXsK5zsHVMrFdm0XL9HyiRmqAUPBzCsjbYUV61Cs=;
-        b=H2KvJ4NL/quQt3z0skXvvhlGPWn8Z5u74THDmxmB2gR3ivtQ6ORTtN6AOGDJm1AGru
-         4l+n1YRH4eVX6QNSlHjLKtpR5XtLodKvrDik0AltRLLarcf5jTerrqnty2I54iWg0oRu
-         WKnVcmAYtMzrUnLLKK6JApUU9Nfn97UtyRnprA9tEqDoiVADbgVK1uU4Lbyjf6hkT2f2
-         xR9YIWarWkavifPfHgJbvPLjTCkSEEB9JLH7WkrmYzc1JgCYc0D3dglFbxOd2WBXbwQE
-         aQjCmXGwXQgiifKWmZWpcJ3MiJMMT8a5BR4u43QsqTbG/iQcUIYkL56Ll2uo43F0Ak1E
-         tjUA==
+         :references:from:organization:in-reply-to:content-transfer-encoding;
+        bh=zY4C5B+QxiaTEzxxexC/40j3SP92tDxpSvstBBqkr8I=;
+        b=2KC6S/IX6j6j/hdZgAG7Wy8zhssVYkMM2W/r28JdDOxrZe9kjqLKPvOKBbwEeBuGvZ
+         94NicFy5IACmfK/dmOP3VJESQJCYQUkwW8sSzBVmJbUKOTfLpl0agepRGrJWK7bG0hGU
+         zuVDM0shNBruv50LMO1GRNg534Rk+TCBYfXW9m/O4b+bxaeOsP9Xga+ZcnNNYEfRxZkA
+         Vjvsae3frQrSGgwDuIeERO1opJtgk4I682nSte3jDJbtnySeKOCYaQY3XR5RC5UXSJzK
+         8BsH9Fdhnb8k1/lx5cazSisFmCBYOo+HjnW8jTAH3hmics07gFpAGcQJF1qVdletwGcS
+         esaw==
 Return-Path: <narmstrong@baylibre.com>
-Message-ID: <f6905ca8-301b-0f95-1cc2-78503bec1496@baylibre.com>
-Date: Fri, 22 Apr 2022 18:22:18 +0200
+Message-ID: <23ce10e4-bdb6-9b3a-465b-8ff86d679296@baylibre.com>
+Date: Fri, 22 Apr 2022 18:22:24 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH] clocksource/drivers/oxnas: fix error check return value of irq_of_parse_and_map()
-References: <20220422084816.2775898-1-lv.ruyi@zte.com.cn>
+Subject: Re: [PATCH] clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return value
+References: <20220422104101.55754-1-krzysztof.kozlowski@linaro.org>
 From: "Neil Armstrong" <narmstrong@baylibre.com>
-In-Reply-To: <20220422084816.2775898-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <20220422104101.55754-1-krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-To: cgel.zte@gmail.com, daniel.lezcano@linaro.org, tglx@linutronix.de
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io
 List-ID: <linux-oxnas@groups.io>
 
-On 22/04/2022 10:48, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On 22/04/2022 12:41, Krzysztof Kozlowski wrote:
+> The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 > 
-> The irq_of_parse_and_map() function returns 0 on failure, and does not
-> return an negative value.
-> 
-> Fixes: 	89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> Fixes: 89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 >   drivers/clocksource/timer-oxnas-rps.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
