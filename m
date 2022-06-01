@@ -1,23 +1,21 @@
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
- by mx.groups.io with SMTP id smtpd.web09.7892.1654091949822932738
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+ by mx.groups.io with SMTP id smtpd.web11.8034.1654091997661085062
  for <linux-oxnas@groups.io>;
- Wed, 01 Jun 2022 06:59:10 -0700
+ Wed, 01 Jun 2022 06:59:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654091946;
-	bh=meEEYYb4Q/Zwm6saccKdiTfafAQE+aqAUob7xdy2nqM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GFHLD0e734PKcb/cr4JL6e3f4W/+KUzMD+GZTpdSbMdXfNiVeWJuCPgP2msfI7zLr
-	 oc0xTyRfxDCkS7hdCyHhWKlJJ+Q0tk/FHN0WjKN4vVoB7kbG6HN0aVvXnF4k/ZlCeM
-	 qfIxwAJazHaoEylARAmdZLRTKOFeU3tm1jVZx28ny3t+TKj9J3ILetO74wbwgGVzjc
-	 SMNvDW0G9S8STGObunWaHv5pMf3n6poDlUlbaS8cQ7SkZdl/+TS89DexjWutDi5+3N
-	 h/cUZc4oBUPztOn2sEdYVJk8xGo8EpEFo7fWPybG4gbGp4HBwDZnerUC2iGTctiltU
-	 az/sbaCA4h6Xw==
+	s=k20201202; t=1654091994;
+	bh=cJFlLz+jFyLB/OFW6ZZBIAU34k0Q+vivDjWMB3mrnGI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BaQr74OVHhEguiDVV9MNq8c1hE9+qJc13C/u0jW01BTQCimWvCkTLkDfHHlRaOwLn
+	 mXJ0Q3cuwK6LTm1q0I0C9+yu9w1o2v2uk4DdHUgIATK1A0RiKz27fFuxzanhCdmhTV
+	 807cOwQOaPqwrU10AcbsD1Zitl+Rf2D67AmZ7RLbq7Y1RGHevjAIn+DmQFg/guHdld
+	 oxXf0P4bBeFZOVmJyaHf+qPV+k3ugUB+MCQNg/K8+Khk5MBk4hF2w8z6287AarUh5V
+	 OQ1IqnYsljnYLd494YgMjcXHpIcZe1qiXm6+ZafD840+Ubau7Ej3YyfCsaYTlcuLR5
+	 wV6xSiGChTbPA==
 From: Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 02/20] ARM: dts: ox820: align interrupt controller node name with dtschema
-Date: Wed,  1 Jun 2022 09:58:44 -0400
-Message-Id: <20220601135902.2004823-2-sashal@kernel.org>
-In-Reply-To: <20220601135902.2004823-1-sashal@kernel.org>
-References: <20220601135902.2004823-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 01/15] ARM: dts: ox820: align interrupt controller node name with dtschema
+Date: Wed,  1 Jun 2022 09:59:36 -0400
+Message-Id: <20220601135951.2005085-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 To: linux-kernel@vger.kernel.org, stable@vger.kernel.org
@@ -43,10 +41,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/ox820.dtsi b/arch/arm/boot/dts/ox820.dtsi
-index 90846a7655b4..dde4364892bf 100644
+index f7dddfb01f81..d629caf8b98f 100644
 --- a/arch/arm/boot/dts/ox820.dtsi
 +++ b/arch/arm/boot/dts/ox820.dtsi
-@@ -287,7 +287,7 @@ local-timer@600 {
+@@ -286,7 +286,7 @@ local-timer@600 {
  				clocks =3D <&armclk>;
  			};
 =20
