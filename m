@@ -1,23 +1,23 @@
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by mx.groups.io with SMTP id smtpd.web12.7871.1654091788276713692
+ by mx.groups.io with SMTP id smtpd.web12.7895.1654091884165185290
  for <linux-oxnas@groups.io>;
- Wed, 01 Jun 2022 06:56:28 -0700
+ Wed, 01 Jun 2022 06:58:04 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654091786;
+	s=k20201202; t=1654091883;
 	bh=meEEYYb4Q/Zwm6saccKdiTfafAQE+aqAUob7xdy2nqM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xxs+paFeRaBnnb4ePsrWtRwFWTriKFJLA58Bzz8rOYWkDoCE9b6qa+fQiHkXkOtEI
-	 Nq/+rph0Sv98+2ZjpKrjr/CvyG5PmrF8j8UjxgRk17yyk5ns24kCTsNJkiSGd4//jS
-	 pA0LZMrL3GJ6mJs+47SzuxkUilZKfMn2Vx3lwuP0lkpjazrQiy+m0gGS+lhYdZRRAf
-	 T8SidftQ9TpTnOacsvy8BqcWfbePjjipHGyZu7tT2Hc6Zk2ZlB5YPnLMjHAaUQuysN
-	 O1x6EaEHzkcLCwLOT9JMG3MjDC+mL3UfbkS0DMocOSJOA8OK7k+OdfxbKcuA00Z/Z+
-	 Xver3eaOFv9cQ==
+	b=PWbZWtP+dsiT//TTt4Vo4op/Zzs5vVRx620+kg3hCf3gRUtB3eE22WdS/ih3Wswzq
+	 qcGBCWE5s2iW2gBjv83JFIm1XyS/gTY47784DK1FYuvy+yRVwLGzHRg4B/oo368hSN
+	 NqKt4b4Ib1WECRtQRPS2g5HbBIrac88nANsBWZA7utTp6fHpbw93SiH2pWHkkVQqzZ
+	 x8VW753NyiWO4by5dOswzi/Nwl9Pz75s5o/3KWU4UQefZbbxdf0weJS/EciYPKoZXo
+	 cTH0xFD/8EzoX6lvMmYdIS1wfk0pvzKgNpxp/WXit5iO5U75D+CfPDPEcUBhfDoE1E
+	 UA+DmGlTHnwAg==
 From: Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.15 02/37] ARM: dts: ox820: align interrupt controller node name with dtschema
-Date: Wed,  1 Jun 2022 09:55:47 -0400
-Message-Id: <20220601135622.2003939-2-sashal@kernel.org>
-In-Reply-To: <20220601135622.2003939-1-sashal@kernel.org>
-References: <20220601135622.2003939-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 02/26] ARM: dts: ox820: align interrupt controller node name with dtschema
+Date: Wed,  1 Jun 2022 09:57:35 -0400
+Message-Id: <20220601135759.2004435-2-sashal@kernel.org>
+In-Reply-To: <20220601135759.2004435-1-sashal@kernel.org>
+References: <20220601135759.2004435-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 To: linux-kernel@vger.kernel.org, stable@vger.kernel.org
