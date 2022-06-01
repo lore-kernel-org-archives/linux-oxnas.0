@@ -1,21 +1,21 @@
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
- by mx.groups.io with SMTP id smtpd.web11.8034.1654091997661085062
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by mx.groups.io with SMTP id smtpd.web11.8040.1654092031503942273
  for <linux-oxnas@groups.io>;
- Wed, 01 Jun 2022 06:59:58 -0700
+ Wed, 01 Jun 2022 07:00:31 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654091994;
-	bh=cJFlLz+jFyLB/OFW6ZZBIAU34k0Q+vivDjWMB3mrnGI=;
+	s=k20201202; t=1654092030;
+	bh=z42OExAeZKAzjkFiuxCksJlnicHhYdUI6Nt4NvmD5S4=;
 	h=From:To:Cc:Subject:Date:From;
-	b=BaQr74OVHhEguiDVV9MNq8c1hE9+qJc13C/u0jW01BTQCimWvCkTLkDfHHlRaOwLn
-	 mXJ0Q3cuwK6LTm1q0I0C9+yu9w1o2v2uk4DdHUgIATK1A0RiKz27fFuxzanhCdmhTV
-	 807cOwQOaPqwrU10AcbsD1Zitl+Rf2D67AmZ7RLbq7Y1RGHevjAIn+DmQFg/guHdld
-	 oxXf0P4bBeFZOVmJyaHf+qPV+k3ugUB+MCQNg/K8+Khk5MBk4hF2w8z6287AarUh5V
-	 OQ1IqnYsljnYLd494YgMjcXHpIcZe1qiXm6+ZafD840+Ubau7Ej3YyfCsaYTlcuLR5
-	 wV6xSiGChTbPA==
+	b=f+mP6Wna7gS/E44PrVT5Y/QeV2WXd2aSm8Y2LiWkvhPg0Dljpt3rAN64E2Ai2Cgq/
+	 zNUboc3lgtNRohSybVUoZNQFowQLs1cqQxe4JDETclVwGbqrZcc+5hjNJU26ANf1o1
+	 hL1KJDis/lqiV55RFlztXU5Kqhc1Tt15yomWsj3WUqGITlZd/vFpS3XR69hGnu60xT
+	 mKMuMaywUh9RXt9Kkeu7Oz95dMxPEez2KtuibKMjrBSsAnsRmpTXXuaeiWUb1j/E4r
+	 rV1gw999y8S5pxT4jkrOYmOSb3N6LdMvntqAgpp4eF5+CQGgSVY3MluC0IZ9nAEqBh
+	 7ZJsOm7xcJ3rw==
 From: Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 01/15] ARM: dts: ox820: align interrupt controller node name with dtschema
-Date: Wed,  1 Jun 2022 09:59:36 -0400
-Message-Id: <20220601135951.2005085-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 01/14] ARM: dts: ox820: align interrupt controller node name with dtschema
+Date: Wed,  1 Jun 2022 10:00:14 -0400
+Message-Id: <20220601140027.2005280-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 To: linux-kernel@vger.kernel.org, stable@vger.kernel.org
@@ -41,7 +41,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/ox820.dtsi b/arch/arm/boot/dts/ox820.dtsi
-index f7dddfb01f81..d629caf8b98f 100644
+index 8355cb034525..3382b1a9cac9 100644
 --- a/arch/arm/boot/dts/ox820.dtsi
 +++ b/arch/arm/boot/dts/ox820.dtsi
 @@ -286,7 +286,7 @@ local-timer@600 {
