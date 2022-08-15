@@ -1,215 +1,437 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
- by mx.groups.io with SMTP id smtpd.web12.9435.1658425569002601785
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+ by mx.groups.io with SMTP id smtpd.web11.2874.1660574429751153407
  for <linux-oxnas@groups.io>;
- Thu, 21 Jul 2022 10:46:09 -0700
-Received: by mail-wm1-f48.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso1221936wms.2
-        for <linux-oxnas@groups.io>; Thu, 21 Jul 2022 10:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=9Iej/WYKS186ZTIm2THeqOrl8G6w6VDAXbCGSBDKlsE=;
-        b=jhIuTJl9aRW4WFl89NsrDCv9dQz8pHZl66IFjsHxjMixSgJz9lLzwOibDGwkTLJ5Fl
-         wVnDPPZXZ/6A1pdSNH1QWJYY18xMINsbi9WAFTw1CUL7cPTsfkMatT/UzAEKp7D0PksG
-         IZr2IsuDM3wSECNoZThbVAiWRWaD9AWu6MTysK80x5u3wZc5DLKOVTUWcRAQkCuafTjv
-         p//5F4a+apzUzcuX7muRFACjMzOJWy9lpTf2vd8/d7c3wrPr9O2Fqq8XPEjkHuMQK9ol
-         QBCsreSSVCeHMb2/E7Hib2C7nzIXnGBpJiVuH13CdD8TeKW1N/pRh2bBvH1Ju0uQw604
-         0euQ==
-Return-Path: <narmstrong@baylibre.com>
-Message-ID: <f6a9757f-7212-d5e2-be30-e2068066339c@baylibre.com>
-Date: Thu, 21 Jul 2022 19:46:02 +0200
+ Mon, 15 Aug 2022 07:40:30 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
+	:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1660574428; x=1660581628; bh=DGtBzB5gvV
+	/bg6WJhVaceXEXR9j/HiUey3LRQ9aMkpc=; b=y/bOxu6gLP4GvrPWXMY27weFun
+	c1ncX3L4wvaa9IUjoTYgdrlRYy8ylM94pZvP6iDQmLe4esMVZBBWA2vaVkRVNnqe
+	rNTy9eqQX789s5OZl/0VSiFEleOizu220mkbcf1xv49tiUjQrOeXETMbK71FixbU
+	+Z639NZx8LY5/xQLY7y7f+1LNKLtF9KTuhJ2kc00t2+Aq4XKS0Sr+9hMAHBJ5LFN
+	xIz1G7hSqpta6DirFoyRxmnrlmla8uVN/AZ8vvZ8leK4mFzKEQkeFtw/663rN7hR
+	vpHpdYdGPhjwkeDh5yZY6zDTt51EkD3g7gl3DTux+7ofqUyfwri/muCys3Rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1660574428; x=1660581628; bh=DGtBzB5gvV/bg6WJhVaceXEXR9j/
+	HiUey3LRQ9aMkpc=; b=MzzWgt6WOwywKO6TLP+bUkIBGi3rW3WFiCmM8uBSTY8C
+	kekFTJOApWn07sGE4/nCPmVGC9XUfMTvT42w0evi8E5hwKXu6EiqtsQOgYZTMBuc
+	zfo/i1nDXhFhxQEW3mlNoQzc2Ki24KY7c+MWcaytyzhRQCKev9eW82LmS4cnumCM
+	T34uIhx63m/mBWeaPsa+CvZZHENMV2sPGhvjFfPkZyPmPa2ypdU1nlpS3pxqybuA
+	vQVw16JK4LXWosbIOy59orzDTASR+0jC96BC/UCLn79DbLdYkZSj0suCMKmwzhbx
+	59ZMeymfudYzSGOLXtdkmZqcPICyMO5HISTsx1IyNA==
+From: Zi Yan <zi.yan@sent.com>
+Subject: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
+Date: Mon, 15 Aug 2022 10:39:59 -0400
+Message-Id: <20220815143959.1511278-1-zi.yan@sent.com>
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/6] ARM: defconfig cleanups
-References: <20220721141325.2413920-1-arnd@kernel.org>
-From: "Neil Armstrong" <narmstrong@baylibre.com>
-In-Reply-To: <20220721141325.2413920-1-arnd@kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-To: Arnd Bergmann <arnd@kernel.org>, linux-arm-kernel@lists.infradead.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@microchip.com>, Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Alexander Shiyan <shc_work@mail.ru>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Vladimir Zapolskiy <vz@mleia.com>, Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, Dinh Nguyen <dinguyen@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org, bcm-kernel-feedback-list@broadcom.com, linux-rpi-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org, linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, linux-sh@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+To: linux-mm@kvack.org
+Cc: Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>, Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Mike Kravetz <mike.kravetz@oracle.com>, John Hubbard <jhubbard@nvidia.com>, Yang Shi <shy828301@gmail.com>, David Rientjes <rientjes@google.com>, James Houghton <jthoughton@google.com>, Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>, Vineet Gupta <vgupta@synopsys.com>, Shawn Guo <shawnguo@kernel.org>, Taichi Sugaya <sugaya.taichi@socionext.com>, Neil Armstrong <narmstrong@baylibre.com>, Qin Jian <qinjian@cqplus1.com>, Catalin Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh Nguyen <dinguyen@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, Yoshinori Sato <ysato@users.sourceforge.jp>, "David S. Miller" <davem@davemloft.net>, Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>, Ley Foon Tan <ley.foon.tan@intel.com>, Andrew Morton <akpm@linux-foundation.org>, NXP Linux Team <linux-imx@nxp.com>, linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
 List-ID: <linux-oxnas@groups.io>
 
-On 21/07/2022 16:13, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> In the process of deprecating board files, I had to modify some defconfig
-> files and ran into the same problem as everyone else that a lot of
-> them are rather outdated. With some scripting, I managed to split out
-> a preparation patch that puts all lines into the expected order without
-> actually changing the contents.
-> 
-> This helped doing the cleanup separately per Kconfig option that needed
-> to be addressed. I only did a small portion of the follow-up changes
-> to get to the point of being able to rebase my board changes on top,
-> but I did manage to address some bugs that have crept in.
-> 
-> If there are no objections, I'd apply this set to the arm/defconfig
-> branch of the soc tree directly.
-> 
->        Arnd
-> 
-> Arnd Bergmann (6):
->    ARM: refresh defconfig files
->    ARM: defconfig: remove irda remnants
->    ARM: defconfig: remove stale CONFIG_ZBOOT_ROM entries
->    ARM: defconfig: address renamed CONFIG_DEBUG_INFO=y
->    ARM: defconfig: remove broken CONFIG_THUMB disables
->    ARM: defconfig: kill remnants of CONFIG_LEDS
-> 
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: Alexander Shiyan <shc_work@mail.ru>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Vladimir Zapolskiy <vz@mleia.com>
-> Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
-> Cc: Takao Orito <orito.takao@socionext.com>
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Gregory Clement <gregory.clement@bootlin.com>
-> Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-aspeed@lists.ozlabs.org
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: linux-rpi-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-omap@vger.kernel.org
-> Cc: linux-oxnas@groups.io
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-sunxi@lists.linux.dev
-> Cc: linux-tegra@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> 
->   arch/arm/configs/am200epdkit_defconfig    |  28 ++---
->   arch/arm/configs/aspeed_g4_defconfig      |  17 ++-
->   arch/arm/configs/aspeed_g5_defconfig      |  17 ++-
->   arch/arm/configs/assabet_defconfig        |  19 ++-
->   arch/arm/configs/at91_dt_defconfig        |  10 +-
->   arch/arm/configs/axm55xx_defconfig        |  26 ++--
->   arch/arm/configs/badge4_defconfig         |  17 +--
->   arch/arm/configs/bcm2835_defconfig        |  38 +++---
->   arch/arm/configs/cerfcube_defconfig       |  24 ++--
->   arch/arm/configs/clps711x_defconfig       |   6 +-
->   arch/arm/configs/cm_x300_defconfig        |  28 ++---
->   arch/arm/configs/cns3420vb_defconfig      |  20 ++--
->   arch/arm/configs/colibri_pxa270_defconfig |  41 +++----
->   arch/arm/configs/colibri_pxa300_defconfig |  12 +-
->   arch/arm/configs/collie_defconfig         |  22 ++--
->   arch/arm/configs/corgi_defconfig          |  51 ++++----
->   arch/arm/configs/davinci_all_defconfig    |  28 ++---
->   arch/arm/configs/dove_defconfig           |  32 +++--
->   arch/arm/configs/ep93xx_defconfig         |  18 ++-
->   arch/arm/configs/eseries_pxa_defconfig    |  36 ++----
->   arch/arm/configs/exynos_defconfig         |  24 ++--
->   arch/arm/configs/ezx_defconfig            |  74 ++++++------
->   arch/arm/configs/footbridge_defconfig     |  31 ++---
->   arch/arm/configs/h3600_defconfig          |  16 +--
->   arch/arm/configs/h5000_defconfig          |  20 ++--
->   arch/arm/configs/hackkit_defconfig        |  12 +-
->   arch/arm/configs/hisi_defconfig           |  24 ++--
->   arch/arm/configs/imx_v4_v5_defconfig      |  10 +-
->   arch/arm/configs/imx_v6_v7_defconfig      |   8 +-
->   arch/arm/configs/integrator_defconfig     |   2 +-
->   arch/arm/configs/iop32x_defconfig         |  23 ++--
->   arch/arm/configs/ixp4xx_defconfig         |   1 -
->   arch/arm/configs/jornada720_defconfig     |  16 +--
->   arch/arm/configs/keystone_defconfig       |  64 +++++-----
->   arch/arm/configs/lart_defconfig           |  21 ++--
->   arch/arm/configs/lpc18xx_defconfig        |  16 ++-
->   arch/arm/configs/lpc32xx_defconfig        |  12 +-
->   arch/arm/configs/lpd270_defconfig         |  11 +-
->   arch/arm/configs/lubbock_defconfig        |  21 ++--
->   arch/arm/configs/magician_defconfig       |  41 +++----
->   arch/arm/configs/mainstone_defconfig      |  15 ++-
->   arch/arm/configs/milbeaut_m10v_defconfig  |   6 +-
->   arch/arm/configs/mini2440_defconfig       |   8 +-
->   arch/arm/configs/mmp2_defconfig           |  32 +++--
->   arch/arm/configs/moxart_defconfig         |  20 ++--
->   arch/arm/configs/mps2_defconfig           |  18 ++-
->   arch/arm/configs/multi_v4t_defconfig      |   6 +-
->   arch/arm/configs/multi_v5_defconfig       |  14 +--
->   arch/arm/configs/multi_v7_defconfig       |  62 +++++-----
->   arch/arm/configs/mv78xx0_defconfig        |  36 +++---
->   arch/arm/configs/mvebu_v5_defconfig       |  32 +++--
->   arch/arm/configs/mvebu_v7_defconfig       |   4 +-
->   arch/arm/configs/mxs_defconfig            |   6 +-
->   arch/arm/configs/neponset_defconfig       |  30 ++---
->   arch/arm/configs/netwinder_defconfig      |  18 +--
->   arch/arm/configs/nhk8815_defconfig        |   8 +-
->   arch/arm/configs/omap1_defconfig          |  80 ++++++-------
->   arch/arm/configs/omap2plus_defconfig      |  17 ++-
->   arch/arm/configs/orion5x_defconfig        |  36 +++---
->   arch/arm/configs/oxnas_v6_defconfig       |  14 +--
->   arch/arm/configs/palmz72_defconfig        |  16 ++-
->   arch/arm/configs/pcm027_defconfig         |  24 ++--
->   arch/arm/configs/pleb_defconfig           |   8 +-
->   arch/arm/configs/pxa168_defconfig         |  22 ++--
->   arch/arm/configs/pxa255-idp_defconfig     |  21 ++--
->   arch/arm/configs/pxa3xx_defconfig         |  20 ++--
->   arch/arm/configs/pxa910_defconfig         |  26 ++--
->   arch/arm/configs/pxa_defconfig            | 140 ++++++++++------------
->   arch/arm/configs/qcom_defconfig           |  62 +++++-----
->   arch/arm/configs/realview_defconfig       |   8 +-
->   arch/arm/configs/rpc_defconfig            |  20 ++--
->   arch/arm/configs/s3c2410_defconfig        |  12 +-
->   arch/arm/configs/s3c6400_defconfig        |   4 +-
->   arch/arm/configs/s5pv210_defconfig        |   6 +-
->   arch/arm/configs/sama5_defconfig          |   8 +-
->   arch/arm/configs/sama7_defconfig          |   8 +-
->   arch/arm/configs/shannon_defconfig        |  10 +-
->   arch/arm/configs/simpad_defconfig         |  29 ++---
->   arch/arm/configs/socfpga_defconfig        |   8 +-
->   arch/arm/configs/spear13xx_defconfig      |  18 +--
->   arch/arm/configs/spear3xx_defconfig       |  12 +-
->   arch/arm/configs/spear6xx_defconfig       |  10 +-
->   arch/arm/configs/spitz_defconfig          |  51 ++++----
->   arch/arm/configs/stm32_defconfig          |  18 ++-
->   arch/arm/configs/sunxi_defconfig          |   2 +-
->   arch/arm/configs/tct_hammer_defconfig     |  14 +--
->   arch/arm/configs/tegra_defconfig          |  20 ++--
->   arch/arm/configs/trizeps4_defconfig       |  66 +++++-----
->   arch/arm/configs/u8500_defconfig          |   2 +-
->   arch/arm/configs/versatile_defconfig      |   4 +-
->   arch/arm/configs/vexpress_defconfig       |   8 +-
->   arch/arm/configs/vf610m4_defconfig        |   2 +-
->   arch/arm/configs/viper_defconfig          |  30 +++--
->   arch/arm/configs/vt8500_v6_v7_defconfig   |   2 +-
->   arch/arm/configs/xcep_defconfig           |  32 +++--
->   arch/arm/configs/zeus_defconfig           |  28 ++---
->   arch/arm64/configs/defconfig              |   2 +-
->   arch/sh/configs/ecovec24_defconfig        |   2 -
->   100 files changed, 989 insertions(+), 1189 deletions(-)
-> 
+From: Zi Yan <ziy@nvidia.com>
 
-For oxnas:
+This Kconfig option is used by individual arch to set its desired
+MAX_ORDER. Rename it to reflect its actual use.
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Qin Jian <qinjian@cqplus1.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-oxnas@groups.io
+Cc: linux-csky@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/arc/Kconfig                             | 2 +-
+ arch/arm/Kconfig                             | 2 +-
+ arch/arm/configs/imx_v6_v7_defconfig         | 2 +-
+ arch/arm/configs/milbeaut_m10v_defconfig     | 2 +-
+ arch/arm/configs/oxnas_v6_defconfig          | 2 +-
+ arch/arm/configs/pxa_defconfig               | 2 +-
+ arch/arm/configs/sama7_defconfig             | 2 +-
+ arch/arm/configs/sp7021_defconfig            | 2 +-
+ arch/arm64/Kconfig                           | 2 +-
+ arch/csky/Kconfig                            | 2 +-
+ arch/ia64/Kconfig                            | 2 +-
+ arch/ia64/include/asm/sparsemem.h            | 6 +++---
+ arch/loongarch/Kconfig                       | 2 +-
+ arch/m68k/Kconfig.cpu                        | 2 +-
+ arch/mips/Kconfig                            | 2 +-
+ arch/nios2/Kconfig                           | 2 +-
+ arch/powerpc/Kconfig                         | 2 +-
+ arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
+ arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
+ arch/sh/configs/ecovec24_defconfig           | 2 +-
+ arch/sh/mm/Kconfig                           | 2 +-
+ arch/sparc/Kconfig                           | 2 +-
+ arch/xtensa/Kconfig                          | 2 +-
+ include/linux/mmzone.h                       | 4 ++--
+ 24 files changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index 9e3653253ef2..d9a13ccf89a3 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -554,7 +554,7 @@ config ARC_BUILTIN_DTB_NAME
+=20
+ endmenu	 # "ARC Architecture Configuration"
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "12" if ARC_HUGEPAGE_16M
+ 	default "11"
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 87badeae3181..e6c8ee56ac52 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1434,7 +1434,7 @@ config ARM_MODULE_PLTS
+ 	  Disabling this is usually safe for small single-platform
+ 	  configurations. If unsure, say y.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "12" if SOC_AM33XX
+ 	default "9" if SA1111
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6=
+_v7_defconfig
+index 01012537a9b9..fb283059daa0 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -31,7 +31,7 @@ CONFIG_SOC_VF610=3Dy
+ CONFIG_SMP=3Dy
+ CONFIG_ARM_PSCI=3Dy
+ CONFIG_HIGHMEM=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D14
++CONFIG_ARCH_FORCE_MAX_ORDER=3D14
+ CONFIG_CMDLINE=3D"noinitrd console=3Dttymxc0,115200"
+ CONFIG_KEXEC=3Dy
+ CONFIG_CPU_FREQ=3Dy
+diff --git a/arch/arm/configs/milbeaut_m10v_defconfig b/arch/arm/configs/mi=
+lbeaut_m10v_defconfig
+index 58810e98de3d..8620061e19a8 100644
+--- a/arch/arm/configs/milbeaut_m10v_defconfig
++++ b/arch/arm/configs/milbeaut_m10v_defconfig
+@@ -26,7 +26,7 @@ CONFIG_THUMB2_KERNEL=3Dy
+ # CONFIG_THUMB2_AVOID_R_ARM_THM_JUMP11 is not set
+ # CONFIG_ARM_PATCH_IDIV is not set
+ CONFIG_HIGHMEM=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_SECCOMP=3Dy
+ CONFIG_KEXEC=3Dy
+ CONFIG_EFI=3Dy
+diff --git a/arch/arm/configs/oxnas_v6_defconfig b/arch/arm/configs/oxnas_v=
+6_defconfig
+index 600f78b363dd..5c163a9d1429 100644
+--- a/arch/arm/configs/oxnas_v6_defconfig
++++ b/arch/arm/configs/oxnas_v6_defconfig
+@@ -12,7 +12,7 @@ CONFIG_ARCH_OXNAS=3Dy
+ CONFIG_MACH_OX820=3Dy
+ CONFIG_SMP=3Dy
+ CONFIG_NR_CPUS=3D16
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_SECCOMP=3Dy
+ CONFIG_ARM_APPENDED_DTB=3Dy
+ CONFIG_ARM_ATAG_DTB_COMPAT=3Dy
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index 104a45722799..ce3f4ed50498 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -21,7 +21,7 @@ CONFIG_MACH_AKITA=3Dy
+ CONFIG_MACH_BORZOI=3Dy
+ CONFIG_PXA_SYSTEMS_CPLDS=3Dy
+ CONFIG_AEABI=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D9
++CONFIG_ARCH_FORCE_MAX_ORDER=3D9
+ CONFIG_CMDLINE=3D"root=3D/dev/ram0 ro"
+ CONFIG_KEXEC=3Dy
+ CONFIG_CPU_FREQ=3Dy
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defc=
+onfig
+index 0384030d8b25..8b2cf6ddd568 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -19,7 +19,7 @@ CONFIG_ATMEL_CLOCKSOURCE_TCB=3Dy
+ # CONFIG_CACHE_L2X0 is not set
+ # CONFIG_ARM_PATCH_IDIV is not set
+ # CONFIG_CPU_SW_DOMAIN_PAN is not set
+-CONFIG_FORCE_MAX_ZONEORDER=3D15
++CONFIG_ARCH_FORCE_MAX_ORDER=3D15
+ CONFIG_UACCESS_WITH_MEMCPY=3Dy
+ # CONFIG_ATAGS is not set
+ CONFIG_CMDLINE=3D"console=3DttyS0,115200 earlyprintk ignore_loglevel"
+diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_de=
+fconfig
+index 703b9aaa40f0..151ca8c47373 100644
+--- a/arch/arm/configs/sp7021_defconfig
++++ b/arch/arm/configs/sp7021_defconfig
+@@ -18,7 +18,7 @@ CONFIG_ARCH_SUNPLUS=3Dy
+ # CONFIG_VDSO is not set
+ CONFIG_SMP=3Dy
+ CONFIG_THUMB2_KERNEL=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_VFP=3Dy
+ CONFIG_NEON=3Dy
+ CONFIG_MODULES=3Dy
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 571cc234d0b3..c6fcd8746f60 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1401,7 +1401,7 @@ config XEN
+ 	help
+ 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int
+ 	default "14" if ARM64_64K_PAGES
+ 	default "12" if ARM64_16K_PAGES
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 3cbc2dc62baf..adee6ab36862 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -332,7 +332,7 @@ config HIGHMEM
+ 	select KMAP_LOCAL
+ 	default y
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "11"
+=20
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index 26ac8ea15a9e..c6e06cdc738f 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -200,7 +200,7 @@ config IA64_CYCLONE
+ 	  Say Y here to enable support for IBM EXA Cyclone time source.
+ 	  If you're unsure, answer N.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "MAX_ORDER (11 - 17)"  if !HUGETLB_PAGE
+ 	range 11 17  if !HUGETLB_PAGE
+ 	default "17" if HUGETLB_PAGE
+diff --git a/arch/ia64/include/asm/sparsemem.h b/arch/ia64/include/asm/spar=
+semem.h
+index 42ed5248fae9..84e8ce387b69 100644
+--- a/arch/ia64/include/asm/sparsemem.h
++++ b/arch/ia64/include/asm/sparsemem.h
+@@ -11,10 +11,10 @@
+=20
+ #define SECTION_SIZE_BITS	(30)
+ #define MAX_PHYSMEM_BITS	(50)
+-#ifdef CONFIG_FORCE_MAX_ZONEORDER
+-#if ((CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
++#ifdef CONFIG_ARCH_FORCE_MAX_ORDER
++#if ((CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
+ #undef SECTION_SIZE_BITS
+-#define SECTION_SIZE_BITS (CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT)
++#define SECTION_SIZE_BITS (CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT)
+ #endif
+ #endif
+=20
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 4abc9a28aba4..b5b19eea0e3e 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -369,7 +369,7 @@ config NODES_SHIFT
+ 	default "6"
+ 	depends on NUMA
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 14 64 if PAGE_SIZE_64KB
+ 	default "14" if PAGE_SIZE_64KB
+diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+index e0e9e31339c1..3b2f39508524 100644
+--- a/arch/m68k/Kconfig.cpu
++++ b/arch/m68k/Kconfig.cpu
+@@ -399,7 +399,7 @@ config SINGLE_MEMORY_CHUNK
+ 	  order" to save memory that could be wasted for unused memory map.
+ 	  Say N if not sure.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order" if ADVANCED
+ 	depends on !SINGLE_MEMORY_CHUNK
+ 	default "11"
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index ec21f8999249..70d28976a40d 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2140,7 +2140,7 @@ config PAGE_SIZE_64KB
+=20
+ endchoice
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 14 64 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+ 	default "14" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+index 4167f1eb4cd8..a582f72104f3 100644
+--- a/arch/nios2/Kconfig
++++ b/arch/nios2/Kconfig
+@@ -44,7 +44,7 @@ menu "Kernel features"
+=20
+ source "kernel/Kconfig.hz"
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 9 20
+ 	default "11"
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 4c466acdc70d..39d71d7701bd 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -845,7 +845,7 @@ config DATA_SHIFT
+ 	  in that case. If PIN_TLB is selected, it must be aligned to 8M as
+ 	  8M pages will be pinned.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 8 9 if PPC64 && PPC_64K_PAGES
+ 	default "9" if PPC64 && PPC_64K_PAGES
+diff --git a/arch/powerpc/configs/85xx/ge_imp3a_defconfig b/arch/powerpc/co=
+nfigs/85xx/ge_imp3a_defconfig
+index f29c166998af..e7672c186325 100644
+--- a/arch/powerpc/configs/85xx/ge_imp3a_defconfig
++++ b/arch/powerpc/configs/85xx/ge_imp3a_defconfig
+@@ -30,7 +30,7 @@ CONFIG_PREEMPT=3Dy
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ CONFIG_BINFMT_MISC=3Dm
+ CONFIG_MATH_EMULATION=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D17
++CONFIG_ARCH_FORCE_MAX_ORDER=3D17
+ CONFIG_PCI=3Dy
+ CONFIG_PCIEPORTBUS=3Dy
+ CONFIG_PCI_MSI=3Dy
+diff --git a/arch/powerpc/configs/fsl-emb-nonhw.config b/arch/powerpc/confi=
+gs/fsl-emb-nonhw.config
+index f14c6dbd7346..ab8a8c4530d9 100644
+--- a/arch/powerpc/configs/fsl-emb-nonhw.config
++++ b/arch/powerpc/configs/fsl-emb-nonhw.config
+@@ -41,7 +41,7 @@ CONFIG_FIXED_PHY=3Dy
+ CONFIG_FONT_8x16=3Dy
+ CONFIG_FONT_8x8=3Dy
+ CONFIG_FONTS=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D13
++CONFIG_ARCH_FORCE_MAX_ORDER=3D13
+ CONFIG_FRAMEBUFFER_CONSOLE=3Dy
+ CONFIG_FRAME_WARN=3D1024
+ CONFIG_FTL=3Dy
+diff --git a/arch/sh/configs/ecovec24_defconfig b/arch/sh/configs/ecovec24_=
+defconfig
+index e699e2e04128..b52e14ccb450 100644
+--- a/arch/sh/configs/ecovec24_defconfig
++++ b/arch/sh/configs/ecovec24_defconfig
+@@ -8,7 +8,7 @@ CONFIG_MODULES=3Dy
+ CONFIG_MODULE_UNLOAD=3Dy
+ # CONFIG_BLK_DEV_BSG is not set
+ CONFIG_CPU_SUBTYPE_SH7724=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_MEMORY_SIZE=3D0x10000000
+ CONFIG_FLATMEM_MANUAL=3Dy
+ CONFIG_SH_ECOVEC=3Dy
+diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
+index ba569cfb4368..411fdc0901f7 100644
+--- a/arch/sh/mm/Kconfig
++++ b/arch/sh/mm/Kconfig
+@@ -18,7 +18,7 @@ config PAGE_OFFSET
+ 	default "0x80000000" if MMU
+ 	default "0x00000000"
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 9 64 if PAGE_SIZE_16KB
+ 	default "9" if PAGE_SIZE_16KB
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index 1c852bb530ec..4d3d1af90d52 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -269,7 +269,7 @@ config ARCH_SPARSEMEM_ENABLE
+ config ARCH_SPARSEMEM_DEFAULT
+ 	def_bool y if SPARC64
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "13"
+ 	help
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 12ac277282ba..bcb0c5d2abc2 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -771,7 +771,7 @@ config HIGHMEM
+=20
+ 	  If unsure, say Y.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "11"
+ 	help
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 025754b0bc09..fd61347b4b1f 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -24,10 +24,10 @@
+ #include <asm/page.h>
+=20
+ /* Free memory management - zoned buddy allocator.  */
+-#ifndef CONFIG_FORCE_MAX_ZONEORDER
++#ifndef CONFIG_ARCH_FORCE_MAX_ORDER
+ #define MAX_ORDER 11
+ #else
+-#define MAX_ORDER CONFIG_FORCE_MAX_ZONEORDER
++#define MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
+ #endif
+ #define MAX_ORDER_NR_PAGES (1 << (MAX_ORDER - 1))
+=20
+--=20
+2.35.1
+
