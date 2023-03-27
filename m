@@ -1,21 +1,21 @@
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by mx.groups.io with SMTP id smtpd.web10.33166.1679919265009855664
+ by mx.groups.io with SMTP id smtpd.web10.33168.1679919273322617573
  for <linux-oxnas@groups.io>;
- Mon, 27 Mar 2023 05:14:25 -0700
+ Mon, 27 Mar 2023 05:14:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679919264;
-	bh=/zMPyAlfGd5fpJsITtg1RxPyUHI2dqVyx+YefpHkWXQ=;
+	s=k20201202; t=1679919272;
+	bh=ZhYG8JNUwjljPv9OKiF3eMGP7VJHxmj1d7o6guSf4No=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d1KUM73yCUytmr56IfxXPD1HZ5UAmAKM+0CBBY3u49w6bNCyrB2sEPtREvafbUkjb
-	 CFGZfI0FCfmknT0h+L+eXyaIpkkJwi4v3Z4EgaKViz+/z9QPPlnu3v9F3flYQ26Q7U
-	 q3EOb110zv0M3qi2mMyrlqEWXlVpt/VQQyKgll7QY7/XsuTxEM/ZKlPsmMjjXqmTMk
-	 uGUPoZTe4WHm4gicfHvkF72XI2puokOkW3TeQ/sk06+15hCStezZtavWZrwr2jQs/G
-	 iy1gH+XnYUCVyfsVu1+ZP4/ApT59WEmDcash0EKA5e1KL8ASTdihabMg2li4cEac/w
-	 6iZEB7B78CFDw==
+	b=PBdwMSfV6WhGkWO4GD6yfcHOXcUpefrDC/+txqBn1K1TXjh6vtxTQLHjgNJ0FEkt0
+	 8kEYArEe0oN6TTz55A/ouqhYMm5G10akCJmXzW/muCfT8GBSGN5Uni+3VEARUH4Auc
+	 H3B65ricYeSXsGj53UrQTCcr95NZtYK/45G5qbsvcFbKhYxNglRYB3Jv/RHrFzHtks
+	 DVdr6HivllSdF2l5dgd1hATA9JZvKqwXHc1koDjA6e60zts4nydXjlN/RqoC6otSSa
+	 Tq0Qb2MNzDbHG7RwE+Edr/TKARawLeFdDNo+IyVrlawBJzvWe5xP0tuqDo6AiiQKTk
+	 Trtj2/d6VSosQ==
 From: Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH 03/21] sparc32: flush caches in dma_sync_*for_device
-Date: Mon, 27 Mar 2023 14:12:59 +0200
-Message-Id: <20230327121317.4081816-4-arnd@kernel.org>
+Subject: [PATCH 04/21] microblaze: dma-mapping: skip extra DMA flushes
+Date: Mon, 27 Mar 2023 14:13:00 +0200
+Message-Id: <20230327121317.4081816-5-arnd@kernel.org>
 In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
 References: <20230327121317.4081816-1-arnd@kernel.org>
 MIME-Version: 1.0
@@ -26,47 +26,66 @@ List-ID: <linux-oxnas@groups.io>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Leon has a very minimalistic cache that has no range operations
-and requires being flushed entirely to deal with noncoherent
-DMA. Most in-order architectures do their cache management in
-the dma_sync_*for_device() operations rather than dma_sync_*for_cpu.
+The microblaze dma_sync_* implementation uses the same function
+for both _for_cpu() and _for_device(), which is inconsistent
+with other architectures and slightly more expensive.
 
-Since the cache is write-through only, both should have the same
-effect, so change it for consistency with the other architectures.
+Split it up into separate functions and skip the parts that
+are not needed:
+
+ - on dma_sync_*_for_cpu(..., DMA_TO_DEVICE), skip the second
+   writeback, which does nothing.
+
+ - on dma_sync_*_for_cpu(..., DMA_BIDIRECTIONAL), only invalidate
+   the cache to clear out cache lines that got loaded speculatively,
+   but skip the extraneous writeback.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/sparc/Kconfig         | 2 +-
- arch/sparc/kernel/ioport.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/microblaze/kernel/dma.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 84437a4c6545..637da50e236c 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -51,7 +51,7 @@ config SPARC
- config SPARC32
- 	def_bool !64BIT
- 	select ARCH_32BIT_OFF_T
--	select ARCH_HAS_SYNC_DMA_FOR_CPU
-+	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select CLZ_TAB
- 	select DMA_DIRECT_REMAP
- 	select GENERIC_ATOMIC64
-diff --git a/arch/sparc/kernel/ioport.c b/arch/sparc/kernel/ioport.c
-index 4e4f3d3263e4..4f3d26066ec2 100644
---- a/arch/sparc/kernel/ioport.c
-+++ b/arch/sparc/kernel/ioport.c
-@@ -306,7 +306,7 @@ arch_initcall(sparc_register_ioport);
-  * On LEON systems without cache snooping, the entire D-CACHE must be fl=
-ushed to
-  * make DMA to cacheable memory coherent.
-  */
--void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+diff --git a/arch/microblaze/kernel/dma.c b/arch/microblaze/kernel/dma.c
+index 04d091ade417..b4c4e45fd45e 100644
+--- a/arch/microblaze/kernel/dma.c
++++ b/arch/microblaze/kernel/dma.c
+@@ -14,8 +14,8 @@
+ #include <linux/bug.h>
+ #include <asm/cacheflush.h>
+=20
+-static void __dma_sync(phys_addr_t paddr, size_t size,
+-		enum dma_data_direction direction)
 +void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
++		enum dma_data_direction dir)
+ {
+ 	switch (direction) {
+ 	case DMA_TO_DEVICE:
+@@ -30,14 +30,16 @@ static void __dma_sync(phys_addr_t paddr, size_t size=
+,
+ 	}
+ }
+=20
+-void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+-		enum dma_data_direction dir)
+-{
+-	__dma_sync(paddr, size, dir);
+-}
+-
+ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
  		enum dma_data_direction dir)
  {
- 	if (dir !=3D DMA_TO_DEVICE &&
+-	__dma_sync(paddr, size, dir);
+-}
++	switch (direction) {
++	case DMA_TO_DEVICE:
++		break;
++	case DMA_BIDIRECTIONAL:
++	case DMA_FROM_DEVICE:
++		invalidate_dcache_range(paddr, paddr + size);
++		break;
++	default:
++		BUG();
++	}}
 --=20
 2.39.2
 
