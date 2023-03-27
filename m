@@ -1,92 +1,215 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
- by mx.groups.io with SMTP id smtpd.web11.30741.1680194445638582736
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+ by mx.groups.io with SMTP id smtpd.web11.33269.1679919241798999653
  for <linux-oxnas@groups.io>;
- Thu, 30 Mar 2023 09:40:46 -0700
-Received: by mail-wm1-f48.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so12173298wms.2
-        for <linux-oxnas@groups.io>; Thu, 30 Mar 2023 09:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680194444;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kz/2H/BTIuKLAKXpo3BrU6LM5Cbhbn/nr7Y/43JgHBo=;
-        b=ZlHh9rnbOioBf3nV/3JYjFE5Qh/bXo4StWdfNEsfuVogmTWridktEfoOhrvWpVNNhE
-         0z/X0MYaJjK/QYT4ITLVIUdplXX/DuXksJC0IpeVKtHOrPLMJe9eSvHXtK4aOFvf4tZs
-         /AbEoXyA7m4P/L9dHHblxxWiEqpMvlOY5GomHTzf+A7mUydBq8mvV4Xac+jQ3DUw+m7d
-         M7bxCvgbaGFMHEPdtiAa6ky4qk4LVn0KlYFTszccyx+U9QZE1gLR26fPAJN9gaLHkJpX
-         WQORjeI04LW5T5Q3kvDg17MPl5M4+c/QRypn5gBwOkQH/rvgvQ4KM27LU9sBhn9IdM+7
-         8UVg==
-Return-Path: <neil.armstrong@linaro.org>
-Message-ID: <cad25e0a-9594-3d5e-79e7-fd00a80f67ac@linaro.org>
-Date: Thu, 30 Mar 2023 18:40:39 +0200
+ Mon, 27 Mar 2023 05:14:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679919237;
+	bh=GiqSNoh/gnOD0kxoCZ+KxN9c2SO+z1nJBns1fyyi+vo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pq3BAphM3wHtatYjV+DfN2I8sJHS4IYBYyDE+v6/Qc8ZwCT8gpvS4DAGv7VxPzFGA
+	 QTONxH3L5u7xfGpaWF72Vn6IOud15UVhnlOu7Pkpc4MFJc3T+eyi/9YHM2uw4o3Q19
+	 hlFRkjcr9R2SPBbGCiCcG9K2ncI1oTIHchYegylFXUpPuOkFuj5EhA9x60aFehDKxy
+	 Qltw/cCcMI8A23tAm4waeZqorYzy7ERYFcrUh9Z5Dt10vOC7n/8mHT1x94BLc8QwMZ
+	 RjkfvTiQw9Na09hCmY2JMMUGUbEev+PR6WHG/lHK6hz99r9Xiisa4orl4KnTMuyptQ
+	 /3AEVTN69OUkQ==
+From: Arnd Bergmann <arnd@kernel.org>
+Subject: [PATCH 00/21] dma-mapping: unify support for cache flushes
+Date: Mon, 27 Mar 2023 14:12:56 +0200
+Message-Id: <20230327121317.4081816-1-arnd@kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 18/21] ARM: drop SMP support for ARM11MPCore
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-19-arnd@kernel.org>
- <d7f36a28-0cae-a035-791b-363754aefeee@linaro.org>
- <6a5bd3a3-87e0-4a24-89ca-d265b0817a95@app.fastmail.com>
-From: "Neil Armstrong" <neil.armstrong@linaro.org>
-In-Reply-To: <6a5bd3a3-87e0-4a24-89ca-d265b0817a95@app.fastmail.com>
-Content-Language: en-GB
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: 8bit
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Linus Walleij <linus.walleij@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh Nguyen <dinguyen@kernel.org>, Stafford Horne <shorne@gmail.com>, Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>, Max Filippov <jcmvbkbc@gmail.com>, Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>, "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>, "Conor.Dooley" <conor.dooley@microchip.com>, linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org, Daniel Golle <daniel@makrotopia.org>
+Content-Transfer-Encoding: quoted-printable
+To: linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Neil Armstrong <neil.armstrong@linaro.org>, Linus Walleij <linus.walleij@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh Nguyen <dinguyen@kernel.org>, Stafford Horne <shorne@gmail.com>, Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, Max Filippov <jcmvbkbc@gmail.com>, Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Conor Dooley <conor.dooley@microchip.com>, linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io, linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
 List-ID: <linux-oxnas@groups.io>
 
-Le 30/03/2023 à 12:03, Arnd Bergmann a écrit :
-> On Thu, Mar 30, 2023, at 09:48, Neil Armstrong wrote:
->> On 27/03/2023 14:13, Arnd Bergmann wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
->>>
->>> The cache management operations for noncoherent DMA on ARMv6 work
->>> in two different ways:
->>>
->>>    * When CONFIG_DMA_CACHE_RWFO is set, speculative prefetches on in-flight
->>>      DMA buffers lead to data corruption when the prefetched data is written
->>>      back on top of data from the device.
->>>
->>>    * When CONFIG_DMA_CACHE_RWFO is disabled, a cache flush on one CPU
->>>      is not seen by the other core(s), leading to inconsistent contents
->>>      accross the system.
->>>
->>> As a consequence, neither configuration is actually safe to use in a
->>> general-purpose kernel that is used on both MPCore systems and ARM1176
->>> with prefetching enabled.
->>>
->>> We could add further workarounds to make the behavior more dynamic based
->>> on the system, but realistically, there are close to zero remaining
->>> users on any ARM11MPCore anyway, and nobody seems too interested in it,
->>> compared to the more popular ARM1176 used in BMC2835 and AST2500.
->>>
->>> The Oxnas platform has some minimal support in OpenWRT, but most of the
->>> drivers and dts files never made it into the mainline kernel, while the
->>> Arm Versatile/Realview platform mainly serves as a reference system but
->>> is not necessary to be kept working once all other ARM11MPCore are gone.
->>
->> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
->>
->> It's sad but it's the reality, there's no chance full OXNAS support will
->> ever come upstream and no real work has been done for years.
->>
->> I think OXNAS support can be programmed for removal for next release,
->> it would need significant work to rework current support to make it acceptable
->> before trying to upstream missing bits anyway.
-> 
-> Ok, thanks for your reply!
-> 
-> To clarify, do you think we should plan for removal after the next
-> stable release (6.3, removed in 6.4), or after the next LTS
-> release (probably 6.6, removed in 6.7)? As far as I understand,
-> the next OpenWRT release (23.x) will be based on linux-5.15,
-> and the one after that (24.x) would likely still use 6.1, unless
-> they skip an LTS kernel.
+From: Arnd Bergmann <arnd@arndb.de>
 
-I think it's ok to remove it ASAP, or at least before the next LTS,
-not having SMP makes the platform barely usable so the earliest is the best.
+After a long discussion about adding SoC specific semantics for when
+to flush caches in drivers/soc/ drivers that we determined to be
+fundamentally flawed[1], I volunteered to try to move that logic into
+architecture-independent code and make all existing architectures do
+the same thing.
 
-Neil
+As we had determined earlier, the behavior is wildly different across
+architectures, but most of the differences come down to either bugs
+(when required flushes are missing) or extra flushes that are harmless
+but might hurt performance.
 
-> 
->       Arnd
+I finally found the time to come up with an implementation of this, which
+starts by replacing every outlier with one of the three common options:
 
+ 1. architectures without speculative prefetching (hegagon, m68k,
+    openrisc, sh, sparc, and certain armv4 and xtensa implementations)
+    only flush their caches before a DMA, by cleaning write-back caches
+    (if any) before a DMA to the device, and by invalidating the caches
+    before a DMA from a device
+
+ 2. arc, microblaze, mips, nios2, sh and later xtensa now follow the
+    normal 32-bit arm model and invalidate their writeback caches
+    again after a DMA from the device, to remove stale cache lines
+    that got prefetched during the DMA. arc, csky and mips used to
+    invalidate buffers also before the bidirectional DMA, but this
+    is now skipped whenever we know it gets invalidated again
+    after the DMA.
+
+ 3. parisc, powerpc and riscv already flushed buffers before
+    a DMA_FROM_DEVICE, and these get moved to the arm64 behavior
+    that does the writeback before and invalidate after both
+    DMA_FROM_DEVICE and DMA_BIDIRECTIONAL in order to avoid the
+    problem of accidentally leaking stale data if the DMA does
+    not actually happen[2].
+
+The last patch in the series replaces the architecture specific code
+with a shared version that implements all three based on architecture
+specific parameters that are almost always determined at compile time.
+
+The difference between cases 1. and 2. is hardware specific, while betwee=
+n
+2. and 3. we need to decide which semantics we want, but I explicitly
+avoid this question in my series and leave it to be decided later.
+
+Another difference that I do not address here is what cache invalidation
+does for partical cache lines. On arm32, arm64 and powerpc, a partial
+cache line always gets written back before invalidation in order to
+ensure that data before or after the buffer is not discarded. On all
+other architectures, the assumption is cache lines are never shared
+between DMA buffer and data that is accessed by the CPU. If we end up
+always writing back dirty cache lines before a DMA (option 3 above),
+then this point becomes moot, otherwise we should probably address this
+in a follow-up series to document one behavior or the other and implement
+it consistently.
+
+Please review!
+
+      Arnd
+
+[1] https://lore.kernel.org/all/20221212115505.36770-1-prabhakar.mahadev-=
+lad.rj@bp.renesas.com/
+[2] https://lore.kernel.org/all/20220606152150.GA31568@willie-the-truck/
+
+Arnd Bergmann (21):
+  openrisc: dma-mapping: flush bidirectional mappings
+  xtensa: dma-mapping: use normal cache invalidation rules
+  sparc32: flush caches in dma_sync_*for_device
+  microblaze: dma-mapping: skip extra DMA flushes
+  powerpc: dma-mapping: split out cache operation logic
+  powerpc: dma-mapping: minimize for_cpu flushing
+  powerpc: dma-mapping: always clean cache in _for_device() op
+  riscv: dma-mapping: only invalidate after DMA, not flush
+  riscv: dma-mapping: skip invalidation before bidirectional DMA
+  csky: dma-mapping: skip invalidating before DMA from device
+  mips: dma-mapping: skip invalidating before bidirectional DMA
+  mips: dma-mapping: split out cache operation logic
+  arc: dma-mapping: skip invalidating before bidirectional DMA
+  parisc: dma-mapping: use regular flush/invalidate ops
+  ARM: dma-mapping: always invalidate WT caches before DMA
+  ARM: dma-mapping: bring back dmac_{clean,inv}_range
+  ARM: dma-mapping: use arch_sync_dma_for_{device,cpu}() internally
+  ARM: drop SMP support for ARM11MPCore
+  ARM: dma-mapping: use generic form of arch_sync_dma_* helpers
+  ARM: dma-mapping: split out arch_dma_mark_clean() helper
+  dma-mapping: replace custom code with generic implementation
+
+ arch/arc/mm/dma.c                          |  66 ++------
+ arch/arm/Kconfig                           |   4 +
+ arch/arm/include/asm/cacheflush.h          |  21 +++
+ arch/arm/include/asm/glue-cache.h          |   4 +
+ arch/arm/mach-oxnas/Kconfig                |   4 -
+ arch/arm/mach-oxnas/Makefile               |   1 -
+ arch/arm/mach-oxnas/headsmp.S              |  23 ---
+ arch/arm/mach-oxnas/platsmp.c              |  96 -----------
+ arch/arm/mach-versatile/platsmp-realview.c |   4 -
+ arch/arm/mm/Kconfig                        |  19 ---
+ arch/arm/mm/cache-fa.S                     |   4 +-
+ arch/arm/mm/cache-nop.S                    |   6 +
+ arch/arm/mm/cache-v4.S                     |  13 +-
+ arch/arm/mm/cache-v4wb.S                   |   4 +-
+ arch/arm/mm/cache-v4wt.S                   |  22 ++-
+ arch/arm/mm/cache-v6.S                     |  35 +---
+ arch/arm/mm/cache-v7.S                     |   6 +-
+ arch/arm/mm/cache-v7m.S                    |   4 +-
+ arch/arm/mm/dma-mapping-nommu.c            |  36 ++--
+ arch/arm/mm/dma-mapping.c                  | 181 ++++++++++-----------
+ arch/arm/mm/proc-arm1020.S                 |   4 +-
+ arch/arm/mm/proc-arm1020e.S                |   4 +-
+ arch/arm/mm/proc-arm1022.S                 |   4 +-
+ arch/arm/mm/proc-arm1026.S                 |   4 +-
+ arch/arm/mm/proc-arm920.S                  |   4 +-
+ arch/arm/mm/proc-arm922.S                  |   4 +-
+ arch/arm/mm/proc-arm925.S                  |   4 +-
+ arch/arm/mm/proc-arm926.S                  |   4 +-
+ arch/arm/mm/proc-arm940.S                  |   4 +-
+ arch/arm/mm/proc-arm946.S                  |   4 +-
+ arch/arm/mm/proc-feroceon.S                |   8 +-
+ arch/arm/mm/proc-macros.S                  |   2 +
+ arch/arm/mm/proc-mohawk.S                  |   4 +-
+ arch/arm/mm/proc-xsc3.S                    |   4 +-
+ arch/arm/mm/proc-xscale.S                  |   6 +-
+ arch/arm64/mm/dma-mapping.c                |  28 ++--
+ arch/csky/mm/dma-mapping.c                 |  46 +++---
+ arch/hexagon/kernel/dma.c                  |  44 ++---
+ arch/m68k/kernel/dma.c                     |  43 +++--
+ arch/microblaze/kernel/dma.c               |  38 ++---
+ arch/mips/mm/dma-noncoherent.c             |  75 +++------
+ arch/nios2/mm/dma-mapping.c                |  57 +++----
+ arch/openrisc/kernel/dma.c                 |  62 ++++---
+ arch/parisc/include/asm/cacheflush.h       |   6 +-
+ arch/parisc/kernel/pci-dma.c               |  33 +++-
+ arch/powerpc/mm/dma-noncoherent.c          |  76 +++++----
+ arch/riscv/mm/dma-noncoherent.c            |  51 +++---
+ arch/sh/kernel/dma-coherent.c              |  43 +++--
+ arch/sparc/Kconfig                         |   2 +-
+ arch/sparc/kernel/ioport.c                 |  38 +++--
+ arch/xtensa/Kconfig                        |   1 -
+ arch/xtensa/include/asm/cacheflush.h       |   6 +-
+ arch/xtensa/kernel/pci-dma.c               |  47 +++---
+ include/linux/dma-sync.h                   | 107 ++++++++++++
+ 54 files changed, 721 insertions(+), 699 deletions(-)
+ delete mode 100644 arch/arm/mach-oxnas/headsmp.S
+ delete mode 100644 arch/arm/mach-oxnas/platsmp.c
+ create mode 100644 include/linux/dma-sync.h
+
+--=20
+2.39.2
+
+Cc: Vineet Gupta <vgupta@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Rich Felker <dalias@libc.org>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-oxnas@groups.io
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-openrisc@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
