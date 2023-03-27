@@ -1,21 +1,21 @@
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by mx.groups.io with SMTP id smtpd.web10.33173.1679919291630126202
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+ by mx.groups.io with SMTP id smtpd.web10.33176.1679919301366267827
  for <linux-oxnas@groups.io>;
- Mon, 27 Mar 2023 05:14:51 -0700
+ Mon, 27 Mar 2023 05:15:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679919289;
-	bh=deueI+j9QpGrVEyOG4DDYuCvj98ECBO1BAKmt0h8mOk=;
+	s=k20201202; t=1679919298;
+	bh=Y+wx0FiQgLjkqhPKxtczgrowoCTrPuzhrrVdIO/KSAA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XVuAqsjP7YxlTH/jfP4+hsuYEQziw3g24pme7hHONNL+tw53tUh634JeGsQ9qMsJb
-	 QiINm6FdyBSv5TDyEB7Icm81k8m52mJn/Oxz3tHbi/ytF+O96JNQpZ/Drh8XHi5GkJ
-	 DmnZaeE1/m3voIm0tXrGCkwwIwVqBzNYdHR+o9A0oJjYUFrIsmjSaMN81JqJ9bMdUz
-	 ALnkbRdTQARnjKcrPQsU1ISirc/GQsLgUD4/A9nuA1lqc+8ADpy1N7lxpgLiuI99q/
-	 wavZSpV769B5sIjhDLnf+Uwl5ZpVrfQbbb6B1+ZErklaPLQABWTLh2J99jHRm4BWCH
-	 eD4ekbguj3pOg==
+	b=CPGniWUcV5VUAZiOWzIY5/EsUqYQgyEzxjQ8UMeF3Al20/Hh61j9pc8T9PS2mzH4N
+	 RSYd/J7YHPH5Nmfk7XsUSK79nWPo+dGlRYvhxWqnqg+N+CIjbuT/Wb2iRTjyp1l0YE
+	 q3AT+X8nNFF6xSpGl06sKKOZy0e/LCKNsDpUgC07vuwopI9ykgcvXa2bBFGYOjVaGl
+	 X5PV9Eydwk0GTrNzStCQUtT6ovd3xxwDRfs6NRHuZY4OjKijI2Z6KdM95ztBnGcDwK
+	 5HPw8DEJ4VDkMTWgdZ8nt+6QlnfKBn6oiVjPRF9H4yYTieJdfpVbSHx8IkThq5gzbA
+	 lsa0aYW1Hchqw==
 From: Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH 06/21] powerpc: dma-mapping: minimize for_cpu flushing
-Date: Mon, 27 Mar 2023 14:13:02 +0200
-Message-Id: <20230327121317.4081816-7-arnd@kernel.org>
+Subject: [PATCH 07/21] powerpc: dma-mapping: always clean cache in _for_device() op
+Date: Mon, 27 Mar 2023 14:13:03 +0200
+Message-Id: <20230327121317.4081816-8-arnd@kernel.org>
 In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
 References: <20230327121317.4081816-1-arnd@kernel.org>
 MIME-Version: 1.0
@@ -26,36 +26,49 @@ List-ID: <linux-oxnas@groups.io>
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The powerpc dma_sync_*_for_cpu() variants do more flushes than on other
-architectures. Reduce it to what everyone else does:
+The powerpc implementation of arch_sync_dma_for_device() is unique in tha=
+t
+it sometimes performs a full flush for the arch_sync_dma_for_device(paddr=
+,
+size, DMA_FROM_DEVICE) operation when the address is unaligned, but
+otherwise invalidates the caches.
 
- - No flush is needed after data has been sent to a device
+Since the _for_cpu() counterpart has to invalidate the cache already
+in order to avoid stale data from prefetching, this operation only really
+needs to ensure that there are no dirty cache lines, which can be done
+using either invalidation or cleaning the cache, but not necessarily
+both.
 
- - When data has been received from a device, the cache only needs to
-   be invalidated to clear out cache lines that were speculatively
-   prefetched.
+Most architectures traditionally go for invalidation here, but as
+Will Deacon points out, this can leak old data to user space if
+a DMA is started but the device ends up not actually filling the
+entire buffer, see the link below.
 
-In particular, the second flushing of partial cache lines of bidirectiona=
-l
-buffers is actively harmful -- if a single cache line is written by both
-the CPU and the device, flushing it again does not maintain coherency
-but instead overwrite the data that was just received from the device.
+The same argument applies to DMA_BIDIRECTIONAL transfers. Using
+a cache-clean operation is the safe choice here, followed by
+invalidating the cache after the DMA to get rid of stale data
+that was prefetched before the completion of the DMA.
 
+Link: https://lore.kernel.org/all/20220606152150.GA31568@willie-the-truck=
+/
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/powerpc/mm/dma-noncoherent.c | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
+ arch/powerpc/mm/dma-noncoherent.c | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
 
 diff --git a/arch/powerpc/mm/dma-noncoherent.c b/arch/powerpc/mm/dma-nonc=
 oherent.c
-index f10869d27de5..e108cacf877f 100644
+index e108cacf877f..00e59a4faa2b 100644
 --- a/arch/powerpc/mm/dma-noncoherent.c
 +++ b/arch/powerpc/mm/dma-noncoherent.c
-@@ -132,21 +132,11 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_=
-t size,
- 	switch (direction) {
- 	case DMA_NONE:
- 		BUG();
+@@ -104,26 +104,7 @@ static void __dma_phys_op(phys_addr_t paddr, size_t =
+size, enum dma_cache_op op)
+ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+ 		enum dma_data_direction dir)
+ {
+-	switch (direction) {
+-	case DMA_NONE:
+-		BUG();
 -	case DMA_FROM_DEVICE:
 -		/*
 -		 * invalidate only when cache-line aligned otherwise there is
@@ -68,16 +81,15 @@ t size,
 -		break;
 -	case DMA_TO_DEVICE:		/* writeback only */
 -		__dma_phys_op(start, end, DMA_CACHE_CLEAN);
-+	case DMA_TO_DEVICE:
- 		break;
+-		break;
 -	case DMA_BIDIRECTIONAL:	/* writeback and invalidate */
 -		__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-+	case DMA_FROM_DEVICE:
-+	case DMA_BIDIRECTIONAL:
-+		__dma_phys_op(start, end, DMA_CACHE_INVAL);
- 		break;
- 	}
+-		break;
+-	}
++	__dma_phys_op(start, end, DMA_CACHE_CLEAN);
  }
+=20
+ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
 --=20
 2.39.2
 
