@@ -1,28 +1,28 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
- by mx.groups.io with SMTP id smtpd.web10.24275.1680181173234476610
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+ by mx.groups.io with SMTP id smtpd.web11.25203.1680182806390353700
  for <linux-oxnas@groups.io>;
- Thu, 30 Mar 2023 05:59:33 -0700
-Received: by mail-io1-f51.google.com with SMTP id m22so8235062ioy.4
-        for <linux-oxnas@groups.io>; Thu, 30 Mar 2023 05:59:33 -0700 (PDT)
+ Thu, 30 Mar 2023 06:26:46 -0700
+Received: by mail-il1-f176.google.com with SMTP id j2so2768170ila.8
+        for <linux-oxnas@groups.io>; Thu, 30 Mar 2023 06:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680181172; x=1682773172;
+        d=gmail.com; s=20210112; t=1680182805; x=1682774805;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=db58zgLapT4+5eM+e2dEcRQMOxpl02qLJJqJynMawPw=;
-        b=gvyLOSrV5NqLHUuxidIYczTpyccsUd898Kt8qAjGZCJm8EQYH5JcTmwLqg57uC0cvB
-         j7U0x9dcm2RsX8dLxVGcboGq4Pdvm6cDFGIifVhW5LUG0BZhpnkLq+12fDfUITmPUgDN
-         KJqbUWD1A1NNvcxlD8Va+DklQ7yRgA9v4iGNa+yDzNCF8hz/BAHOp1sivo3m/ett+i3j
-         AtVwEXoZrtByosb2V89SvT6DgwFv0o1YJU+4lunFRTh6XWRbkQcRhcsLjusSr3Liunwq
-         utzWcTAPvMsNoessMz8HZ9Y6dfPH5hnImowquLEBicF67L5RSN3ovwZ4QUhqVrtpFGVk
-         CyWA==
+        bh=n2pZnebNGLahNe2yjgjrKsFqnYvTRYd7uF1JoUeedu4=;
+        b=ipMmc4f2rhe9ZxmiesNtaMCdByaDBx7tN+zc7KMJSrXwy2WiELheDph1YzfOyUJK5G
+         2D9w1lws05LiLD96ktr9W079igf4FZMXTfy1rli6Syf8wtA/xOvdvesIM/xHoHpQ4mp2
+         kGaQPBqZIeQg75WZRmLC1J0vvz0N+J/wHgPfeNx6CWqljr2xVRlnhMmqStDFXeH9OteD
+         UdDKlBrcDx+IHVgGRnNql6fNqhC8UJ/0zLJcMACiQdKHQjGURJds5lWBs1vyz5ebkPWw
+         0o6fGsGo2wE6PVztfykuJW8aKjmi0krcntJGszy/82gq0ndxxs4fJ8aJQW98nZewfAkA
+         hgxg==
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-9-arnd@kernel.org>
-In-Reply-To: <20230327121317.4081816-9-arnd@kernel.org>
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-10-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-10-arnd@kernel.org>
 From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Thu, 30 Mar 2023 13:59:06 +0100
-Message-ID: <CA+V-a8v--RqxFJYTZ04vVgiA69VJsFWk=r=TvRvokhpAV-famg@mail.gmail.com>
-Subject: Re: [PATCH 08/21] riscv: dma-mapping: only invalidate after DMA, not flush
+Date: Thu, 30 Mar 2023 14:26:18 +0100
+Message-ID: <CA+V-a8twDb_P3TOpOqhz3Umump_NZg2Bw-8tgMCAmAdadUxfkw@mail.gmail.com>
+Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before bidirectional DMA
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 To: Arnd Bergmann <arnd@kernel.org>
@@ -34,18 +34,18 @@ te:
 >
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> No other architecture intentionally writes back dirty cache lines into
-> a buffer that a device has just finished writing into. If the cache is
-> clean, this has no effect at all, but if a cacheline in the buffer has
-> actually been written by the CPU,  there is a drive bug that is likely
-> made worse by overwriting that buffer.
+> For a DMA_BIDIRECTIONAL transfer, the caches have to be cleaned
+> first to let the device see data written by the CPU, and invalidated
+> after the transfer to let the CPU see data written by the device.
+>
+> riscv also invalidates the caches before the transfer, which does
+> not appear to serve any purpose.
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
 >  arch/riscv/mm/dma-noncoherent.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-
 Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 Cheers,
@@ -53,16 +53,16 @@ Prabhakar
 
 > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoher=
 ent.c
-> index d919efab6eba..640f4c496d26 100644
+> index 640f4c496d26..69c80b2155a1 100644
 > --- a/arch/riscv/mm/dma-noncoherent.c
 > +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -42,7 +42,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t si=
-ze,
+> @@ -25,7 +25,7 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t=
+ size,
+>                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
 >                 break;
->         case DMA_FROM_DEVICE:
 >         case DMA_BIDIRECTIONAL:
 > -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+> +               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
 >                 break;
 >         default:
 >                 break;
