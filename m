@@ -1,48 +1,57 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
- by mx.groups.io with SMTP id smtpd.web11.79895.1680547005269089239
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+ by mx.groups.io with SMTP id smtpd.web11.83670.1680554356108147118
  for <linux-oxnas@groups.io>;
- Mon, 03 Apr 2023 11:36:45 -0700
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17aeb49429eso31835838fac.6
-        for <linux-oxnas@groups.io>; Mon, 03 Apr 2023 11:36:45 -0700 (PDT)
-Return-Path: <robherring2@gmail.com>
-Date: Mon, 3 Apr 2023 13:36:43 -0500
-From: Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH RFC v2 0/4] ARM: oxnas support removal
-Message-ID: <20230403183643.GA1335487-robh@kernel.org>
-References: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
+ Mon, 03 Apr 2023 13:39:16 -0700
+Received: by mail-ed1-f43.google.com with SMTP id y4so122390876edo.2
+        for <linux-oxnas@groups.io>; Mon, 03 Apr 2023 13:39:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1680554354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ANuyucjG7+IOsm6+PTXTUkVZpuE117uxor/udrQsrHI=;
+        b=QBtct7OF544g4KW8FmyicOGj93ZjWlg8zuQv1bJbp8jcg7kZlaoTEPE+ZjM8qK1FvF
+         ySiNTF5dDqmcX7CK3V3nXjfCtZyZUPhXWS0tiyg1h2mmI68eIuECf75r+pVgglVEKCkU
+         kHoMUTP0p53HT7ROKBpLFzTXIvLXbS7upHKKFV+6T4zuNMqbtyJ5qYvrMPN/aHFSnads
+         mcQglHoBkCSFBXGMXHZCZrQSWHcr75YnbjUa66Tunz0FV33dyy00oLs71tZiNRBidtW4
+         jtGUBV/KHY62/FaxcVx0/bdUCldUHFYapDx3Da/E+rJH3/2oHbH6x+g4Go250AzETWuH
+         eyhQ==
 MIME-Version: 1.0
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-oxnas@groups.io, Linus Walleij <linus.walleij@linaro.org>, Daniel Golle <daniel@makrotopia.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230402143025.2524443-1-u.kleine-koenig@pengutronix.de> <20230402143025.2524443-2-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230402143025.2524443-2-u.kleine-koenig@pengutronix.de>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Mon, 3 Apr 2023 22:39:03 +0200
+Message-ID: <CAFBinCBX8dQo9898KkXaMaanQ9-LcFA7HHFf+XBM2-f+g8WY7Q@mail.gmail.com>
+Subject: Re: [PATCH net-next 01/11] net: stmmac: Make stmmac_pltfr_remove() return void
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, Jose Abreu <joabreu@synopsys.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Vladimir Zapolskiy <vz@mleia.com>, Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, Matthias Brugger <matthias.bgg@gmail.com>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Jerome Brunet <jbrunet@baylibre.com>, Bhupesh Sharma <bhupesh.sharma@linaro.org>, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de, linux-amlogic@lists.infradead.org, linux-oxnas@groups.io, linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-On Mon, Apr 03, 2023 at 09:42:17AM +0200, Neil Armstrong wrote:
-> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
-> associated with a clear lack of maintainance, development and migration to
-> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
-> 
-> In addition, the OX810 hasn't been booted for years and isn't even present
-> in an ARM config file.
-> 
-> For the OX820, lack of USB and SATA support makes the platform not usable
-> in the current Linux support and relies on off-tree drivers hacked from the
-> vendor (defunct for years) sources.
-> 
-> The last users are in the OpenWRT distribution, and today's removal means
-> support will still be in stable 6.1 LTS kernel until end of 2026.
-> 
-> If someone wants to take over the development even with lack of SMP, I'll
-> be happy to hand off maintainance.
-> 
-> The plan is to apply the first 4 patches first, then the drivers
-> followed by bindings. Finally the MAINTAINANCE entry can be removed.
-> 
-> I'm not sure about the process of bindings removal, but perhaps the bindings
-> should be marked as deprecated first then removed later on ?
-
-Nah, just remove them. Like the code, we can always bring them back if 
-needed.
-
-Rob
+On Sun, Apr 2, 2023 at 4:31=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The function returns zero unconditionally. Change it to return void inste=
+ad
+> which simplifies some callers as error handing becomes unnecessary.
+>
+> The function is also used for some drivers as remove callback. Switch the=
+se
+> to the .remove_new() callback. For some others no error can happen in the
+> remove callback now, convert them to .remove_new(), too.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-anarion.c     | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-generic.c     | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c         | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c     | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-intel-plat.c  | 9 +++------
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c     | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-lpc18xx.c     | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c    | 9 +++------
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-meson.c       | 2 +-
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c     | 2 +-
+for dwmac-meson and dwmac-meson8b:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
