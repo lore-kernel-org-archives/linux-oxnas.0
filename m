@@ -1,55 +1,92 @@
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
- by mx.groups.io with SMTP id smtpd.web11.11767.1681390329225874052
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by mx.groups.io with SMTP id smtpd.web11.83253.1682438291856550081
  for <linux-oxnas@groups.io>;
- Thu, 13 Apr 2023 05:52:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1681390322; x=1681397522; bh=NR
-	7qDHxvmrn4O6C7ghCGmkwcCMB9CqvbPSwmBqWhNIE=; b=ZXclSBnVVRa8vpoYG+
-	Nh7NGI1Sfo/+IhOueSX6qtWqFgLpX1O7kGpe874+9lPVAkHB/MzUC6Ip3Qt5J4S1
-	bo+Igz4vPJgrOb5hGwvGzYSyD9RAM686r7y8aQw66DlT4Mt340zXnCYSOX2rluiN
-	l6kWpyNhBIXZQ/WjHlR82CZljPrL2zeVzs/VKz/0NnIUPr0YWmnDYjaoDj48NIs+
-	UFfZMJaZFIZIs03gVqCq4iH3pg/lZtVMlR8XIkQ70K5m2tAxwHrPsotuz4IugI93
-	6XX70k3nZhX+AhqXZznQyr38x7nSAEkpDTOnIVRV2ikChkz1k3AGDfv3Jf0wEK6q
-	B4Qw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1681390322; x=1681397522; bh=NR7qDHxvmrn4O
-	6C7ghCGmkwcCMB9CqvbPSwmBqWhNIE=; b=gqOA+P8sXOuT1JOfKkqGPELz//AFF
-	f2eiDN24y3pX47Aau9zsWL6E8P7Knx1xYRVsUHNfPuY3xLBDKbzMqkoi7VrJfZ+o
-	W2mfsUlFecf2kgDULdtR2hU7Te44ccwG0sZJJ62Vj9KlDW/g2YbNj73dSar7sZor
-	Lalym6dR+k04Z8y/YiYW1TKtaKYCSHw8QkHRYjo8Tdd4ZZV+YIE/S2VHOdNo6IMp
-	Z1kBRS94su8sb72OzoxxZQuCPo8irGFKsthakuC3qSU4fnAaIq/6lBOlIe4lj5le
-	uqmU2YzZXlg34GD8AxHkIBUzub0qWgTia98RBKzwE2Iz+p4RVnYEoo8Ig==
-Mime-Version: 1.0
-Message-Id: <66899d69-1339-4a61-8612-6f8e452b0b26@app.fastmail.com>
-In-Reply-To: 
- <OS0PR01MB5922EDAFCD6DA0313DB99C5E86989@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230327121317.4081816-1-arnd@kernel.org>
- <20230327121317.4081816-22-arnd@kernel.org>
- <OS0PR01MB5922EDAFCD6DA0313DB99C5E86989@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Date: Thu, 13 Apr 2023 14:51:40 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-Subject: Re: [PATCH 21/21] dma-mapping: replace custom code with generic implementation
-Content-Type: text/plain
-To: Biju Das <biju.das.jz@bp.renesas.com>, Arnd Bergmann <arnd@kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Neil Armstrong <neil.armstrong@linaro.org>, Linus Walleij <linus.walleij@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh Nguyen <dinguyen@kernel.org>, Stafford Horne <shorne@gmail.com>, Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>, Max Filippov <jcmvbkbc@gmail.com>, Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>, "Lad, Prabhakar  <prabhakar.mahadev-lad.rj@bp.renesas.com>, Conor.Dooley" <conor.dooley@microchip.com>, "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>, "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>, "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>, "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>, "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>, "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>, "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>, "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>
+ Tue, 25 Apr 2023 08:58:12 -0700
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by dfw.source.kernel.org (Postfix) with ESMTPS id 3E35A62BF2
+	for <linux-oxnas@groups.io>; Tue, 25 Apr 2023 15:58:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EF7C433A4
+	for <linux-oxnas@groups.io>; Tue, 25 Apr 2023 15:58:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1682438290;
+	bh=itrfj1uL7ULKhIO/qSGGwopdMhHtcuGv7fowY1MDPYk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EgTh2lVlpMtQ5px5R+jV+EfXPM/vMd0vZZcesoDR/dZgys7DryqsRrWS2pdpS9uas
+	 OYd9yTEmElOVrIZbn0OqVscAcdbafdiKbG9xGY95F+dXOVKPpAW5UFqkaPFQaikMgo
+	 aWZCYgp15j+P/IiGD62g++flweL1qEmmRIyA46J9ZxdgcgQr67x7Q3TlACfNIAqEWA
+	 ybnHZqICC3N6Bh2h/8vZ/QwOp/oM5lTZZiMl9J1LI5jXGxCqVcLQ5wSHavpOM+9lzJ
+	 GcWe9oPB1zz3J6OXPcR6ftsIf9jN3vnmyzPm8qTrcAX6jvM8Z/Yhdc9tzdb3LHV6hX
+	 cc5h5IH4H4Nww==
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-b99dae893c0so2516709276.3
+        for <linux-oxnas@groups.io>; Tue, 25 Apr 2023 08:58:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+ <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
+In-Reply-To: <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Tue, 25 Apr 2023 10:57:57 -0500
+Message-ID: <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+To: Geert Uytterhoeven <geert@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc: Ansuel Smith <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org, linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com, linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org, linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@dh-electronics.com, linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org, linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-realtek-soc@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-On Thu, Apr 13, 2023, at 14:13, Biju Das wrote:
-> Hi all,
+On Tue, Apr 25, 2023 at 2:28=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
 >
-> FYI, this patch breaks on RZ/G2L SMARC EVK board and Arnd will send V2 
-> for fixing this issue.
+> Hi Rob,
 >
-> [10:53] <biju> [    3.384408] Unable to handle kernel paging request at 
-> virtual address 000000004afb0080
+> On Tue, Apr 25, 2023 at 12:16=E2=80=AFAM Rob Herring <robh+dt@kernel.org>=
+ wrote:
+> > I have a script[1] that does the conversion written the last time this
+> > came up. Just have to agree on directory names. I think the easiest
+> > would be for Arnd/Olof to run it at the end of a merge window before
+> > rc1.
+>
+> "emev2" and "sh7" are missing for renesas.
 
-Right, sorry about this, I accidentally removed the 'phys_to_virt()'
-conversion on arm64.
+No doubt it's been bitrotting (or I may have missed some).
 
-     Arnd
+> Does your script also cater for .dts files not matching any pattern,
+> but including a .dtsi file that does match a pattern?
+
+I assume I built everything after moving, but maybe not...
+
+That's all just "details". First, we need agreement on a) moving
+things to subdirs and b) doing it 1-by-1 or all at once. So far we've
+been stuck on a) for being 'too much churn'.
+
+One nice thing with subdirs is 'make CHECK_DTBS=3Dy
+arch/arm/boot/dts/foo/' can build everything for a platform family
+without having to mess with the kconfig. Maybe most folks don't care,
+but I do. My CI job running schema checks looks like this to deal with
+grouping the arm dts files (this list is probably out of date too, but
+less so):
+
+        if [ "$ARCH" =3D "arm" ]; then
+            VENDOR_LIST=3D"alphascale alpine artpec aspeed axm bcm cx9
+(ecx|highbank) \
+              efm ep7 imx1 imx23 imx28 imx27 imx5 imx6 imx7 ls vf qcom \
+              (am3|am4|am5|dra|keystone|omap|compulab|logicpd|elpida|motoro=
+la-cpcap|da|dm)
+\
+              nspire armada dove kirkwood orion mvebu mmp2 berlin pxa
+(arm-|integ|mps|ve) \
+              (at91|sama|usb_|tny_|mpa1600|animeo_ip|aks-cdu|ethernut5|evk-=
+pro3|pm9g45|ge86)
+\
+              exynos s3c s5p gemini (hisi|hi3|hip) mt meson moxa nuvo
+lpc owl ox8 \
+              (r7|r8|r9|emev2|sh73a|gr-|iwg) (rk|rv11) socfpga stm
+(sti|st-pin) ste \
+              spear (sun|axp) tegra uniph (vt8500|wm8) xen zynq"
+        else
+            VENDOR_LIST=3D$(ls arch/$ARCH/boot/dts/ | xargs)
+        fi
+
+Rob
