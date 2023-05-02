@@ -1,24 +1,24 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
- by mx.groups.io with SMTP id smtpd.web11.5472.1683067947382214206
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+ by mx.groups.io with SMTP id smtpd.web10.5840.1683068567700801892
  for <linux-oxnas@groups.io>;
- Tue, 02 May 2023 15:52:27 -0700
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f0108a7d20so5140715e87.3
-        for <linux-oxnas@groups.io>; Tue, 02 May 2023 15:52:27 -0700 (PDT)
+ Tue, 02 May 2023 16:02:47 -0700
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-75131c2997bso37715385a.1
+        for <linux-oxnas@groups.io>; Tue, 02 May 2023 16:02:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683067945; x=1685659945;
+        d=gmail.com; s=20221208; t=1683068567; x=1685660567;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=T1p8PAJD9DFCngojw0T3kSd1c2uyqBORxfNEmDK3GJ4=;
-        b=BUUnQw61aCluaeaOfOjylr17lq4wyiS3svEJzNGaImPvwBFbxjY1AYjKa65LSPa2ym
-         yE16k3jpuP3N8wCSlIVKGAALWKur7gs6Ffzu8U/kGAiuA1Xyx/x2hK/JJfWNLEFbZFh+
-         gw5Uv9OoWoi9etQy1IAyVFsO7YWXlAUhhQim+LNTWB6y3zMhsYaevaqfbTuzGPLNMccY
-         J+vqS7x9RyTltzOUQDkaayM18bum3WFZAKA4wqgFiMMBPsbYfXaNiW1/rSr4VdyK3Fqn
-         5j1I0Zeq+WoDj447GF++RwHlJ/hGKjEKpd2ivZT8M021uOxvON7tTCA8VLC+2Vt7SgLR
-         uLMQ==
-Return-Path: <dmitry.baryshkov@linaro.org>
-Message-ID: <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
-Date: Wed, 3 May 2023 01:52:24 +0300
+        bh=RVUCe/5y2Ex7bNIQOvHne7x9R8A0wELwbdEse2WDpF8=;
+        b=iHBlY9kIRMOF3Yq8hT/HYtLwTwjoof0FVfaEhNjRSWPoYgoA1qtRUzGwD+nkjOzJPI
+         u09FXpbJrjxtM3MFyzM74JfHNsb7UZ0GJze/A7Ip/HD+5roEWeYmZwjlYu0a2cdkfbwf
+         +kLbPvAmDmxad5KujOjWnyiCW+W4okHTLQRqn4fLYSw7t/qXPwhwMm5mWSJxb8hi+d0O
+         ev3gtx0+XlazA6w82yl+mnLoL1jpad70ZxSgOz1YQXa9W1BLk0lheCYSgecLnoqpXxAH
+         /k0Y7rMrxmhfNEQZTdJyCemWb5DMYD7STFJO05Jiqj2/50xWs6TXP7C2X1ywzoueu5sn
+         IGTQ==
+Return-Path: <f.fainelli@gmail.com>
+Message-ID: <d4b52074-d11c-4c7a-ad74-b2fce64c6d30@gmail.com>
+Date: Tue, 2 May 2023 16:02:34 -0700
 MIME-Version: 1.0
 Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
 References: <20220328000915.15041-1-ansuelsmth@gmail.com>
@@ -29,16 +29,16 @@ References: <20220328000915.15041-1-ansuelsmth@gmail.com>
  <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
  <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
  <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Florian Fainelli <f.fainelli@gmail.com>
 In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-Content-Language: en-GB
+Content-Language: en-US
 Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Transfer-Encoding: 8bit
 To: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
 Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Olof Johansson <olof@lixom.net>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev, Linux-OMAP <linux-omap@vger.kernel.org>, linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com, linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@dh-electronics.com, linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-realtek-soc@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-On 02/05/2023 22:40, Rob Herring wrote:
+On 5/2/23 12:40, Rob Herring wrote:
 > On Tue, May 2, 2023 at 3:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >>
 >> On Tue, Apr 25, 2023, at 17:57, Rob Herring wrote:
@@ -123,11 +123,6 @@ On 02/05/2023 22:40, Rob Herring wrote:
 >      'pxa2' : 'pxa',
 >      'pxa3' : 'pxa',
 >      'pxa' : 'marvell',
-
-I'd question if it makes sense to split the pxa line. Yes, it was sold 
-by Intel to Marvell, but IIRC the devices still had some inheritance. 
-So, if we have the 'pxa' subdir, I'd move Marvell PXAs to that dir too.
-
 >      'arm-' : 'arm',
 >      'integ' : 'arm',
 >      'mps' : 'arm',
@@ -151,59 +146,10 @@ So, if we have the 'pxa' subdir, I'd move Marvell PXAs to that dir too.
 >      'pm9g45' : 'microchip',
 >      'ge86' : 'microchip',
 >      'bcm' : 'brcm',
->      'exynos' : 'samsung',
->      's3c' : 'samsung',
->      's5p' : 'samsung',
->      'gemini' : 'gemini',
->      'hi3' : 'hisilicon',
->      'hip' : 'hisilicon',
->      'hisi' : 'hisilicon',
->      'sd5' : 'hisilicon',
->      'hpe' : 'hpe',
->      'intel': 'intel',
->      'mt' : 'mediatek',
->      'meson' : 'meson',
->      'moxa' : 'moxa',
->      'mstar' : 'mstar',
->      'nuvo' : 'nuvoton',
->      'lpc' : 'lpc',
->      'lan96' : 'microchip',
->      'owl' : 'actions',
->      'ox8' : 'oxsemi',
->      'rda' : 'rda',
->      'rtd' : 'realtek',
->      'r7' : 'renesas',
->      'r8' : 'renesas',
->      'r9' : 'renesas',
->      'emev2' : 'renesas',
->      'sh73a' : 'renesas',
->      'gr-' : 'renesas',
->      'iwg' : 'renesas',
->      'rk' : 'rockchip',
->      'rv11' : 'rockchip',
->      'rockchip' : 'rockchip',
->      'socfpga' : 'socfpga',
->      'stm' : 'stm32',
->      'sti' : 'sti',
->      'st-pin' : 'sti',
->      'ste' : 'st-ericsson',
->      'spear' : 'spear',
->      'axp' : 'allwinner',
->      'tegra' : 'nvidia',
->      'milbeaut' : 'socionext',
->      'uniph' : 'socionext',
->      'vt8500' : 'vt8500',
->      'wm8' : 'vt8500',
->      'xen' : 'xen',
->      'zx' : 'zte',
->      'zynq' : 'xilinx',
-> }
-> 
-> Rob
-> 
-> [1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm-dts-move-v2
 
+How about we use 'broadcom' here, to follow what arm64 does? I could 
+rename arch/mips/boot/dts/brcm to arch/mips/boot/dts/broadcom for 
+consistency, too?
 -- 
-With best wishes
-Dmitry
+Florian
 
