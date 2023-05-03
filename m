@@ -1,48 +1,48 @@
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by mx.groups.io with SMTP id smtpd.web11.8352.1683075874318085512
+ by mx.groups.io with SMTP id smtpd.web11.8578.1683076653744245336
  for <linux-oxnas@groups.io>;
- Tue, 02 May 2023 18:04:34 -0700
+ Tue, 02 May 2023 18:17:33 -0700
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.source.kernel.org (Postfix) with ESMTPS id 903CA629D9
-	for <linux-oxnas@groups.io>; Wed,  3 May 2023 01:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79650C433A4
-	for <linux-oxnas@groups.io>; Wed,  3 May 2023 01:04:32 +0000 (UTC)
+	by dfw.source.kernel.org (Postfix) with ESMTPS id 3C128629F5
+	for <linux-oxnas@groups.io>; Wed,  3 May 2023 01:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1040CC433A7
+	for <linux-oxnas@groups.io>; Wed,  3 May 2023 01:17:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683075872;
-	bh=3tzUPFXqJgNCRsublfj+ZgGaTs7KzeK4/lauS5NgXbw=;
+	s=k20201202; t=1683076652;
+	bh=hzNYaAPUaGLZ1v0sTCo4kr9f/IJ1faX5mnRj5TAeAKs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QoGLyyHrVl2A+YTplbrnYiMEIz6wk+jP9SV8dz5UCtY76MWzNfxcDGsWDt7XzaFbR
-	 Xr4LoafVLAa94EjThKoFMtXLMkvCzIlI51WqQfPmq+42ZRGmwhqCuG73rtNFS7wUkc
-	 +fEXrSTR/j+xouT44ufNnuT7bR771W/YBDuqC0FtyyPhTIzbPY4lJHmmC4JrKp+LqL
-	 VUXrPWi4q/OV1Ezdi6st//MbXuMfXSMqmAVFzsUiMTdstEd3wZmJZlVLjAXQcv6nMA
-	 7k3X1222URsa6zFwyiuGaddxH/mAzA1qAvda1W1zjhNGD1pbVwdRUepxFlVrtRcox8
-	 yQNSGRSC9H6BA==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2a8baeac4d1so46313371fa.1
-        for <linux-oxnas@groups.io>; Tue, 02 May 2023 18:04:32 -0700 (PDT)
+	b=QMxxEJKiF/Xy/wpJ45M6Vv6cDRwnVgmz71oBe+yu+VPg0ZvwY64iyWw1oPr8JUNsE
+	 0+NbSQmo02gKsS9daJssd0DmAziCO02D1v+rCR9/TCg9DRmRIzIHHDkEC5EBHq42cC
+	 iZJESeEwfq5QYqjYTczZHNt4kDZ5i7w0VJs1GJao3IU+1auKFA2BykAAE5UNE3BtXQ
+	 aC4MLEcHqVgH0EAnYnpuUjEij93YdOr8eL89gHougN+yaCFsiDwKF73MyP/ntMVVx7
+	 Z0tyl6sVDb0DoXY+oCDA68mFlGLNWyOY++rZwaVyScUlpxomtUHulQA3qlYqFCh+jI
+	 ZWyTVi+oNLAKA==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so5793406e87.3
+        for <linux-oxnas@groups.io>; Tue, 02 May 2023 18:17:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
  <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
  <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
  <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
  <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <d4b52074-d11c-4c7a-ad74-b2fce64c6d30@gmail.com>
-In-Reply-To: <d4b52074-d11c-4c7a-ad74-b2fce64c6d30@gmail.com>
+ <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
+In-Reply-To: <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
 From: Rob Herring <robh+dt@kernel.org>
-Date: Tue, 2 May 2023 20:04:17 -0500
-Message-ID: <CAL_JsqKRcMSijAdiP_BpyBGRuMhscZ12QFcLBAeZ+TcaQg7r4g@mail.gmail.com>
+Date: Tue, 2 May 2023 20:17:17 -0500
+Message-ID: <CAL_JsqJXd_EpOQwwNEAn25mzFfkhEvqzur6ui5Ca+dbt2kA8-Q@mail.gmail.com>
 Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-To: Florian Fainelli <f.fainelli@gmail.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>, Olof Johansson <olof@lixom.net>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev, Linux-OMAP <linux-omap@vger.kernel.org>, linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com, linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@dh-electronics.com, linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-realtek-soc@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-On Tue, May 2, 2023 at 6:02=E2=80=AFPM Florian Fainelli <f.fainelli@gmail.c=
-om> wrote:
+On Tue, May 2, 2023 at 5:52=E2=80=AFPM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> On 5/2/23 12:40, Rob Herring wrote:
+> On 02/05/2023 22:40, Rob Herring wrote:
 > > On Tue, May 2, 2023 at 3:15=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wr=
 ote:
 > >>
@@ -132,36 +132,13 @@ ve
 > >      'pxa2' : 'pxa',
 > >      'pxa3' : 'pxa',
 > >      'pxa' : 'marvell',
-> >      'arm-' : 'arm',
-> >      'integ' : 'arm',
-> >      'mps' : 'arm',
-> >      've' : 'arm',
-> >      'aspeed' : 'aspeed',
-> >      'ast2' : 'aspeed',
-> >      'facebook' : 'aspeed',
-> >      'ibm' : 'aspeed',
-> >      'openbmc' : 'aspeed',
-> >      'en7' : 'airoha',
-> >      'at91' : 'microchip',
-> >      'sama' : 'microchip',
-> >      'sam9' : 'microchip',
-> >      'usb_' : 'microchip',
-> >      'tny_' : 'microchip',
-> >      'mpa1600' : 'microchip',
-> >      'animeo_ip' : 'microchip',
-> >      'aks-cdu' : 'microchip',
-> >      'ethernut5' : 'microchip',
-> >      'evk-pro3' : 'microchip',
-> >      'pm9g45' : 'microchip',
-> >      'ge86' : 'microchip',
-> >      'bcm' : 'brcm',
 >
-> How about we use 'broadcom' here, to follow what arm64 does? I could
-> rename arch/mips/boot/dts/brcm to arch/mips/boot/dts/broadcom for
-> consistency, too?
+> I'd question if it makes sense to split the pxa line. Yes, it was sold
+> by Intel to Marvell, but IIRC the devices still had some inheritance.
+> So, if we have the 'pxa' subdir, I'd move Marvell PXAs to that dir too.
 
-Okay, though if starting clean I'd somewhat prefer to use the vendor
-prefix. I guess since arm and arm64 share dtsi files, they should
-match.
+I think I probably split it because it was different maintainers.
+Though it doesn't look like pxa168 or pxa910 have any maintainer. They
+are a mixture of pxa and mmp I think.
 
 Rob
