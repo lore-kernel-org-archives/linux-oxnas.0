@@ -1,48 +1,41 @@
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by mx.groups.io with SMTP id smtpd.web11.8578.1683076653744245336
+ by mx.groups.io with SMTP id smtpd.web11.8618.1683076780850274990
  for <linux-oxnas@groups.io>;
- Tue, 02 May 2023 18:17:33 -0700
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by dfw.source.kernel.org (Postfix) with ESMTPS id 3C128629F5
-	for <linux-oxnas@groups.io>; Wed,  3 May 2023 01:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1040CC433A7
-	for <linux-oxnas@groups.io>; Wed,  3 May 2023 01:17:32 +0000 (UTC)
+ Tue, 02 May 2023 18:19:40 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683076652;
-	bh=hzNYaAPUaGLZ1v0sTCo4kr9f/IJ1faX5mnRj5TAeAKs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QMxxEJKiF/Xy/wpJ45M6Vv6cDRwnVgmz71oBe+yu+VPg0ZvwY64iyWw1oPr8JUNsE
-	 0+NbSQmo02gKsS9daJssd0DmAziCO02D1v+rCR9/TCg9DRmRIzIHHDkEC5EBHq42cC
-	 iZJESeEwfq5QYqjYTczZHNt4kDZ5i7w0VJs1GJao3IU+1auKFA2BykAAE5UNE3BtXQ
-	 aC4MLEcHqVgH0EAnYnpuUjEij93YdOr8eL89gHougN+yaCFsiDwKF73MyP/ntMVVx7
-	 Z0tyl6sVDb0DoXY+oCDA68mFlGLNWyOY++rZwaVyScUlpxomtUHulQA3qlYqFCh+jI
-	 ZWyTVi+oNLAKA==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so5793406e87.3
-        for <linux-oxnas@groups.io>; Tue, 02 May 2023 18:17:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328000915.15041-1-ansuelsmth@gmail.com> <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain> <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+	s=k20201202; t=1683076779;
+	bh=/ClN072w7D0BeanxCvNBxwRHREUHQZYiL77EUxvntHk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JVZeDMEmw3ok5p7/Jokl5bNCXoQM891Tszn/Thv4zoccfzdzf7iHFIpWlAS0tyFpX
+	 AA7SIMVFkbkYY5BWamH6TXc+Z4lBpRRw/BuCp0bg7BjTsUVZrM3wqhddMLNOBEqtCs
+	 iokjjjqiG3GqW0VqYJKaWIQpd6Q+V0thg4cB4zRnaTSa9V24b7++ydOgA3W/HzZ8PC
+	 UWZO6ttjeoJqXl+BqEV6mBqbjoqkHY/IX5QVwWKf09zlT/tidsYX0jfpN0ED1RsGYc
+	 11tcJfs9v4CYDwdvCCUAUixITcxX98mDPAOJAgRNKRIxD9/FJHjnGP5J0TfstHwO9a
+	 Jao70lg62pHUg==
+Date: Wed, 3 May 2023 09:19:20 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Message-ID: <20230503011920.GB31464@dragon>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
+ <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
  <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
  <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com> <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
- <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
-In-Reply-To: <bce93654-fc36-3d12-282d-76fafb8f51ce@linaro.org>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Tue, 2 May 2023 20:17:17 -0500
-Message-ID: <CAL_JsqJXd_EpOQwwNEAn25mzFfkhEvqzur6ui5Ca+dbt2kA8-Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Content-Type: text/plain; charset="UTF-8"
+ <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
+ <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+ <2783a3ba-8fcb-7e5f-3147-91d02e573ba4@kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <2783a3ba-8fcb-7e5f-3147-91d02e573ba4@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>, Olof Johansson <olof@lixom.net>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev, Linux-OMAP <linux-omap@vger.kernel.org>, linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com, linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@dh-electronics.com, linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-realtek-soc@lists.infradead.org
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>, Olof Johansson <olof@lixom.net>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev, Linux-OMAP <linux-omap@vger.kernel.org>, linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com, linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@dh-electronics.com, linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org, "linux-oxnas@groups.io" <linux-oxnas@groups.io>, linux-arm-msm@vger.kernel.org, linux-unisoc@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-realtek-soc@lists.infradead.org
 List-ID: <linux-oxnas@groups.io>
 
-On Tue, May 2, 2023 at 5:52=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 02/05/2023 22:40, Rob Herring wrote:
+On Tue, May 02, 2023 at 10:02:03PM +0200, Krzysztof Kozlowski wrote:
+> On 02/05/2023 21:40, Rob Herring wrote:
 > > On Tue, May 2, 2023 at 3:15=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wr=
 ote:
 > >>
@@ -73,72 +66,152 @@ ve
 > >> tree based on my soc/dt branch? Everything is merged upstream,
 > >> and I think git-merge would handle the remaining merges with any
 > >> other changes in mainline.
-> >
+> >=20
 > > I've dusted off my script and made a branch[1] with the result.
 > > There's just a couple of fixes needed after the script is run (see the
 > > top commit). The cross arch includes are all fixed up by the script.
 > > dtbs_install maintains a flat install. I compared the number of .dtbs
 > > before and after to check the script.
-> >
+> >=20
 > > I think the only issue remaining is finalizing the mapping of
 > > platforms to subdirs. What I have currently is a mixture of SoC
 > > families and vendors. The most notable are all the Freescale/NXP
 > > platforms, pxa, socfpga, and stm32. It's not consistent with arm64
 > > either. Once that's finalized, I still need to go update MAINTAINERS.
-> >
+> >=20
 > > Here's the current mapping:
-> >
+> >=20
 > > vendor_map =3D {
-> >      'alphascale' : 'alphascale',
-> >      'alpine' : 'alpine',
-> >      'artpec' : 'axis',
-> >      'axm' : 'lsi',
-> >      'cx9' : 'cnxt',
-> >      'ecx' : 'calxeda',
-> >      'highbank' : 'calxeda',
-> >      'ep7' : 'cirrus',
-> >      'mxs': 'mxs',
-> >      'imx23': 'mxs',
-> >      'imx28': 'mxs',
-> >      'sun' : 'allwinner',
-> >      'imx': 'imx',
-> >      'e6' : 'imx',
-> >      'e7' : 'imx',
-> >      'mba6' : 'imx',
-> >      'ls': 'fsl',
-> >      'vf': 'fsl',
-> >      'qcom': 'qcom',
-> >      'am3' : 'ti',
-> >      'am4' : 'ti',
-> >      'am5' : 'ti',
-> >      'dra' : 'ti',
-> >      'keystone' : 'ti',
-> >      'omap' : 'ti',
-> >      'compulab' : 'ti',
-> >      'logicpd' : 'ti',
-> >      'elpida' : 'ti',
-> >      'motorola' : 'ti',
-> >      'twl' : 'ti',
-> >      'da' : 'ti',
-> >      'dm' : 'ti',
-> >      'nspire' : 'nspire',
-> >      'armada' : 'marvell',
-> >      'dove' : 'marvell',
-> >      'kirkwood' : 'marvell',
-> >      'orion' : 'marvell',
-> >      'mvebu' : 'marvell',
-> >      'mmp' : 'marvell',
-> >      'berlin' : 'berlin',
-> >      'pxa2' : 'pxa',
-> >      'pxa3' : 'pxa',
-> >      'pxa' : 'marvell',
->
-> I'd question if it makes sense to split the pxa line. Yes, it was sold
-> by Intel to Marvell, but IIRC the devices still had some inheritance.
-> So, if we have the 'pxa' subdir, I'd move Marvell PXAs to that dir too.
+> >     'alphascale' : 'alphascale',
+> >     'alpine' : 'alpine',
+> >     'artpec' : 'axis',
+> >     'axm' : 'lsi',
+> >     'cx9' : 'cnxt',
+> >     'ecx' : 'calxeda',
+> >     'highbank' : 'calxeda',
+> >     'ep7' : 'cirrus',
+> >     'mxs': 'mxs',
+> >     'imx23': 'mxs',
+> >     'imx28': 'mxs',
+> >     'sun' : 'allwinner',
+> >     'imx': 'imx',
+> >     'e6' : 'imx',
+> >     'e7' : 'imx',
+> >     'mba6' : 'imx',
+> >     'ls': 'fsl',
+> >     'vf': 'fsl',
+>=20
+> If I remember correctly, Vybrid are a bit closer to iMX than to LS
+> (Layerscape), but it should be Shawn's call (+Cc).
 
-I think I probably split it because it was different maintainers.
-Though it doesn't look like pxa168 or pxa910 have any maintainer. They
-are a mixture of pxa and mmp I think.
+I would suggest to have all Freescale/NXP platforms in a single
+directory, which includes all mxs, imx, fsl ones.
 
-Rob
+Shawn
+
+>=20
+> >     'qcom': 'qcom',
+> >     'am3' : 'ti',
+> >     'am4' : 'ti',
+> >     'am5' : 'ti',
+> >     'dra' : 'ti',
+> >     'keystone' : 'ti',
+> >     'omap' : 'ti',
+> >     'compulab' : 'ti',
+> >     'logicpd' : 'ti',
+> >     'elpida' : 'ti',
+> >     'motorola' : 'ti',
+> >     'twl' : 'ti',
+> >     'da' : 'ti',
+> >     'dm' : 'ti',
+> >     'nspire' : 'nspire',
+> >     'armada' : 'marvell',
+> >     'dove' : 'marvell',
+> >     'kirkwood' : 'marvell',
+> >     'orion' : 'marvell',
+> >     'mvebu' : 'marvell',
+> >     'mmp' : 'marvell',
+> >     'berlin' : 'berlin',
+> >     'pxa2' : 'pxa',
+> >     'pxa3' : 'pxa',
+> >     'pxa' : 'marvell',
+> >     'arm-' : 'arm',
+> >     'integ' : 'arm',
+> >     'mps' : 'arm',
+> >     've' : 'arm',
+> >     'aspeed' : 'aspeed',
+> >     'ast2' : 'aspeed',
+> >     'facebook' : 'aspeed',
+> >     'ibm' : 'aspeed',
+> >     'openbmc' : 'aspeed',
+> >     'en7' : 'airoha',
+> >     'at91' : 'microchip',
+> >     'sama' : 'microchip',
+> >     'sam9' : 'microchip',
+> >     'usb_' : 'microchip',
+> >     'tny_' : 'microchip',
+> >     'mpa1600' : 'microchip',
+> >     'animeo_ip' : 'microchip',
+> >     'aks-cdu' : 'microchip',
+> >     'ethernut5' : 'microchip',
+> >     'evk-pro3' : 'microchip',
+> >     'pm9g45' : 'microchip',
+> >     'ge86' : 'microchip',
+> >     'bcm' : 'brcm',
+> >     'exynos' : 'samsung',
+> >     's3c' : 'samsung',
+> >     's5p' : 'samsung',
+>=20
+> For samsung looks good.
+>=20
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
+> >     'gemini' : 'gemini',
+> >     'hi3' : 'hisilicon',
+> >     'hip' : 'hisilicon',
+> >     'hisi' : 'hisilicon',
+> >     'sd5' : 'hisilicon',
+> >     'hpe' : 'hpe',
+> >     'intel': 'intel',
+> >     'mt' : 'mediatek',
+> >     'meson' : 'meson',
+> >     'moxa' : 'moxa',
+> >     'mstar' : 'mstar',
+> >     'nuvo' : 'nuvoton',
+> >     'lpc' : 'lpc',
+> >     'lan96' : 'microchip',
+> >     'owl' : 'actions',
+> >     'ox8' : 'oxsemi',
+> >     'rda' : 'rda',
+> >     'rtd' : 'realtek',
+> >     'r7' : 'renesas',
+> >     'r8' : 'renesas',
+> >     'r9' : 'renesas',
+> >     'emev2' : 'renesas',
+> >     'sh73a' : 'renesas',
+> >     'gr-' : 'renesas',
+> >     'iwg' : 'renesas',
+> >     'rk' : 'rockchip',
+> >     'rv11' : 'rockchip',
+> >     'rockchip' : 'rockchip',
+> >     'socfpga' : 'socfpga',
+> >     'stm' : 'stm32',
+> >     'sti' : 'sti',
+> >     'st-pin' : 'sti',
+> >     'ste' : 'st-ericsson',
+> >     'spear' : 'spear',
+> >     'axp' : 'allwinner',
+> >     'tegra' : 'nvidia',
+> >     'milbeaut' : 'socionext',
+> >     'uniph' : 'socionext',
+> >     'vt8500' : 'vt8500',
+> >     'wm8' : 'vt8500',
+> >     'xen' : 'xen',
+> >     'zx' : 'zte',
+> >     'zynq' : 'xilinx',
+>=20
+> The rest looks good to me, but I don't know half of these :)
+>=20
+> Best regards,
+> Krzysztof
+>=20
