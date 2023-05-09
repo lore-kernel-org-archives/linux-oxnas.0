@@ -1,31 +1,31 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
- by mx.groups.io with SMTP id smtpd.web10.2851.1683580813676179275
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+ by mx.groups.io with SMTP id smtpd.web10.28921.1683630032844666575
  for <linux-oxnas@groups.io>;
- Mon, 08 May 2023 14:20:14 -0700
+ Tue, 09 May 2023 04:00:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683580814; x=1715116814;
+  t=1683630032; x=1715166032;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZXD+ewt6EPlLmAFkTGfXobVhsHMapRgravjPxFdOVE4=;
-  b=JWQuCwoMrIeUBO5wHqQQfPtKSU+lz/gy+omBy2H9xVxVgPZhZC1RSieA
-   vTBzn9e23ECVY3xDbfLXnlGbbMucBhukWGLhSz01gqUPzbnOsXwa6pSU2
-   Km6YHtiZyIFVmFhrQsWJGKac87i9Ry8PUuy62W8grrUGibsYYFlsQu7jD
-   n+uohnnaCuuu/r8bhKfEn8CB7clhTe2P2LT6LlNLIg0PCGuum95Z61msk
-   7aaFP2p4rKlWzXRZ845MCjof3BZwM2tygni++/MdpL9CS4HGX/WYt+IqC
-   5HhE73/hJHhDvQIkgpZaYtU9nImhCAUEdNZxOutwv+T42NVT7GfeI0kSy
-   g==;
-Date: Tue, 9 May 2023 05:19:22 +0800
+  bh=ZAugAsSP1MFsa5ZKGdlMLronpk78T7eWaPGGGpSlRoM=;
+  b=CFPSL1b5ipGtkCy1orwEimCZLZ0tCwQMT1aibhqh7ZAlP5ey7xuZ8rsd
+   A852lIRp/UX4xUY0YF1q91wZB8jH8Z3F2h1lkbwVj26hAFgPXtcEXraex
+   lqBsJqZ3/PcVkpiyLmzuU/zE/A6Lc9TvfaFp+2s0xqWqKp9wYah4dXy+H
+   UjAVcaleEYMNsHfyWKidnatLZDA3swooRNHh/O0lgdIszVZNoxQ8r9GIK
+   1OqlMKuH8+Ybz/JBspGej5Cu1SvOqUSYg+zzFX5dofZFkbWvhRV8CYfzz
+   miNr0SW+aa8sPYMJjJBwI0PA6EwocWlV5nY9h0HFbc84v94FktnTDg6yW
+   Q==;
+Date: Tue, 9 May 2023 18:59:19 +0800
 From: kernel test robot <lkp@intel.com>
 Subject: Re: [PATCH] dirvers/pinctrl.c : using pinctrl_dev->dev to obtain struct device * dev
-Message-ID: <202305090411.OyJRHVis-lkp@intel.com>
+Message-ID: <202305091858.pJaUy3Gt-lkp@intel.com>
 References: <20230508154043.11859-1-sensor1010@163.com>
 MIME-Version: 1.0
 In-Reply-To: <20230508154043.11859-1-sensor1010@163.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 To: Lizhe <sensor1010@163.com>, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, linus.walleij@linaro.org, neil.armstrong@linaro.org, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, daniel@zonque.org, haojian.zhuang@gmail.com, robert.jarzmik@free.fr
-Cc: oe-kbuild-all@lists.linux.dev, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com, Lizhe <sensor1010@163.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com, Lizhe <sensor1010@163.com>
 List-ID: <linux-oxnas@groups.io>
 
 Hi Lizhe,
@@ -33,7 +33,7 @@ Hi Lizhe,
 kernel test robot noticed the following build errors:
 
 [auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next linus/master v6.4-rc1 next-20230508]
+[also build test ERROR on linusw-pinctrl/for-next linus/master v6.4-rc1 next-20230509]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -42,8 +42,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Lizhe/dirvers-pinctrl-c-u
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
 patch link:    https://lore.kernel.org/r/20230508154043.11859-1-sensor1010%40163.com
 patch subject: [PATCH] dirvers/pinctrl.c : using pinctrl_dev->dev to obtain struct device * dev
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230509/202305090411.OyJRHVis-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
+config: i386-randconfig-a001-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091858.pJaUy3Gt-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -53,85 +53,28 @@ reproduce (this is a W=1 build):
         git checkout 83751a28d7f5223597b6742300796fb80362dc20
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305090411.OyJRHVis-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091858.pJaUy3Gt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from include/linux/device.h:15,
-                    from include/linux/platform_device.h:13,
-                    from drivers/pinctrl/pinctrl-stmfx.c:12:
-   drivers/pinctrl/pinctrl-stmfx.c: In function 'stmfx_pinctrl_probe':
->> drivers/pinctrl/pinctrl-stmfx.c:714:25: error: 'pctldev' undeclared (first use in this function); did you mean 'pci_dev'?
-     714 |                 dev_err(pctldev->dev, "gpio_chip registration failed\n");
-         |                         ^~~~~~~
-   include/linux/dev_printk.h:110:25: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                         ^~~
-   drivers/pinctrl/pinctrl-stmfx.c:714:17: note: in expansion of macro 'dev_err'
-     714 |                 dev_err(pctldev->dev, "gpio_chip registration failed\n");
-         |                 ^~~~~~~
-   drivers/pinctrl/pinctrl-stmfx.c:714:25: note: each undeclared identifier is reported only once for each function it appears in
-     714 |                 dev_err(pctldev->dev, "gpio_chip registration failed\n");
-         |                         ^~~~~~~
-   include/linux/dev_printk.h:110:25: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                         ^~~
-   drivers/pinctrl/pinctrl-stmfx.c:714:17: note: in expansion of macro 'dev_err'
-     714 |                 dev_err(pctldev->dev, "gpio_chip registration failed\n");
-         |                 ^~~~~~~
---
-   In file included from include/linux/printk.h:564,
-                    from include/asm-generic/bug.h:22,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/io.h:11,
-                    from drivers/pinctrl/pxa/pinctrl-pxa2xx.c:9:
-   drivers/pinctrl/pxa/pinctrl-pxa2xx.c: In function 'pxa2xx_pmx_gpio_set_direction':
->> drivers/pinctrl/pxa/pinctrl-pxa2xx.c:94:24: error: invalid use of undefined type 'struct pinctrl_dev'
-      94 |         dev_dbg(pctldev->dev, "set_direction(pin=%d): dir=%d\n",
-         |                        ^~
-   include/linux/dynamic_debug.h:222:29: note: in definition of macro '__dynamic_func_call_cls'
-     222 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:9: note: in expansion of macro '_dynamic_func_call_cls'
-     248 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:271:9: note: in expansion of macro '_dynamic_func_call'
-     271 |         _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   drivers/pinctrl/pxa/pinctrl-pxa2xx.c:94:9: note: in expansion of macro 'dev_dbg'
-      94 |         dev_dbg(pctldev->dev, "set_direction(pin=%d): dir=%d\n",
-         |         ^~~~~~~
-   drivers/pinctrl/pxa/pinctrl-pxa2xx.c: In function 'pxa2xx_pmx_set_mux':
-   drivers/pinctrl/pxa/pinctrl-pxa2xx.c:159:24: error: invalid use of undefined type 'struct pinctrl_dev'
-     159 |         dev_dbg(pctldev->dev, "set_mux(pin=%d): af=%d dir=%d\n",
-         |                        ^~
-   include/linux/dynamic_debug.h:222:29: note: in definition of macro '__dynamic_func_call_cls'
-     222 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:9: note: in expansion of macro '_dynamic_func_call_cls'
-     248 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:271:9: note: in expansion of macro '_dynamic_func_call'
-     271 |         _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   drivers/pinctrl/pxa/pinctrl-pxa2xx.c:159:9: note: in expansion of macro 'dev_dbg'
-     159 |         dev_dbg(pctldev->dev, "set_mux(pin=%d): af=%d dir=%d\n",
-         |         ^~~~~~~
+>> drivers/pinctrl/pinctrl-stmfx.c:714:11: error: use of undeclared identifier 'pctldev'
+                   dev_err(pctldev->dev, "gpio_chip registration failed\n");
+                           ^
+   drivers/pinctrl/pinctrl-stmfx.c:727:11: error: use of undeclared identifier 'pctldev'
+                   dev_err(pctldev->dev, "cannot request irq%d\n", irq);
+                           ^
+   drivers/pinctrl/pinctrl-stmfx.c:731:11: error: use of undeclared identifier 'pctldev'
+           dev_info(pctldev->dev,
+                    ^
+   3 errors generated.
 
 
-vim +714 drivers/pinctrl/pinctrl-stmfx.c
+vim +/pctldev +714 drivers/pinctrl/pinctrl-stmfx.c
 
    638	
    639	static int stmfx_pinctrl_probe(struct platform_device *pdev)
