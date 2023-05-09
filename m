@@ -1,181 +1,106 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
- by mx.groups.io with SMTP id smtpd.web10.28921.1683630032844666575
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by mx.groups.io with SMTP id smtpd.web11.3424.1683672890015604373
  for <linux-oxnas@groups.io>;
- Tue, 09 May 2023 04:00:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683630032; x=1715166032;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZAugAsSP1MFsa5ZKGdlMLronpk78T7eWaPGGGpSlRoM=;
-  b=CFPSL1b5ipGtkCy1orwEimCZLZ0tCwQMT1aibhqh7ZAlP5ey7xuZ8rsd
-   A852lIRp/UX4xUY0YF1q91wZB8jH8Z3F2h1lkbwVj26hAFgPXtcEXraex
-   lqBsJqZ3/PcVkpiyLmzuU/zE/A6Lc9TvfaFp+2s0xqWqKp9wYah4dXy+H
-   UjAVcaleEYMNsHfyWKidnatLZDA3swooRNHh/O0lgdIszVZNoxQ8r9GIK
-   1OqlMKuH8+Ybz/JBspGej5Cu1SvOqUSYg+zzFX5dofZFkbWvhRV8CYfzz
-   miNr0SW+aa8sPYMJjJBwI0PA6EwocWlV5nY9h0HFbc84v94FktnTDg6yW
-   Q==;
-Date: Tue, 9 May 2023 18:59:19 +0800
-From: kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] dirvers/pinctrl.c : using pinctrl_dev->dev to obtain struct device * dev
-Message-ID: <202305091858.pJaUy3Gt-lkp@intel.com>
-References: <20230508154043.11859-1-sensor1010@163.com>
+ Tue, 09 May 2023 15:54:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+	t=1683672871; i=j.neuschaefer@gmx.net;
+	bh=IjOsP3Hl5WOUcxHtKpSlXVU2zmb5sAncILY7B0EhNVs=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ndYA2tf/LPtkgltTOvt7X2+Zi6uiTPSZbAqw/mXBwe2s3qEMYWIHbVw2U7syYOtiu
+	 0ByeTgk6m0fQkzncsA2uFg7rs+4GDkYCaq3zleDHMNFIszwJSYZevaNUwCstSv1xs2
+	 q2XsYVKyF7xXnp4qsykgKdmrMBdtxCsRttws9I9ls8dUQV5PBqFxC2CHyOsYGjarJ/
+	 Rr2m1bZj51r337gAlDvnDkQfA5v+OxXvevYZAHhLDsYKtlfaLNIq481n2v1Dl3mPUG
+	 +ciwlK0+ezWRctjT6rrS4cmxjRJOY33gMIuTSxMpaalo6ZUK907KGn7D4ZZQnJjuQD
+	 xm3g+5vkab4wA==
+Date: Wed, 10 May 2023 00:54:29 +0200
+From: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Message-ID: <ZFrPJQdwoxqFpzUO@probook>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
+ <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+ <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
+ <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
+ <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
+ <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230508154043.11859-1-sensor1010@163.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-To: Lizhe <sensor1010@163.com>, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, linus.walleij@linaro.org, neil.armstrong@linaro.org, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, daniel@zonque.org, haojian.zhuang@gmail.com, robert.jarzmik@free.fr
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com, Lizhe <sensor1010@163.com>
+In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+Content-Type: multipart/mixed; boundary="Groupsio=hQYSUSMWES4U9JNyHoMf"
+To: Rob Herring <robh+dt@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org, linux-realtek-soc@lists.infradead.org, linux-arm-kernel@axis.com, linux-stm32@st-md-mailman.stormreply.com, chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org, openbmc@lists.ozlabs.org, Krzysztof Kozlowski <krzk@kernel.org>, linux-rockchip@lists.infradead.org, Geert Uytterhoeven <geert@linux-m68k.org>, linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-actions@lists.infradead.org, linux-unisoc@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org, Linux-OMAP <linux-omap@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, kernel@dh-electronics.com, Olof Johansson <olof@lixom.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "linux-oxnas@groups.io" <linux-oxnas@groups.io>
 List-ID: <linux-oxnas@groups.io>
 
-Hi Lizhe,
+--Groupsio=hQYSUSMWES4U9JNyHoMf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-kernel test robot noticed the following build errors:
+On Tue, May 02, 2023 at 02:40:19PM -0500, Rob Herring wrote:
+[...]
+> I've dusted off my script and made a branch[1] with the result.
+> There's just a couple of fixes needed after the script is run (see the
+> top commit). The cross arch includes are all fixed up by the script.
+> dtbs_install maintains a flat install. I compared the number of .dtbs
+> before and after to check the script.
+>=20
+> I think the only issue remaining is finalizing the mapping of
+> platforms to subdirs. What I have currently is a mixture of SoC
+> families and vendors. The most notable are all the Freescale/NXP
+> platforms, pxa, socfpga, and stm32. It's not consistent with arm64
+> either. Once that's finalized, I still need to go update MAINTAINERS.
+>=20
+> Here's the current mapping:
+>=20
+> vendor_map =3D {
+[...]
+>     'aspeed' : 'aspeed',
+>     'ast2' : 'aspeed',
+>     'facebook' : 'aspeed',
+>     'ibm' : 'aspeed',
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next linus/master v6.4-rc1 next-20230509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>     'openbmc' : 'aspeed',
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhe/dirvers-pinctrl-c-using-pinctrl_dev-dev-to-obtain-struct-device-dev/20230508-234502
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230508154043.11859-1-sensor1010%40163.com
-patch subject: [PATCH] dirvers/pinctrl.c : using pinctrl_dev->dev to obtain struct device * dev
-config: i386-randconfig-a001-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091858.pJaUy3Gt-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/83751a28d7f5223597b6742300796fb80362dc20
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lizhe/dirvers-pinctrl-c-using-pinctrl_dev-dev-to-obtain-struct-device-dev/20230508-234502
-        git checkout 83751a28d7f5223597b6742300796fb80362dc20
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+The openbmc flash layouts are currently only used by aspeed devicetrees,
+but they don't really depend on any aspeed details. It would be possible
+to reuse them in Nuvoton BMC devicetrees in the future, for example.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305091858.pJaUy3Gt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pinctrl/pinctrl-stmfx.c:714:11: error: use of undeclared identifier 'pctldev'
-                   dev_err(pctldev->dev, "gpio_chip registration failed\n");
-                           ^
-   drivers/pinctrl/pinctrl-stmfx.c:727:11: error: use of undeclared identifier 'pctldev'
-                   dev_err(pctldev->dev, "cannot request irq%d\n", irq);
-                           ^
-   drivers/pinctrl/pinctrl-stmfx.c:731:11: error: use of undeclared identifier 'pctldev'
-           dev_info(pctldev->dev,
-                    ^
-   3 errors generated.
+In that sense, I think putting them in a separate "openbmc" directory
+would be slightly better.
 
 
-vim +/pctldev +714 drivers/pinctrl/pinctrl-stmfx.c
+Jonathan
 
-   638	
-   639	static int stmfx_pinctrl_probe(struct platform_device *pdev)
-   640	{
-   641		struct stmfx *stmfx = dev_get_drvdata(pdev->dev.parent);
-   642		struct device_node *np = pdev->dev.of_node;
-   643		struct stmfx_pinctrl *pctl;
-   644		struct gpio_irq_chip *girq;
-   645		int irq, ret;
-   646	
-   647		pctl = devm_kzalloc(stmfx->dev, sizeof(*pctl), GFP_KERNEL);
-   648		if (!pctl)
-   649			return -ENOMEM;
-   650	
-   651		platform_set_drvdata(pdev, pctl);
-   652	
-   653		pctl->dev = &pdev->dev;
-   654		pctl->stmfx = stmfx;
-   655	
-   656		if (!of_property_present(np, "gpio-ranges")) {
-   657			dev_err(pctl->dev, "missing required gpio-ranges property\n");
-   658			return -EINVAL;
-   659		}
-   660	
-   661		irq = platform_get_irq(pdev, 0);
-   662		if (irq <= 0)
-   663			return -ENXIO;
-   664	
-   665		mutex_init(&pctl->lock);
-   666	
-   667		/* Register pin controller */
-   668		pctl->pctl_desc.name = "stmfx-pinctrl";
-   669		pctl->pctl_desc.pctlops = &stmfx_pinctrl_ops;
-   670		pctl->pctl_desc.confops = &stmfx_pinconf_ops;
-   671		pctl->pctl_desc.pins = stmfx_pins;
-   672		pctl->pctl_desc.npins = ARRAY_SIZE(stmfx_pins);
-   673		pctl->pctl_desc.owner = THIS_MODULE;
-   674		pctl->pctl_desc.link_consumers = true;
-   675	
-   676		ret = devm_pinctrl_register_and_init(pctl->dev, &pctl->pctl_desc,
-   677						     pctl, &pctl->pctl_dev);
-   678		if (ret) {
-   679			dev_err(pctl->dev, "pinctrl registration failed\n");
-   680			return ret;
-   681		}
-   682	
-   683		ret = pinctrl_enable(pctl->pctl_dev);
-   684		if (ret) {
-   685			dev_err(pctl->dev, "pinctrl enable failed\n");
-   686			return ret;
-   687		}
-   688	
-   689		/* Register gpio controller */
-   690		pctl->gpio_chip.label = "stmfx-gpio";
-   691		pctl->gpio_chip.parent = pctl->dev;
-   692		pctl->gpio_chip.get_direction = stmfx_gpio_get_direction;
-   693		pctl->gpio_chip.direction_input = stmfx_gpio_direction_input;
-   694		pctl->gpio_chip.direction_output = stmfx_gpio_direction_output;
-   695		pctl->gpio_chip.get = stmfx_gpio_get;
-   696		pctl->gpio_chip.set = stmfx_gpio_set;
-   697		pctl->gpio_chip.set_config = gpiochip_generic_config;
-   698		pctl->gpio_chip.base = -1;
-   699		pctl->gpio_chip.ngpio = pctl->pctl_desc.npins;
-   700		pctl->gpio_chip.can_sleep = true;
-   701	
-   702		girq = &pctl->gpio_chip.irq;
-   703		gpio_irq_chip_set_chip(girq, &stmfx_pinctrl_irq_chip);
-   704		/* This will let us handle the parent IRQ in the driver */
-   705		girq->parent_handler = NULL;
-   706		girq->num_parents = 0;
-   707		girq->parents = NULL;
-   708		girq->default_type = IRQ_TYPE_NONE;
-   709		girq->handler = handle_bad_irq;
-   710		girq->threaded = true;
-   711	
-   712		ret = devm_gpiochip_add_data(pctl->dev, &pctl->gpio_chip, pctl);
-   713		if (ret) {
- > 714			dev_err(pctldev->dev, "gpio_chip registration failed\n");
-   715			return ret;
-   716		}
-   717	
-   718		ret = stmfx_pinctrl_gpio_function_enable(pctl);
-   719		if (ret)
-   720			return ret;
-   721	
-   722		ret = devm_request_threaded_irq(pctl->dev, irq, NULL,
-   723						stmfx_pinctrl_irq_thread_fn,
-   724						IRQF_ONESHOT,
-   725						dev_name(pctl->dev), pctl);
-   726		if (ret) {
-   727			dev_err(pctldev->dev, "cannot request irq%d\n", irq);
-   728			return ret;
-   729		}
-   730	
-   731		dev_info(pctldev->dev,
-   732			 "%ld GPIOs available\n", hweight_long(pctl->gpio_valid_mask));
-   733	
-   734		return 0;
-   735	}
-   736	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+[...]
+>     'nuvo' : 'nuvoton',
+[...]
+> }
+>=20
+> Rob
+>=20
+> [1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm-dts-=
+move-v2
+
+--Groupsio=hQYSUSMWES4U9JNyHoMf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmRazv0ACgkQCDBEmo7z
+X9tB/A//Y5MU9b+r/mxCUuxjsa0CB4Ewu8xmc+YTd1pdMEIrJYfgdpXFskBmzFsg
+QFYR1gBnq7P4mhusW4RaYWxpzD3M45B2vIuhgL6t8lqIWae0UuNbPEO4rbCIbvGZ
+PCx1dTAGZ2vg+mxRK0OYouuCE9EvgrC9PGmOcgDkqCLngGsr11gXz0GMNebggmie
+TX8iauQHnzfGaSQWtwIdQRu1gj2d/VO5NSn4CrgvMIuLCSwhTwY+e9H9/+CcrqHK
+wNiMG0W8yY5CMO7ZSYf7EkEidunJ0htwqJmUoLfpqN4NZ/21yno69v+L36ZRu/lq
++KrZJeaXC3Ar39R2x75Pns5em46uwJJdI5aXumj9xPU3A3rgWCQcrECZJ7i/HEoK
+hzhnsQhJNP4jAPVxdiaWJTYUXHRwafI6/GVvj1BvfgqZ9VHE28iGdDcgVvOfmkDx
+eRZQxcJzFaWZeWTOeM05/dHUDUJXFrYvDsj0+FgneBU/oqEc+H4bR9AP2ttU24hU
+4jBq2I2FlDyKlC0ARS22oRQlZG6KS50d1Nvx6cLr7lxeOHmcW09dPCqHijQVtX3V
+f/Z7MYrDEXgTK8r1wJk6PuvVN+jFX/l/Ali5L/OJqUsZB4bgteXKEWXWMmgik1/I
+d3nr3gTYEaykVkjCJORFKu4G2FHrzWgWpFYsl8Mu+safGLa+rdA=
+=Jzyt
+-----END PGP SIGNATURE-----
+
+--Groupsio=hQYSUSMWES4U9JNyHoMf--
