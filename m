@@ -1,106 +1,85 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by mx.groups.io with SMTP id smtpd.web11.3424.1683672890015604373
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by mx.groups.io with SMTP id smtpd.web10.7885.1683687626417945301
  for <linux-oxnas@groups.io>;
- Tue, 09 May 2023 15:54:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-	t=1683672871; i=j.neuschaefer@gmx.net;
-	bh=IjOsP3Hl5WOUcxHtKpSlXVU2zmb5sAncILY7B0EhNVs=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ndYA2tf/LPtkgltTOvt7X2+Zi6uiTPSZbAqw/mXBwe2s3qEMYWIHbVw2U7syYOtiu
-	 0ByeTgk6m0fQkzncsA2uFg7rs+4GDkYCaq3zleDHMNFIszwJSYZevaNUwCstSv1xs2
-	 q2XsYVKyF7xXnp4qsykgKdmrMBdtxCsRttws9I9ls8dUQV5PBqFxC2CHyOsYGjarJ/
-	 Rr2m1bZj51r337gAlDvnDkQfA5v+OxXvevYZAHhLDsYKtlfaLNIq481n2v1Dl3mPUG
-	 +ciwlK0+ezWRctjT6rrS4cmxjRJOY33gMIuTSxMpaalo6ZUK907KGn7D4ZZQnJjuQD
-	 xm3g+5vkab4wA==
-Date: Wed, 10 May 2023 00:54:29 +0200
-From: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Message-ID: <ZFrPJQdwoxqFpzUO@probook>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
- <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
- <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
- <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+ Tue, 09 May 2023 20:00:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1683687624;
+	bh=7LO/nm+SvO2zUJm9O7tKkRrwmKO+jJgciV/tuTaQgEI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=RTOVU+VB5lVL3KuGZFTpoKDpYjJRZaFEG2sQHTVRB003U8JjjD5mssizr5+LQvmxS
+	 FiRe09LS1LVd1YWnDEJh5qAL8JXede7MYdp/xXZvK/GdzrksCN2HWYx2Yl6T6VU0FJ
+	 9JyyJlSaOGUYos/Lyy9six7qob5Gkj21W/akStnMjymLUTb5PyAM8M1Wbf3N951mzV
+	 Eg6NfnYrqIYGWQtpMzg4W3Sk8GzvYYx+hlaSlCIHcLFyllWUB3ydom5VLPkfJdMfc6
+	 YNs6Y4Xid5qDf/PpW1q5ZniGiemNLv2Btm+78JH6TJxiVI7ORNqyekAAsAcCAtY5+p
+	 +unEdK3RS/REg==
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
-Content-Type: multipart/mixed; boundary="Groupsio=hQYSUSMWES4U9JNyHoMf"
-To: Rob Herring <robh+dt@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org, linux-realtek-soc@lists.infradead.org, linux-arm-kernel@axis.com, linux-stm32@st-md-mailman.stormreply.com, chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org, openbmc@lists.ozlabs.org, Krzysztof Kozlowski <krzk@kernel.org>, linux-rockchip@lists.infradead.org, Geert Uytterhoeven <geert@linux-m68k.org>, linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-actions@lists.infradead.org, linux-unisoc@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org, Linux-OMAP <linux-omap@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, kernel@dh-electronics.com, Olof Johansson <olof@lixom.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "linux-oxnas@groups.io" <linux-oxnas@groups.io>
+Subject: Re: [PATCH net-next v2 00/11] net: stmmac: Convert to platform remove callback returning void
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <168368762456.27124.17176817660933091864.git-patchwork-notify@kernel.org>
+Date: Wed, 10 May 2023 03:00:24 +0000
+References: <20230508142637.1449363-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230508142637.1449363-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@ci.codeaurora.org
+Cc: peppe.cavallaro@st.com, alexandre.torgue@foss.st.com, joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com, shawnguo@kernel.org, s.hauer@pengutronix.de, vz@mleia.com, neil.armstrong@linaro.org, khilman@baylibre.com, vkoul@kernel.org, kernel@esmil.dk, samin.guo@starfivetech.com, wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org, nobuhiro1.iwamatsu@toshiba.co.jp, matthias.bgg@gmail.com, thierry.reding@gmail.com, jonathanh@nvidia.com, festevam@gmail.com, linux-imx@nxp.com, jbrunet@baylibre.com, martin.blumenstingl@googlemail.com, bhupesh.sharma@linaro.org, angelogioacchino.delregno@collabora.com, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de, linux-amlogic@lists.infradead.org, linux-oxnas@groups.io, linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org
 List-ID: <linux-oxnas@groups.io>
 
---Groupsio=hQYSUSMWES4U9JNyHoMf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-On Tue, May 02, 2023 at 02:40:19PM -0500, Rob Herring wrote:
-[...]
-> I've dusted off my script and made a branch[1] with the result.
-> There's just a couple of fixes needed after the script is run (see the
-> top commit). The cross arch includes are all fixed up by the script.
-> dtbs_install maintains a flat install. I compared the number of .dtbs
-> before and after to check the script.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  8 May 2023 16:26:26 +0200 you wrote:
+> Hello,
 >=20
-> I think the only issue remaining is finalizing the mapping of
-> platforms to subdirs. What I have currently is a mixture of SoC
-> families and vendors. The most notable are all the Freescale/NXP
-> platforms, pxa, socfpga, and stm32. It's not consistent with arm64
-> either. Once that's finalized, I still need to go update MAINTAINERS.
+> (implicit) v1 of this series is available at
+> https://lore.kernel.org/netdev/20230402143025.2524443-1-u.kleine-koenig@p=
+engutronix.de
+> .
 >=20
-> Here's the current mapping:
+> Changes since then:
 >=20
-> vendor_map =3D {
-[...]
->     'aspeed' : 'aspeed',
->     'ast2' : 'aspeed',
->     'facebook' : 'aspeed',
->     'ibm' : 'aspeed',
+> [...]
 
->     'openbmc' : 'aspeed',
+Here is the summary with links:
+  - [net-next,v2,01/11] net: stmmac: Make stmmac_pltfr_remove() return void
+    https://git.kernel.org/netdev/net-next/c/3246627f11c5
+  - [net-next,v2,02/11] net: stmmac: dwmac-visconti: Make visconti_eth_cloc=
+k_remove() return void
+    https://git.kernel.org/netdev/net-next/c/b9bc44fe068d
+  - [net-next,v2,03/11] net: stmmac: dwmac-qcom-ethqos: Drop an if with an =
+always false condition
+    https://git.kernel.org/netdev/net-next/c/c5f3ffe35cc9
+  - [net-next,v2,04/11] net: stmmac: dwmac-visconti: Convert to platform re=
+move callback returning void
+    https://git.kernel.org/netdev/net-next/c/f4d05c419761
+  - [net-next,v2,05/11] net: stmmac: dwmac-dwc-qos-eth: Convert to platform=
+ remove callback returning void
+    https://git.kernel.org/netdev/net-next/c/360cd89064b6
+  - [net-next,v2,06/11] net: stmmac: dwmac-qcom-ethqos: Convert to platform=
+ remove callback returning void
+    https://git.kernel.org/netdev/net-next/c/5580b559a80a
+  - [net-next,v2,07/11] net: stmmac: dwmac-rk: Convert to platform remove c=
+allback returning void
+    https://git.kernel.org/netdev/net-next/c/903cc461c901
+  - [net-next,v2,08/11] net: stmmac: dwmac-sti: Convert to platform remove =
+callback returning void
+    https://git.kernel.org/netdev/net-next/c/b394982a10d9
+  - [net-next,v2,09/11] net: stmmac: dwmac-stm32: Convert to platform remov=
+e callback returning void
+    https://git.kernel.org/netdev/net-next/c/fec3f552140e
+  - [net-next,v2,10/11] net: stmmac: dwmac-sun8i: Convert to platform remov=
+e callback returning void
+    https://git.kernel.org/netdev/net-next/c/cc708d4ed7b3
+  - [net-next,v2,11/11] net: stmmac: dwmac-tegra: Convert to platform remov=
+e callback returning void
+    https://git.kernel.org/netdev/net-next/c/a86f8601c8f0
 
-The openbmc flash layouts are currently only used by aspeed devicetrees,
-but they don't really depend on any aspeed details. It would be possible
-to reuse them in Nuvoton BMC devicetrees in the future, for example.
-
-In that sense, I think putting them in a separate "openbmc" directory
-would be slightly better.
+You are awesome, thank you!
+--=20
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Jonathan
-
-
-
-[...]
->     'nuvo' : 'nuvoton',
-[...]
-> }
->=20
-> Rob
->=20
-> [1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm-dts-=
-move-v2
-
---Groupsio=hQYSUSMWES4U9JNyHoMf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmRazv0ACgkQCDBEmo7z
-X9tB/A//Y5MU9b+r/mxCUuxjsa0CB4Ewu8xmc+YTd1pdMEIrJYfgdpXFskBmzFsg
-QFYR1gBnq7P4mhusW4RaYWxpzD3M45B2vIuhgL6t8lqIWae0UuNbPEO4rbCIbvGZ
-PCx1dTAGZ2vg+mxRK0OYouuCE9EvgrC9PGmOcgDkqCLngGsr11gXz0GMNebggmie
-TX8iauQHnzfGaSQWtwIdQRu1gj2d/VO5NSn4CrgvMIuLCSwhTwY+e9H9/+CcrqHK
-wNiMG0W8yY5CMO7ZSYf7EkEidunJ0htwqJmUoLfpqN4NZ/21yno69v+L36ZRu/lq
-+KrZJeaXC3Ar39R2x75Pns5em46uwJJdI5aXumj9xPU3A3rgWCQcrECZJ7i/HEoK
-hzhnsQhJNP4jAPVxdiaWJTYUXHRwafI6/GVvj1BvfgqZ9VHE28iGdDcgVvOfmkDx
-eRZQxcJzFaWZeWTOeM05/dHUDUJXFrYvDsj0+FgneBU/oqEc+H4bR9AP2ttU24hU
-4jBq2I2FlDyKlC0ARS22oRQlZG6KS50d1Nvx6cLr7lxeOHmcW09dPCqHijQVtX3V
-f/Z7MYrDEXgTK8r1wJk6PuvVN+jFX/l/Ali5L/OJqUsZB4bgteXKEWXWMmgik1/I
-d3nr3gTYEaykVkjCJORFKu4G2FHrzWgWpFYsl8Mu+safGLa+rdA=
-=Jzyt
------END PGP SIGNATURE-----
-
---Groupsio=hQYSUSMWES4U9JNyHoMf--
